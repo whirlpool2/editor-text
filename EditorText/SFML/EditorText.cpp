@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <conio.h>
 #include <SFML/Graphics.hpp>
 #include<SFML/Window.hpp>
@@ -57,6 +57,7 @@ void setFont(Text& text, Font& font, int size, RGBColor color, string path)
     text.setPosition(10, 10);
 }
 
+// Ia input de la tastatură.
 void handleKeyboardInput(RenderWindow& Window)
 {
     string currentText = "";
