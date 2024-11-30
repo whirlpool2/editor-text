@@ -74,11 +74,11 @@ void handleKeyboardInput(RenderWindow& Window)
     while (Window.isOpen()) {
         Event event;
         while (Window.pollEvent(event)) {
-            if (event.type == Event::Closed)
+            if (event.type == Event::Closed)//verificam daca utilizatorul vrea sa inchida fereastra
                 Window.close();
 
             // Handle keyboard input for characters
-            if (event.type == Event::TextEntered) {
+            if (event.type == Event::TextEntered) {//verificam daca s-a apasat o tasta
                 if (event.text.unicode < 128) {
                     char key = static_cast<char>(event.text.unicode);
                     if (key == 8 && !currentText.empty()) {
