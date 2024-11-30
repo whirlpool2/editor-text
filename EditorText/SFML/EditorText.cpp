@@ -10,6 +10,8 @@ using namespace sf;
 
 //test !!!!!!!!!
 //sigma on th wall
+
+//test mihai
 struct RGBColor
 {
     int r;
