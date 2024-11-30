@@ -45,7 +45,8 @@ Font loadFont(string path)
 
     if (!(font.loadFromFile(path)))
     {
-        throw("Font " + path + " could not be found.");
+        //throw("Font " + path + " could not be found.");
+        cerr << "Font " << path << " could not be found." << '\n';
     }
 
     return font;
