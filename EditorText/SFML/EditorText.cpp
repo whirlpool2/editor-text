@@ -7,6 +7,8 @@ using namespace std;
 using namespace sf;
 //etrtvervwervwervwervwerv
 //test
+
+//test !!!!!!!!!
 struct RGBColor
 {
     int r;
