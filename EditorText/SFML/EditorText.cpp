@@ -62,7 +62,7 @@ void setFont(Text& text, Font& font, int size, RGBColor color, string path)
     text.setPosition(10, 10);
 }
 
-//fac o functie pentru a evidentia cuvantul curent pe care suntem
+//fac o functie pentru a evidentia cuvantul curent pe care suntems
 void CurrentWord(string& currentText, int cursorPos, Text& text, Text& currWord) {
 
     int start = cursorPos;
