@@ -30,3 +30,5 @@
 *.exe
 *.out
 *.app
+/EditorText/.vs/Editor Text
+/.vs/editor-text/v17
