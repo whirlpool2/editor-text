@@ -123,7 +123,19 @@ string suffix(string& str, int k)
     return res;
 }
 
+//Vreau sa fac o functie pentru animatia unde se afla cursorul pe locul unde tastez
 
+void cursorAnimate(RectangleShape& cursor, Clock& timpAlternanta, bool& esteVizibil) {
+    //in esteVizibil retin daca afisam cursor care are forma de dreptunghi , daca estevizibil dau culoare alb , altfel fac transparent
+    if (timpAlternanta.getElapsedTime().asMilliseconds() > 500) {
+        esteVizibil = 1 - esteVizibil;//daca este true il fac fals , altfel il fac true
+        timpAlternanta.restart();
+    }
+    if (esteVizibil)
+        cursor.setFillColor(Color::White);
+    else
+        cursor.setFillColor(Color::Transparent);
+}
 
 // Primește informații de la tastatură și modifică documentul corespunzător.
 void handleKeyboardInput(RenderWindow& Window)
@@ -132,6 +144,18 @@ void handleKeyboardInput(RenderWindow& Window)
     int cursorPos = 0;
     Font font;
     Text text;
+
+    //Creez bara pt animatie cursor
+
+    RectangleShape cursor;
+    Clock timpAlternanta;
+    bool esteVizibil = true;
+    cursor.setFillColor(Color::White);
+    cursor.setSize(Vector2f(2, text.getCharacterSize()));
+
+    //pun cursorul pe pozitia initiala
+
+    cursor.setPosition(text.getPosition().x, text.getPosition().y);
 
     int size = 24;
 
@@ -197,9 +221,24 @@ void handleKeyboardInput(RenderWindow& Window)
             }
         }
 
+        //Actualizez pozitie cursor
+        if (currentText.empty() == 0 && cursorPos > 0) {
+            Vector2f pozitieNouaCursor = text.findCharacterPos(cursorPos);
+            cursor.setPosition(pozitieNouaCursor.x, pozitieNouaCursor.y);
+        }
+        else
+            cursor.setPosition(text.getPosition().x, text.getPosition().y);
+        //aici trebuie rezolvat o problema importanta , daca incerc sa apas repetat tasta left arrow de multe ori , ajung pe prima pozitie
+        // dupa pe cele negative si da crash din cauza asta(nu este alocat in memorie pe pozitiile de dincolo, trb conditie de oprire
+        //Punem animatia la cursor 
+        cursorAnimate(cursor, timpAlternanta, esteVizibil);
+        
+
+
         // Actualizăm window-ul.
         Window.clear(Color::Black);
         Window.draw(text);
+        Window.draw(cursor);
         Window.display();
     }
 }
