@@ -35,7 +35,12 @@ struct textDocument
     int cursorChar;
 };
 
-// Funcție ce returnează un font. (Mai mult pentru a nu tasta font.loadFromFile() de fiecare dată.)
+const RGBColor             COLOR_BG = {  32,  32,  32 };
+const RGBColor COLOR_TEXT_HIGHLIGHT = { 255, 255, 128 };
+const RGBColor           COLOR_TEXT = { 255, 255, 255 };
+
+
+// Returnează un font. (Mai mult pentru a nu tasta font.loadFromFile() de fiecare dată.)
 Font loadFont(string path)
 {
     Font font;
@@ -50,7 +55,7 @@ Font loadFont(string path)
     return font;
 }
 
-// Funcție ce setează dimensiunea, fontul și culoarea unui text.
+// Setează dimensiunea, fontul și culoarea unui text.
 void setFont(Text& text, Font& font, int size, RGBColor color, string path)
 {
     font = loadFont(path);
@@ -61,16 +66,17 @@ void setFont(Text& text, Font& font, int size, RGBColor color, string path)
     text.setPosition(10, 10);
 }
 
-// Funcție care evidențiază cuvântul curent.
+// Evidențiază cuvântul curent.
 void CurrentWord(string& currentText, int cursorPos, Text& text, Text& currWord) {
 
     int start = cursorPos;
+    int end   = cursorPos;
+
     while (start > 0 && currentText != ' ')
     {
         start--;
     }
 
-    int end = cursorPos;
     while (end < currentText.length() && currentText[end] != ' ')
     {
         end++;
@@ -80,21 +86,57 @@ void CurrentWord(string& currentText, int cursorPos, Text& text, Text& currWord)
     string current = currentText.substr(start, end - start);
     string after = currentText.substr(end);
 
-    text.setString(before + current + after);
     currWord.setString(current);
     Vector2f startPos = text.findCharacterPos(start);
     currWord.setPosition(startPos);
+    text.setString(before + current + after);
 }
 
-// Funcție care primește informații de la tastatură și modifică documentul corespunzător.
+// Returnează primele k caractere dintr-un string.
+string prefix(string& str, int k)
+{
+    string res = "";
+
+    if (k > str.size())
+    {
+        k = str.size();
+    }
+
+    for (int i = 0; i < k; i++)
+    {
+        res = res + str[i];
+    }
+
+    return res;
+}
+
+// Returnează ultimele k caractere dintr-un string.
+string suffix(string& str, int k)
+{
+    string res = "";
+
+    for (int i = k; i < str.size(); i++)
+    {
+        res = res + str[i];
+    }
+
+    return res;
+}
+
+
+
+// Primește informații de la tastatură și modifică documentul corespunzător.
 void handleKeyboardInput(RenderWindow& Window)
 {
     string currentText = "";
     int cursorPos = 0;
     Font font;
-    Text text, CuvCurent;
-    setFont(text, font, 24, { 255, 128, 64 }, "Fonts/CascadiaMono.ttf");
-    setFont(CuvCurent, font, 24, { 255, 255 , 255 }, "Fonts/CascadiaMono.ttf");
+    Text text;
+
+    int size = 24;
+
+    setFont(text, font, 24, COLOR_TEXT, "Fonts/CascadiaMono.ttf");
+
     while (Window.isOpen())
     {
         Event event;
@@ -106,7 +148,8 @@ void handleKeyboardInput(RenderWindow& Window)
             }
 
             // Dacă event-ul curent presupune caractere date de la tastatură...
-            if (event.type == Event::TextEntered) {
+            if (event.type == Event::TextEntered)
+            {
                 if (event.text.unicode < 128)
                 {
                     char key = static_cast<char>(event.text.unicode);
@@ -124,25 +167,37 @@ void handleKeyboardInput(RenderWindow& Window)
                         currentText.insert(cursorPos, 1, key);
                         cursorPos++;
                     }
+                    else if (key == 13)
+                    {
+                        currentText = prefix(currentText, cursorPos) + "\n" + suffix(currentText, cursorPos);
+                    }
                 }
                 text.setString(currentText); // După ce se efectuează operațiile, actualizăm textul vizibil.
             }
             if (event.type == Event::KeyPressed) // Acest caz tratează tastele ce nu produc caractere.
             {
-                if (event.key.code == Keyboard::Left && cursorPos > 0)
+                if (event.key.code == Keyboard::Left && cursorPos >= 0)
                 {
                     cursorPos--;
                 }
-                else if (event.key.code == Keyboard::Right && cursorPos < currentText.size())
+                if (event.key.code == Keyboard::Right && cursorPos < currentText.size())
                 {
                     cursorPos++;
+                }
+                if (event.key.code == Keyboard::Equal && Keyboard::isKeyPressed(Keyboard::LControl))
+                {
+                    size = size + 4;
+                    text.setCharacterSize(size);
+                }
+                if (event.key.code == Keyboard::Dash && Keyboard::isKeyPressed(Keyboard::LControl))
+                {
+                    size = (size > 6) ? size - 4 : size;
+                    text.setCharacterSize(size);
                 }
             }
         }
 
-        CurrentWord(currentText, cursorPos, text, CuvCurent);
-
-        // Clear and draw updated text
+        // Actualizăm window-ul.
         Window.clear(Color::Black);
         Window.draw(text);
         Window.display();
@@ -151,7 +206,7 @@ void handleKeyboardInput(RenderWindow& Window)
 
 int main()
 {
-    RenderWindow EditorText(VideoMode(800, 800), "Editor Text", sf::Style::Default);
+    RenderWindow EditorText(VideoMode(800, 800), "Editor Text", Style::Default);
     EditorText.setFramerateLimit(60);
 
     handleKeyboardInput(EditorText);
