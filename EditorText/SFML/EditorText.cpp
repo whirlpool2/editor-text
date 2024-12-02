@@ -35,18 +35,22 @@ struct textDocument
     int cursorChar;
 };
 
+// Funcție ce returnează un font. (Mai mult pentru a nu tasta font.loadFromFile() de fiecare dată.)
 Font loadFont(string path)
 {
     Font font;
 
-    if (!(font.loadFromFile(path)))
+    if (!(font.loadFromFile(path))) // Dacă nu găsim fontul, incărcăm fontul inclus cu proiectul.
     {
         cerr << "Font " << path << " could not be found." << '\n';
+        font.loadFromFile("Fonts/CascadiaMono.ttf");
+        return font;
     }
 
     return font;
 }
 
+// Funcție ce setează dimensiunea, fontul și culoarea unui text.
 void setFont(Text& text, Font& font, int size, RGBColor color, string path)
 {
     font = loadFont(path);
