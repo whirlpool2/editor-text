@@ -1,19 +1,20 @@
-﻿D:\Visual Studio Community 202\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (SFML.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (SFML.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   EditorText.cpp
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(102,21): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(182,53): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(182,53): warning C4244:         with
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(182,53): warning C4244:         [
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(182,53): warning C4244:             T=float
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(182,53): warning C4244:         ]
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(266,69): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(266,69): warning C4244:         with
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(266,69): warning C4244:         [
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(266,69): warning C4244:             T=float
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(266,69): warning C4244:         ]
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(272,69): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(272,69): warning C4244:         with
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(272,69): warning C4244:         [
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(272,69): warning C4244:             T=float
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(272,69): warning C4244:         ]
-  SFML.vcxproj -> C:\Users\lucas\Source\Repos\editor-text\EditorText\x64\Debug\Editor Text.exe
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(102,21): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(178,28): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(197,53): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(197,53): warning C4244:         with
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(197,53): warning C4244:         [
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(197,53): warning C4244:             T=float
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(197,53): warning C4244:         ]
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(283,69): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(283,69): warning C4244:         with
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(283,69): warning C4244:         [
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(283,69): warning C4244:             T=float
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(283,69): warning C4244:         ]
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(289,69): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(289,69): warning C4244:         with
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(289,69): warning C4244:         [
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(289,69): warning C4244:             T=float
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(289,69): warning C4244:         ]
+  SFML.vcxproj -> C:\Users\Stefan\Source\Repos\editor-text\EditorText\x64\Debug\Editor Text.exe

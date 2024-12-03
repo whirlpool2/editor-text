@@ -142,25 +142,40 @@ void cursorAnimate(RectangleShape& cursor, Clock& timpAlternanta, bool& esteVizi
         cursor.setFillColor(Color::Transparent);
     }
 }
-//Functie care updateaza pozitia cursorului in functie de mouse 
-void updateCursorForMouse(Vector2i &mousepos, string currentText, int &cursorPos, Text text) {
-    
-    //Iteram prin tot textul pentru a gasi pozitia mouseului
-    for (int i = 0; i < currentText.size(); i++) {
-        Vector2f pozitieCaracterCurent = text.findCharacterPos(i);
 
-        //Verificam daca mouse ul este pe caracterul  curent
-        //Daca incercam sa verifica mousepos.x == pozitieCaractercurent.x  si   mousepos.y == pozitieCaracterCurent.y
-        //nu va functiona pentru ca mouse-ul ar trebui sa fie FIX pe aceeasi pozitie cu caracterul la care vrem sa ajungem, asa ca
-        //folosim intervale de 1 caracter
-        if (mousepos.x >= pozitieCaracterCurent.x and mousepos.x <= pozitieCaracterCurent.x + text.getCharacterSize()
-            and mousepos.y >= pozitieCaracterCurent.y and mousepos.y <= pozitieCaracterCurent.y + text.getCharacterSize()) {
-            cursorPos = i + 1;
-            break;
+// Calculează distanța între 2 Vector2f (perechi de float-uri).
+float distVec2f(Vector2f u, Vector2f v)
+{
+    Vector2f d = u - v;
+    return sqrt(d.x * d.x + d.y * d.y);
+}
+
+template <typename T>
+T absDiff(T x, T y)
+{
+    return x > y ? x - y : y - x;
+}
+
+// Returnează cea mai apropiată poziție a cursorului text de click.
+int cursorClickPos(Vector2i &mousePos, string currentText, Text text)
+{    
+    Vector2f mousePosFloat = { mousePos.x * 1.0f, mousePos.y * 1.0f };
+
+    // Verificăm fiecare caracter dacă se află la cel mult o dimensiune de caracter distanță de click.
+    for (int i = 0; i < currentText.size(); i++)
+    {
+        Vector2f charPos = text.findCharacterPos(i);
+        int fontSize = text.getCharacterSize();
+        if (distVec2f(charPos, mousePosFloat) <= fontSize)
+        {
+            return i + 1;
         }
+        if (absDiff(mousePosFloat.y, charPos.y) <= fontSize && currentText[i] == '\n')
+        {
+            return i;
         }
-
-
+    }
+    return currentText.size();
 }
 
 // Primește informații de la tastatură și modifică documentul corespunzător.
@@ -197,11 +212,13 @@ void handleKeyboardInput(RenderWindow& Window)
                 Window.close();
             }
             
-            //Daca este apasat click stanga
-            if (event.type == Event::MouseButtonPressed) {
-                if (event.mouseButton.button == Mouse::Left) {
-                    Vector2i mousepos = Mouse::getPosition(Window);
-                    updateCursorForMouse(mousepos, currentText, cursorPos, text);
+            // Daca este apasat click stanga
+            if (event.type == Event::MouseButtonPressed)
+            {
+                if (event.mouseButton.button == Mouse::Left)
+                {
+                    Vector2i mousePos = Mouse::getPosition(Window);
+                    cursorPos = cursorClickPos(mousePos, currentText, text);
                 }
             }
             // Dacă event-ul curent presupune caractere date de la tastatură...
