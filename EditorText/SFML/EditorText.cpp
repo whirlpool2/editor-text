@@ -215,15 +215,31 @@ void handleKeyboardInput(RenderWindow& Window)
                 {
                     cursorPos++;
                 }
+				if (event.key.code == Keyboard::Up && cursorPos > 0)
+				{
+					do
+					{
+						cursorPos--;
+					} while (currentText[cursorPos] != '\n' && cursorPos - 1 > 0);
+				}
+				if (event.key.code == Keyboard::Down && cursorPos < currentText.size())
+				{
+					do
+					{
+						cursorPos++;
+                    } while (currentText[cursorPos] != '\n' && cursorPos < currentText.size());
+				}
                 if (event.key.code == Keyboard::Equal && Keyboard::isKeyPressed(Keyboard::LControl))
                 {
                     size = size + 4;
                     text.setCharacterSize(size);
+                    cursor.setSize(Vector2f(2, text.getCharacterSize()));
                 }
                 if (event.key.code == Keyboard::Dash && Keyboard::isKeyPressed(Keyboard::LControl))
                 {
                     size = (size > 6) ? size - 4 : size;
                     text.setCharacterSize(size);
+                    cursor.setSize(Vector2f(2, text.getCharacterSize()));
                 }
             }
         }
