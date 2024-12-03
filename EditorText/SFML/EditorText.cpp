@@ -125,16 +125,22 @@ string suffix(string& str, int k)
 
 //Vreau sa fac o functie pentru animatia unde se afla cursorul pe locul unde tastez
 
-void cursorAnimate(RectangleShape& cursor, Clock& timpAlternanta, bool& esteVizibil) {
+void cursorAnimate(RectangleShape& cursor, Clock& timpAlternanta, bool& esteVizibil)
+{
     //in esteVizibil retin daca afisam cursor care are forma de dreptunghi , daca estevizibil dau culoare alb , altfel fac transparent
-    if (timpAlternanta.getElapsedTime().asMilliseconds() > 500) {
-        esteVizibil = 1 - esteVizibil;//daca este true il fac fals , altfel il fac true
+    if (timpAlternanta.getElapsedTime().asMilliseconds() > 500)
+    {
+        esteVizibil = 1 - esteVizibil; // Alternăm vizibilitatea după 500 milisecunde.
         timpAlternanta.restart();
     }
     if (esteVizibil)
-        cursor.setFillColor(Color::White);
+    {
+        cursor.setFillColor(Color(COLOR_TEXT.r, COLOR_TEXT.g, COLOR_TEXT.b));
+    }
     else
+    {
         cursor.setFillColor(Color::Transparent);
+    }
 }
 
 // Primește informații de la tastatură și modifică documentul corespunzător.
@@ -200,7 +206,7 @@ void handleKeyboardInput(RenderWindow& Window)
             }
             if (event.type == Event::KeyPressed) // Acest caz tratează tastele ce nu produc caractere.
             {
-                if (event.key.code == Keyboard::Left && cursorPos >= 0)
+                if (event.key.code == Keyboard::Left && cursorPos > 0)
                 {
                     cursorPos--;
                 }
@@ -232,11 +238,9 @@ void handleKeyboardInput(RenderWindow& Window)
         // dupa pe cele negative si da crash din cauza asta(nu este alocat in memorie pe pozitiile de dincolo, trb conditie de oprire
         //Punem animatia la cursor 
         cursorAnimate(cursor, timpAlternanta, esteVizibil);
-        
-
 
         // Actualizăm window-ul.
-        Window.clear(Color::Black);
+        Window.clear(Color(COLOR_BG.r, COLOR_BG.g, COLOR_BG.b));
         Window.draw(text);
         Window.draw(cursor);
         Window.display();
