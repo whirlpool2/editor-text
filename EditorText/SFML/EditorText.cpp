@@ -190,16 +190,16 @@ void handleKeyboardInput(RenderWindow& Window)
     
     int fontSize = 24;
 
-    RectangleShape cursor;
-    Clock timpAlternanta;
+    RectangleShape cursorVisual;
+    Clock cursorBlinkInterval;
     bool esteVizibil = true;
-    cursor.setFillColor(Color::White);
-    cursor.setSize(Vector2f(2, text.getCharacterSize()));
+    cursorVisual.setFillColor(Color::White);
+    cursorVisual.setSize(Vector2f(2, text.getCharacterSize()));
 
-    //pun cursorul pe pozitia initiala
+    // Se pune cursorul vizual pe prima poziție a documentului.
+    cursorVisual.setPosition(text.getPosition().x, text.getPosition().y);
 
-    cursor.setPosition(text.getPosition().x, text.getPosition().y);
-
+    // Setăm fontul la unul arbitrar.
     setFont(text, font, 24, COLOR_TEXT, "Fonts/CascadiaMono.ttf");
 
     while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul rulează la infinit.
@@ -226,18 +226,18 @@ void handleKeyboardInput(RenderWindow& Window)
             {
                 if (event.text.unicode < 128)
                 {
+                    // Convertim tasta apăsată într-un char.
                     char key = static_cast<char>(event.text.unicode);
 
                     // Dacă se apasă backspace și se poate șterge...
                     if (key == 8 && !currentText.empty() && cursorPos > 0)
                     {
                         currentText.erase(cursorPos - 1, 1);
-                        cursorPos--; // Devansăm cu o poziție după ștergere.
+                        cursorPos--;
                     }
                     else if (key >= 32 && key <= 126)
                     {
                         // key in [32, 126] implică caracterele alfanumerice, punctuații și paranteze, etc.
-                        // După inserarea caracterului, se incrementează poziția cursorului.
                         currentText.insert(cursorPos, 1, key);
                         cursorPos++;
                     }
@@ -273,42 +273,41 @@ void handleKeyboardInput(RenderWindow& Window)
 					{
 						cursorPos++;
                     } while (currentText[cursorPos] != '\n' && cursorPos < currentText.size());
-                    // BUG: Dacă ne aflăm pe penultima linie și incercăm să trecem la următoarea, dă crash.
-                    //      Trebuie o condiție de oprire mai bună.
 				}
                 if (event.key.code == Keyboard::Equal && Keyboard::isKeyPressed(Keyboard::LControl)) // Zoom-in (CTRL + '=')
                 {
                     fontSize = fontSize + 4;
                     text.setCharacterSize(fontSize);
-                    cursor.setSize(Vector2f(2, text.getCharacterSize()));
+                    cursorVisual.setSize(Vector2f(2, text.getCharacterSize()));
                 }
                 if (event.key.code == Keyboard::Dash && Keyboard::isKeyPressed(Keyboard::LControl)) // Zoom-out (CTRL + '-')
                 {
                     fontSize = (fontSize > 6) ? fontSize - 4 : fontSize;
                     text.setCharacterSize(fontSize);
-                    cursor.setSize(Vector2f(2, text.getCharacterSize()));
+                    cursorVisual.setSize(Vector2f(2, text.getCharacterSize()));
                 }
             }
         }
 
-        // Se actualizează poziția cursorului.
+        // Se actualizează poziția cursorului vizual.
         if (currentText.empty() == 0 && cursorPos > 0)
         {
-            Vector2f pozitieNouaCursor = text.findCharacterPos(cursorPos); // Funcția findCharacterPos returnează un vector de
-            cursor.setPosition(pozitieNouaCursor.x, pozitieNouaCursor.y);  // 2 floaturi care conține poziția caracterului de la cursorPos.
+            Vector2f cursorVisualPos = text.findCharacterPos(cursorPos);
+            cursorVisual.setPosition(cursorVisualPos.x, cursorVisualPos.y);
+            // Funcția findCharacterPos returnează poziția unui caracter dintr-un text ca o pereche de 2 float-uri.
         }
         else // Dacă currentText este gol, documentul este gol. Atunci, cursorul este poziționat unde ar veni primul caracter.
         {
-            cursor.setPosition(text.getPosition().x, text.getPosition().y);
+            cursorVisual.setPosition(text.getPosition().x, text.getPosition().y);
         }
         
         // Se animează cursorul.
-        cursorAnimate(cursor, timpAlternanta, esteVizibil);
+        cursorAnimate(cursorVisual, cursorBlinkInterval, esteVizibil);
 
         // Actualizăm window-ul.
         Window.clear(Color(COLOR_BG.r, COLOR_BG.g, COLOR_BG.b));
         Window.draw(text);
-        Window.draw(cursor);
+        Window.draw(cursorVisual);
         Window.display();
     }
 }

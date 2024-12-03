@@ -2,19 +2,19 @@
   EditorText.cpp
 C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(102,21): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(178,28): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(197,53): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(197,53): warning C4244:         with
-C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(197,53): warning C4244:         [
-C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(197,53): warning C4244:             T=float
-C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(197,53): warning C4244:         ]
-C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(283,69): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(283,69): warning C4244:         with
-C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(283,69): warning C4244:         [
-C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(283,69): warning C4244:             T=float
-C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(283,69): warning C4244:         ]
-C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(289,69): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(289,69): warning C4244:         with
-C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(289,69): warning C4244:         [
-C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(289,69): warning C4244:             T=float
-C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(289,69): warning C4244:         ]
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(197,59): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(197,59): warning C4244:         with
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(197,59): warning C4244:         [
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(197,59): warning C4244:             T=float
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(197,59): warning C4244:         ]
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(281,75): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(281,75): warning C4244:         with
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(281,75): warning C4244:         [
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(281,75): warning C4244:             T=float
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(281,75): warning C4244:         ]
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(287,75): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(287,75): warning C4244:         with
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(287,75): warning C4244:         [
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(287,75): warning C4244:             T=float
+C:\Users\Stefan\source\repos\editor-text\EditorText\SFML\EditorText.cpp(287,75): warning C4244:         ]
   SFML.vcxproj -> C:\Users\Stefan\Source\Repos\editor-text\EditorText\x64\Debug\Editor Text.exe
