@@ -142,6 +142,26 @@ void cursorAnimate(RectangleShape& cursor, Clock& timpAlternanta, bool& esteVizi
         cursor.setFillColor(Color::Transparent);
     }
 }
+//Functie care updateaza pozitia cursorului in functie de mouse
+void updateCursorForMouse(Vector2i &mousepos, string currentText, int &cursorPos, Text text) {
+    
+    //Iteram prin tot textul pentru a gasi pozitia mouseului
+    for (int i = 0; i < currentText.size(); i++) {
+        Vector2f pozitieCaracterCurent = text.findCharacterPos(i);
+
+        //Verificam daca mouse ul este pe caracterul  curent
+        //Daca incercam sa verifica mousepos.x == pozitieCaractercurent.x  si   mousepos.y == pozitieCaracterCurent.y
+        //nu va functiona pentru ca mouse-ul ar trebui sa fie FIX pe aceeasi pozitie cu caracterul la care vrem sa ajungem, asa ca
+        //folosim intervale de 1 caracter
+        if (mousepos.x >= pozitieCaracterCurent.x and mousepos.x <= pozitieCaracterCurent.x + text.getCharacterSize()
+            and mousepos.y >= pozitieCaracterCurent.y and mousepos.y <= pozitieCaracterCurent.y + text.getCharacterSize()) {
+            cursorPos = i + 1;
+            break;
+        }
+        }
+
+
+}
 
 // Primește informații de la tastatură și modifică documentul corespunzător.
 void handleKeyboardInput(RenderWindow& Window)
@@ -176,7 +196,14 @@ void handleKeyboardInput(RenderWindow& Window)
             {
                 Window.close();
             }
-
+            
+            //Daca este apasat click stanga
+            if (event.type == Event::MouseButtonPressed) {
+                if (event.mouseButton.button == Mouse::Left) {
+                    Vector2i mousepos = Mouse::getPosition(Window);
+                    updateCursorForMouse(mousepos, currentText, cursorPos, text);
+                }
+            }
             // Dacă event-ul curent presupune caractere date de la tastatură...
             if (event.type == Event::TextEntered)
             {
