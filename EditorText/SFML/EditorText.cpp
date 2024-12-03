@@ -199,6 +199,7 @@ void handleKeyboardInput(RenderWindow& Window)
                     }
                     else if (key == 13)
                     {
+                        // 13 corespude CR, adică ENTER.
                         currentText = prefix(currentText, cursorPos) + "\n" + suffix(currentText, cursorPos);
                     }
                 }
