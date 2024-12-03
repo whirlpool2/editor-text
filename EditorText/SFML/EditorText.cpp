@@ -123,8 +123,7 @@ string suffix(string& str, int k)
     return res;
 }
 
-//Vreau sa fac o functie pentru animatia unde se afla cursorul pe locul unde tastez
-
+// Animează vizualul cursorului (animația de blink).
 void cursorAnimate(RectangleShape& cursor, Clock& timpAlternanta, bool& esteVizibil)
 {
     //in esteVizibil retin daca afisam cursor care are forma de dreptunghi , daca estevizibil dau culoare alb , altfel fac transparent
@@ -133,6 +132,7 @@ void cursorAnimate(RectangleShape& cursor, Clock& timpAlternanta, bool& esteVizi
         esteVizibil = 1 - esteVizibil; // Alternăm vizibilitatea după 500 milisecunde.
         timpAlternanta.restart();
     }
+
     if (esteVizibil)
     {
         cursor.setFillColor(Color(COLOR_TEXT.r, COLOR_TEXT.g, COLOR_TEXT.b));
@@ -151,7 +151,9 @@ void handleKeyboardInput(RenderWindow& Window)
     Font font;
     Text text;
 
-    //Creez bara pt animatie cursor
+    // Creez bara pt animatie cursor
+    
+    int fontSize = 24;
 
     RectangleShape cursor;
     Clock timpAlternanta;
@@ -163,11 +165,9 @@ void handleKeyboardInput(RenderWindow& Window)
 
     cursor.setPosition(text.getPosition().x, text.getPosition().y);
 
-    int size = 24;
-
     setFont(text, font, 24, COLOR_TEXT, "Fonts/CascadiaMono.ttf");
 
-    while (Window.isOpen())
+    while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul rulează la infinit.
     {
         Event event;
         while (Window.pollEvent(event)) // Verificăm event-ul curent.
@@ -215,45 +215,49 @@ void handleKeyboardInput(RenderWindow& Window)
                 {
                     cursorPos++;
                 }
-				if (event.key.code == Keyboard::Up && cursorPos > 0)
+				if (event.key.code == Keyboard::Up && cursorPos > 0) // Trecem la linia precedentă.
 				{
 					do
 					{
 						cursorPos--;
 					} while (currentText[cursorPos] != '\n' && cursorPos - 1 > 0);
 				}
-				if (event.key.code == Keyboard::Down && cursorPos < currentText.size())
+				if (event.key.code == Keyboard::Down && cursorPos < currentText.size()) // Trecem la linia următoare.
 				{
 					do
 					{
 						cursorPos++;
                     } while (currentText[cursorPos] != '\n' && cursorPos < currentText.size());
+                    // BUG: Dacă ne aflăm pe penultima linie și incercăm să trecem la următoarea, dă crash.
+                    //      Trebuie o condiție de oprire mai bună.
 				}
-                if (event.key.code == Keyboard::Equal && Keyboard::isKeyPressed(Keyboard::LControl))
+                if (event.key.code == Keyboard::Equal && Keyboard::isKeyPressed(Keyboard::LControl)) // Zoom-in (CTRL + '=')
                 {
-                    size = size + 4;
-                    text.setCharacterSize(size);
+                    fontSize = fontSize + 4;
+                    text.setCharacterSize(fontSize);
                     cursor.setSize(Vector2f(2, text.getCharacterSize()));
                 }
-                if (event.key.code == Keyboard::Dash && Keyboard::isKeyPressed(Keyboard::LControl))
+                if (event.key.code == Keyboard::Dash && Keyboard::isKeyPressed(Keyboard::LControl)) // Zoom-out (CTRL + '-')
                 {
-                    size = (size > 6) ? size - 4 : size;
-                    text.setCharacterSize(size);
+                    fontSize = (fontSize > 6) ? fontSize - 4 : fontSize;
+                    text.setCharacterSize(fontSize);
                     cursor.setSize(Vector2f(2, text.getCharacterSize()));
                 }
             }
         }
 
-        //Actualizez pozitie cursor
-        if (currentText.empty() == 0 && cursorPos > 0) {
-            Vector2f pozitieNouaCursor = text.findCharacterPos(cursorPos);
-            cursor.setPosition(pozitieNouaCursor.x, pozitieNouaCursor.y);
+        // Se actualizează poziția cursorului.
+        if (currentText.empty() == 0 && cursorPos > 0)
+        {
+            Vector2f pozitieNouaCursor = text.findCharacterPos(cursorPos); // Funcția findCharacterPos returnează un vector de
+            cursor.setPosition(pozitieNouaCursor.x, pozitieNouaCursor.y);  // 2 floaturi care conține poziția caracterului de la cursorPos.
         }
-        else
+        else // Dacă currentText este gol, documentul este gol. Atunci, cursorul este poziționat unde ar veni primul caracter.
+        {
             cursor.setPosition(text.getPosition().x, text.getPosition().y);
-        //aici trebuie rezolvat o problema importanta , daca incerc sa apas repetat tasta left arrow de multe ori , ajung pe prima pozitie
-        // dupa pe cele negative si da crash din cauza asta(nu este alocat in memorie pe pozitiile de dincolo, trb conditie de oprire
-        //Punem animatia la cursor 
+        }
+        
+        // Se animează cursorul.
         cursorAnimate(cursor, timpAlternanta, esteVizibil);
 
         // Actualizăm window-ul.
