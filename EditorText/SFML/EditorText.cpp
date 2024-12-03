@@ -142,7 +142,7 @@ void cursorAnimate(RectangleShape& cursor, Clock& timpAlternanta, bool& esteVizi
         cursor.setFillColor(Color::Transparent);
     }
 }
-//Functie care updateaza pozitia cursorului in functie de mouse
+//Functie care updateaza pozitia cursorului in functie de mouse 
 void updateCursorForMouse(Vector2i &mousepos, string currentText, int &cursorPos, Text text) {
     
     //Iteram prin tot textul pentru a gasi pozitia mouseului
