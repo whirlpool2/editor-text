@@ -141,9 +141,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EditorText.cpp" />
+    <ClCompile Include="textFuncs.cpp" />
+    <ClCompile Include="textStructs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="Fonts\CascadiaMono.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="textFuncs.h" />
+    <ClInclude Include="textStructs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
