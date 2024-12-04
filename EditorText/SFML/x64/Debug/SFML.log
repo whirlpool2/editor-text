@@ -2,21 +2,21 @@
   EditorText.cpp
 D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(102,21): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
 D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(178,28): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
-D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(197,59): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(197,59): warning C4244:         with
-D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(197,59): warning C4244:         [
-D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(197,59): warning C4244:             T=float
-D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(197,59): warning C4244:         ]
-D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(281,75): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(281,75): warning C4244:         with
-D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(281,75): warning C4244:         [
-D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(281,75): warning C4244:             T=float
-D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(281,75): warning C4244:         ]
-D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(287,75): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(287,75): warning C4244:         with
-D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(287,75): warning C4244:         [
-D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(287,75): warning C4244:             T=float
-D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(287,75): warning C4244:         ]
+D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(236,59): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(236,59): warning C4244:         with
+D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(236,59): warning C4244:         [
+D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(236,59): warning C4244:             T=float
+D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(236,59): warning C4244:         ]
+D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(323,75): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(323,75): warning C4244:         with
+D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(323,75): warning C4244:         [
+D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(323,75): warning C4244:             T=float
+D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(323,75): warning C4244:         ]
+D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(329,75): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(329,75): warning C4244:         with
+D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(329,75): warning C4244:         [
+D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(329,75): warning C4244:             T=float
+D:\Repositories\Editor-text\EditorText\SFML\EditorText.cpp(329,75): warning C4244:         ]
 sfml-graphics-s-d.lib(Transformable.obj) : warning LNK4099: PDB '' was not found with 'sfml-graphics-s-d.lib(Transformable.obj)' or at ''; linking object as if no debug info
 sfml-graphics-s-d.lib(Color.obj) : warning LNK4099: PDB '' was not found with 'sfml-graphics-s-d.lib(Color.obj)' or at ''; linking object as if no debug info
 sfml-graphics-s-d.lib(VertexArray.obj) : warning LNK4099: PDB '' was not found with 'sfml-graphics-s-d.lib(VertexArray.obj)' or at ''; linking object as if no debug info

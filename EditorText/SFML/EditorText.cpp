@@ -178,6 +178,44 @@ int cursorClickPos(Vector2i &mousePos, string currentText, Text text)
     return currentText.size();
 }
 
+//Functie pentru creare scrollBar si functionalitate
+
+void ScrollBar(Event& event, RenderWindow& window, RectangleShape& background, RectangleShape& slider, bool& isDragged, float& scrollPos) {
+    background.setSize(Vector2f(20, 800));
+    background.setPosition(780, 0);
+    background.setFillColor(Color(200, 200, 200));
+
+    slider.setSize(Vector2f(20, 50));
+    slider.setPosition(780, scrollPos * (background.getSize().y - slider.getSize().y));
+    slider.setFillColor(Color(100, 100, 100));
+
+    if (event.type == Event::MouseButtonPressed) {
+        Vector2i mousePos = Mouse::getPosition(window);
+        if (slider.getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
+            isDragged = true;
+        }
+    }
+    else if (event.type == Event::MouseButtonReleased) {
+        isDragged = false;
+    }
+    else if (event.type == Event::MouseMoved && isDragged) {
+        Vector2i mousePos = Mouse::getPosition(window);
+        float newY = mousePos.y - (slider.getSize().y / 2.0f);
+        float backgroundTop = background.getPosition().y;
+        float backgroundBottom = background.getPosition().y + background.getSize().y - slider.getSize().y;
+
+        if (newY < backgroundTop)
+            newY = backgroundTop;
+        if (newY > backgroundBottom)
+            newY = backgroundBottom;
+
+        slider.setPosition(slider.getPosition().x, newY);
+        float scrollLimit = background.getSize().y - slider.getSize().y;
+        scrollPos = (slider.getPosition().y - backgroundTop) / scrollLimit;
+    }
+}
+
+
 // Primește informații de la tastatură și modifică documentul corespunzător.
 void handleKeyboardInput(RenderWindow& Window)
 {
@@ -201,6 +239,9 @@ void handleKeyboardInput(RenderWindow& Window)
 
     // Setăm fontul la unul arbitrar.
     setFont(text, font, 24, COLOR_TEXT, "Fonts/CascadiaMono.ttf");
+
+    bool isDragged = false;
+	float scrollPos = 0.0f;
 
     while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul rulează la infinit.
     {
@@ -304,10 +345,20 @@ void handleKeyboardInput(RenderWindow& Window)
         // Se animează cursorul.
         cursorAnimate(cursorVisual, cursorBlinkInterval, esteVizibil);
 
+        //creez scrollbar si animatie
+
+        RectangleShape Bar;
+        RectangleShape Slider;
+
+        ScrollBar(event, Window, Bar, Slider, isDragged, scrollPos);
+
+
         // Actualizăm window-ul.
         Window.clear(Color(COLOR_BG.r, COLOR_BG.g, COLOR_BG.b));
         Window.draw(text);
         Window.draw(cursorVisual);
+        Window.draw(Bar);
+        Window.draw(Slider);
         Window.display();
     }
 }
