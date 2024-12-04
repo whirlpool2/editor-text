@@ -171,7 +171,7 @@ int cursorClickPos(Vector2i &mousePos, string currentText, Text text)
             return i + 1;
         }
         if (absDiff(mousePosFloat.y, charPos.y) <= fontSize && currentText[i] == '\n')
-        {
+        { 
             return i;
         }
     }
@@ -265,7 +265,7 @@ void handleKeyboardInput(RenderWindow& Window)
 					do
 					{
 						cursorPos--;
-					} while (currentText[cursorPos] != '\n' && cursorPos - 1 > 0);
+					} while (currentText[cursorPos] != '\n' && cursorPos > 0);
 				}
 				if (event.key.code == Keyboard::Down && cursorPos < currentText.size()) // Trecem la linia următoare.
 				{
