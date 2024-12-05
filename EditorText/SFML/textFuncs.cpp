@@ -133,8 +133,8 @@ unsigned int cursorClickPos(sf::Vector2i& mousePos, textDocument& doc, sf::Text 
 
 unsigned int visibleLineCount(sf::RenderWindow& window, sf::Text textObject)
 {
-    // return window.getSize().y / (textObject.getCharacterSize() + textObject.getLineSpacing());
-    return 5;
+	const sf::Font* font = textObject.getFont();
+	return window.getSize().y / font->getLineSpacing(textObject.getCharacterSize());
 }
 
 void updateTextObject(textDocument* doc, sf::RenderWindow& window, sf::Text& textObject, unsigned int firstLine)

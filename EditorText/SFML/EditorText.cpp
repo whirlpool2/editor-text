@@ -7,36 +7,44 @@
 
 using namespace std;
 
-//Functie pentru creare scrollBar si functionalitate
-
-void ScrollBar(Event& event, RenderWindow& window, RectangleShape& background, RectangleShape& slider, bool& isDragged, float& scrollPos) {
-    background.setSize(Vector2f(20, 800));
+// Implementează scrollbar-ul pentru text.
+void ScrollBar(sf::Event& event, sf::RenderWindow& window, sf::RectangleShape& background, sf::RectangleShape& slider, bool& isDragged, float& scrollPos)
+{
+    background.setSize(sf::Vector2f(20, 800));
     background.setPosition(780, 0);
-    background.setFillColor(Color(200, 200, 200));
+    background.setFillColor(sf::Color(200, 200, 200));
 
-    slider.setSize(Vector2f(20, 50));
+    slider.setSize(sf::Vector2f(20, 50));
     slider.setPosition(780, scrollPos * (background.getSize().y - slider.getSize().y));
-    slider.setFillColor(Color(100, 100, 100));
+    slider.setFillColor(sf::Color(100, 100, 100));
 
-    if (event.type == Event::MouseButtonPressed) {
-        Vector2i mousePos = Mouse::getPosition(window);
-        if (slider.getGlobalBounds().contains(static_cast<Vector2f>(mousePos))) {
+    if (event.type == sf::Event::MouseButtonPressed) 
+    {
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        if (slider.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) 
+        {
             isDragged = true;
         }
     }
-    else if (event.type == Event::MouseButtonReleased) {
+    else if (event.type == sf::Event::MouseButtonReleased) 
+    {
         isDragged = false;
     }
-    else if (event.type == Event::MouseMoved && isDragged) {
-        Vector2i mousePos = Mouse::getPosition(window);
+    else if (event.type == sf::Event::MouseMoved && isDragged) 
+    {
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         float newY = mousePos.y - (slider.getSize().y / 2.0f);
         float backgroundTop = background.getPosition().y;
         float backgroundBottom = background.getPosition().y + background.getSize().y - slider.getSize().y;
 
         if (newY < backgroundTop)
+        {
             newY = backgroundTop;
+        }
         if (newY > backgroundBottom)
+        {
             newY = backgroundBottom;
+        }
 
         slider.setPosition(slider.getPosition().x, newY);
         float scrollLimit = background.getSize().y - slider.getSize().y;
@@ -186,8 +194,8 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
 
         //creez scrollbar si animatie
 
-        RectangleShape Bar;
-        RectangleShape Slider;
+        sf::RectangleShape Bar;
+        sf::RectangleShape Slider;
 
         ScrollBar(event, Window, Bar, Slider, isDragged, scrollPos);
 
