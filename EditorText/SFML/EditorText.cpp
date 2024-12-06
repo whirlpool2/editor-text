@@ -148,10 +148,6 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                 {
                     doc.cursorPos++;
                 }
-                if (event.key.code == sf::Keyboard::Up && doc.cursorPos > 0) // Trecem la linia precedentă.
-                {
-                    cout << 'a';
-                }
                 if (event.key.code == sf::Keyboard::Down && doc.cursorPos < doc.charCount) // Trecem la linia următoare.
                 {
                     if (doc.getLineCount() != doc.getCursorLine(doc.cursorPos) - 1) {// Daca nu sunt pe ultima linie
@@ -159,23 +155,48 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                         //cred ca este inutil IF ul asta dar merge asa ca nu-l scot
                         if (doc.cursorPos == '\n')
                             currLinelength = doc.getLineLength(doc.cursorPos - 1);
-                         if (currLinelength + doc.cursorPos >= doc.charCount)
+                        if (currLinelength + doc.cursorPos >= doc.charCount)
                             doc.cursorPos = doc.charCount;
                         else if (doc.getCursorLine(doc.cursorPos + currLinelength + 1) != doc.getCursorLine(doc.cursorPos) + 1) {
                             while (doc.cursorPos < doc.charCount && doc.getChar(doc.cursorPos)->c != '\n')
-                                doc.cursorPos++;//daca nu merge fa do whilee
-                            doc.cursorPos++;
+                                doc.cursorPos++;//daca nu merge fa do while
+                            doc.cursorPos++;    //na ca nu ma faci do while ca merge si asa
                             doc.cursorPos += doc.getLineLength(doc.cursorPos);
                         }
                         else {
                             doc.cursorPos += currLinelength + 1;
                         }
                     }
-                    
-                    else if(doc.getLineCount() == doc.getCursorLine(doc.cursorPos) - 1){
-                        doc.cursorPos = doc.charCount;
+
+                    else if (doc.getLineCount() == doc.getCursorLine(doc.cursorPos) - 1) {//daca suntem pe ultima linie
+                        doc.cursorPos = doc.charCount;                                    //ne ducem la capatul ei
                     }
                 }
+                if (event.key.code == sf::Keyboard::Up && doc.cursorPos > 0) // Trecem la linia precedentă.
+                {
+                    if (doc.getCursorLine(doc.cursorPos) == 1 or doc.cursorPos == 0) {
+                        doc.cursorPos = doc.getLineLength(doc.cursorPos);
+                        cout << "SIGAMA";
+                    }
+                    else {
+                        int currLineLength = doc.getLineLength(doc.cursorPos);
+                        int prevLineLength = doc.getLineLength(doc.cursorPos - currLineLength - 2); //-2 ca ai si '\n'
+                        cout << "Linie curenta : " << currLineLength << " Linia dinainte: " << prevLineLength << endl;
+                        //Duc cursorul la inceputul liniei curente
+                        int currLineNumber = doc.getCursorLine(doc.cursorPos);
+                        int posinLine = 0;//Memorez pe ce pozitie este cursorul
+                        while (doc.getCursorLine(doc.cursorPos - 1) == currLineNumber) {
+                            doc.cursorPos--;
+                            posinLine++;
+                        }
+                        cout << "Poz curr : " << doc.cursorPos << " Cat scad: " << posinLine << endl;
+                        if (posinLine > prevLineLength)
+                            doc.cursorPos--;
+                        else doc.cursorPos = doc.cursorPos - (prevLineLength - posinLine + 1);
+                    }
+                    
+                }
+                
                 if (event.key.code == sf::Keyboard::Equal && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) // Zoom-in (CTRL + '=')
                 {
                     fontSize = fontSize + 4;
