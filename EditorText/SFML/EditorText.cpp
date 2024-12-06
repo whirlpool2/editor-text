@@ -154,7 +154,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                 }
                 if (event.key.code == sf::Keyboard::Down && doc.cursorPos < doc.charCount) // Trecem la linia următoare.
                 {
-                    if (doc.getLineCount() != doc.getCursorLine(doc.cursorPos) - 1) {//Daca nu sunt pe ultima linie
+                    if (doc.getLineCount() != doc.getCursorLine(doc.cursorPos) - 1) {// Daca nu sunt pe ultima linie
                         int currLinelength = doc.getLineLength(doc.cursorPos);
                         //cred ca este inutil IF ul asta dar merge asa ca nu-l scot
                         if (doc.cursorPos == '\n')
