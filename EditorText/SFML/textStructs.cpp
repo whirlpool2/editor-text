@@ -127,3 +127,19 @@ unsigned long long textDocument::getCursorLine()
 
 	return lineCount;
 }
+
+unsigned long long textDocument::getLineLength(int CursorPos) {
+	int LineLength = 0;
+	int currLine = getCursorLine();//functioneaza bine
+	unsigned long long lineCount = 0;
+	character* p = this->first;
+	while (p != nullptr and currLine >= lineCount) {
+
+		if (currLine == lineCount)
+			LineLength++;
+		if (p->c == '\n')
+			lineCount++;
+		p = p->next;
+	}
+	return LineLength - 1;
+}

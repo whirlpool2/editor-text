@@ -37,6 +37,9 @@ struct textDocument
 
     // Returnează numărul liniei la care se află cursorul.
 	unsigned long long getCursorLine();
+
+    //Returneaza lungimea liniei curente
+    unsigned long long getLineLength(int cursorPos);
 };
 
 // CONSTS
