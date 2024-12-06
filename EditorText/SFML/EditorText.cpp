@@ -163,7 +163,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                             doc.cursorPos = doc.charCount;
                         else if (doc.getCursorLine(doc.cursorPos + currLinelength + 1) != doc.getCursorLine(doc.cursorPos) + 1) {
                             while (doc.cursorPos < doc.charCount && doc.getChar(doc.cursorPos)->c != '\n')
-                                doc.cursorPos++;//daca nu merge fa do while
+                                doc.cursorPos++;//daca nu merge fa do whilee
                             doc.cursorPos++;
                             doc.cursorPos += doc.getLineLength(doc.cursorPos);
                         }
