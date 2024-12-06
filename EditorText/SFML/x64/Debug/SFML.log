@@ -5,26 +5,35 @@ C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(69,63): w
 C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(69,63): warning C4244:         [
 C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(69,63): warning C4244:             T=float
 C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(69,63): warning C4244:         ]
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(157,68): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(158,67): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(158,44): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(161,78): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(161,63): warning C4244: '=': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(165,83): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(165,112): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(169,67): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(176,72): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(184,79): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(184,79): warning C4244:         with
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(184,79): warning C4244:         [
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(184,79): warning C4244:             T=float
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(184,79): warning C4244:         ]
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(190,79): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(190,79): warning C4244:         with
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(190,79): warning C4244:         [
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(190,79): warning C4244:             T=float
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(190,79): warning C4244:         ]
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(218,59): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(153,68): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(154,67): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(154,44): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(157,78): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(157,63): warning C4244: '=': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(160,83): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(160,112): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(164,67): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(171,73): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(177,46): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(178,62): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(182,67): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(182,44): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(183,95): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(183,44): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(186,67): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(186,44): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(188,64): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(204,79): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(204,79): warning C4244:         with
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(204,79): warning C4244:         [
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(204,79): warning C4244:             T=float
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(204,79): warning C4244:         ]
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(210,79): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(210,79): warning C4244:         with
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(210,79): warning C4244:         [
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(210,79): warning C4244:             T=float
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(210,79): warning C4244:         ]
+C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(238,59): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
 sfml-graphics-s-d.lib(Transformable.obj) : warning LNK4099: PDB '' was not found with 'sfml-graphics-s-d.lib(Transformable.obj)' or at ''; linking object as if no debug info
 sfml-graphics-s-d.lib(Color.obj) : warning LNK4099: PDB '' was not found with 'sfml-graphics-s-d.lib(Color.obj)' or at ''; linking object as if no debug info
 sfml-graphics-s-d.lib(VertexArray.obj) : warning LNK4099: PDB '' was not found with 'sfml-graphics-s-d.lib(VertexArray.obj)' or at ''; linking object as if no debug info
