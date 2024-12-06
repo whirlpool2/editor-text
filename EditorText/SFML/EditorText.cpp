@@ -156,7 +156,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                 {
                     if (doc.getLineCount() != doc.getCursorLine(doc.cursorPos) - 1) {//Daca nu sunt pe ultima linie
                         int currLinelength = doc.getLineLength(doc.cursorPos);
-                        //cred ca este inutil IF ul asta dar merge asa ca nu l scot
+                        //cred ca este inutil IF ul asta dar merge asa ca nu-l scot
                         if (doc.cursorPos == '\n')
                             currLinelength = doc.getLineLength(doc.cursorPos - 1);
                          if (currLinelength + doc.cursorPos >= doc.charCount)
