@@ -156,12 +156,11 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                 {
                     if (doc.getLineCount() != doc.getCursorLine(doc.cursorPos) - 1) {//Daca nu sunt pe ultima linie
                         int currLinelength = doc.getLineLength(doc.cursorPos);
-                        
+                        //cred ca este inutil IF ul asta dar merge asa ca nu l scot
                         if (doc.cursorPos == '\n')
                             currLinelength = doc.getLineLength(doc.cursorPos - 1);
-                        if (currLinelength + doc.cursorPos >= doc.charCount)
+                         if (currLinelength + doc.cursorPos >= doc.charCount)
                             doc.cursorPos = doc.charCount;
-                        //Daca linia curenta e mai mare decat urmatoarea
                         else if (doc.getCursorLine(doc.cursorPos + currLinelength + 1) != doc.getCursorLine(doc.cursorPos) + 1) {
                             while (doc.cursorPos < doc.charCount && doc.getChar(doc.cursorPos)->c != '\n')
                                 doc.cursorPos++;//daca nu merge fa do while
