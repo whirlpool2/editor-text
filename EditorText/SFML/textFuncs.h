@@ -40,3 +40,6 @@ void insertCharInTextObject(textDocument* doc, sf::Text& textObject, char c);
 
 // Șterge caracterul de la poziția cursorului din obiectul text.
 void deleteCharInTextObject(textDocument* doc, sf::Text& textObject);
+
+//Functie pentru generare bottomBar pe care afisam linia curenta si pozitia curenta pe linie
+void bottomBar(sf::Text& bottomBar, int lineNumber, int linePos, sf::Font& font, unsigned int windowHeight);

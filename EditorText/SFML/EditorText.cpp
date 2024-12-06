@@ -18,19 +18,19 @@ void ScrollBar(sf::Event& event, sf::RenderWindow& window, sf::RectangleShape& b
     slider.setPosition(780, scrollPos * (background.getSize().y - slider.getSize().y));
     slider.setFillColor(sf::Color(100, 100, 100));
 
-    if (event.type == sf::Event::MouseButtonPressed) 
+    if (event.type == sf::Event::MouseButtonPressed)
     {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-        if (slider.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos))) 
+        if (slider.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)))
         {
             isDragged = true;
         }
     }
-    else if (event.type == sf::Event::MouseButtonReleased) 
+    else if (event.type == sf::Event::MouseButtonReleased)
     {
         isDragged = false;
     }
-    else if (event.type == sf::Event::MouseMoved && isDragged) 
+    else if (event.type == sf::Event::MouseMoved && isDragged)
     {
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
         float newY = mousePos.y - (slider.getSize().y / 2.0f);
@@ -58,7 +58,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
 {
     sf::Font font;
     sf::Text text;
-    
+
     int fontSize = 24;
 
     // Declarăm forma pentru cursorul vizual.
@@ -74,10 +74,10 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
     // Setăm fontul la unul arbitrar.
     setFont(text, font, 24, COLOR_TEXT, (char*)"Fonts/CascadiaMono.ttf");
 
-	cout << visibleLineCount(Window, text) << endl; 
+    cout << visibleLineCount(Window, text) << endl;
 
     bool isDragged = false;
-	float scrollPos = 0.0f;
+    float scrollPos = 0.0f;
 
     while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul rulează la infinit.
     {
@@ -88,7 +88,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
             {
                 Window.close();
             }
-            
+
             // Daca este apăsat click stânga.
             if (event.type == sf::Event::MouseButtonPressed)
             {
@@ -109,34 +109,34 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                     // Dacă se apasă backspace și se poate șterge...
                     if (key == 8 && doc.charCount != 0 && doc.cursorPos > 0)
                     {
-						cout << "Se sterge caracterul de la pozitia " << doc.cursorPos << endl;
-						deleteCharInTextObject(&doc, text);
+                        cout << "Se sterge caracterul de la pozitia " << doc.cursorPos << endl;
+                        deleteCharInTextObject(&doc, text);
                     }
                     else if (key >= 32 && key <= 126)
                     {
                         // key in [32, 126] implică caracterele alfanumerice, punctuații și paranteze, etc.
-						cout << "Se insereaza caracterul " << key << " la pozitia " << doc.cursorPos << endl;
-						insertCharInTextObject(&doc, text, key);
+                        cout << "Se insereaza caracterul " << key << " la pozitia " << doc.cursorPos << endl;
+                        insertCharInTextObject(&doc, text, key);
                     }
                     else if (key == 13)
                     {
                         // 13 corespude CR, adică ENTER.
-						insertCharInTextObject(&doc, text, '\n');
+                        insertCharInTextObject(&doc, text, '\n');
                     }
                 }
                 // TODO: Revizitează optimizarea asta.
-				// Probabil ar trebui să țin minte doi cursori diferiți, unul pentru cursorul vizual și unul pentru cursorul documentului.
+                // Probabil ar trebui să țin minte doi cursori diferiți, unul pentru cursorul vizual și unul pentru cursorul documentului.
                 // Ar fi cam greu totuși.
                 /*
-				if (doc.getCursorLine() > visibleLineCount(Window, text))
+                if (doc.getCursorLine() > visibleLineCount(Window, text))
                 {
-					cout << "Cursorul este la o linie mai mare decat numarul de linii vizibile. (" << doc.getCursorLine() << " > " << visibleLineCount(Window, text) << ")" << endl;
+                    cout << "Cursorul este la o linie mai mare decat numarul de linii vizibile. (" << doc.getCursorLine() << " > " << visibleLineCount(Window, text) << ")" << endl;
                     updateTextObject(&doc, Window, text, doc.getCursorLine() - visibleLineCount(Window, text));
-				}
+                }
                 */
 
                 // Test pentru funcția docToString. Se va șterge, și va fi apelată la nevoie ulterior.
-				text.setString(docToString(&doc)); // CONFIRMED: MERGE
+                text.setString(docToString(&doc)); // CONFIRMED: MERGE
             }
             if (event.type == sf::Event::KeyPressed) // Acest caz tratează tastele ce nu produc caractere.
             {
@@ -148,20 +148,20 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                 {
                     doc.cursorPos++;
                 }
-				if (event.key.code == sf::Keyboard::Up && doc.cursorPos > 0) // Trecem la linia precedentă.
-				{
-					do
-					{
-						doc.cursorPos--;
+                if (event.key.code == sf::Keyboard::Up && doc.cursorPos > 0) // Trecem la linia precedentă.
+                {
+                    do
+                    {
+                        doc.cursorPos--;
                     } while (doc.getChar(doc.cursorPos)->c != '\n' && doc.cursorPos - 1 > 0);
-				}
-				if (event.key.code == sf::Keyboard::Down && doc.cursorPos < doc.charCount) // Trecem la linia următoare.
-				{
-					do
-					{
-						doc.cursorPos++;
+                }
+                if (event.key.code == sf::Keyboard::Down && doc.cursorPos < doc.charCount) // Trecem la linia următoare.
+                {
+                    do
+                    {
+                        doc.cursorPos++;
                     } while (doc.getChar(doc.cursorPos)->c != '\n' && doc.cursorPos < doc.charCount);
-				}
+                }
                 if (event.key.code == sf::Keyboard::Equal && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) // Zoom-in (CTRL + '=')
                 {
                     fontSize = fontSize + 4;
@@ -171,7 +171,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                 if (event.key.code == sf::Keyboard::Dash && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) // Zoom-out (CTRL + '-')
                 {
                     fontSize = (fontSize > 6) ? fontSize - 4 : fontSize;
-                    text.setCharacterSize(fontSize);
+                    text.setCharacterSize(fontSize);    
                     cursorVisual.setSize(sf::Vector2f(2, text.getCharacterSize()));
                 }
             }
@@ -188,7 +188,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
         {
             cursorVisual.setPosition(text.getPosition().x, text.getPosition().y);
         }
-        
+
         // Se animează cursorul.
         cursorAnimate(cursorVisual, cursorBlinkInterval, cursorVisible);
 
@@ -199,6 +199,8 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
 
         ScrollBar(event, Window, Bar, Slider, isDragged, scrollPos);
 
+        sf::Text barAtBottom;
+        bottomBar(barAtBottom, (int)(doc.getCursorLine()), (int)(doc.cursorPos), font, (unsigned int)(Window.getSize().y));
 
         // Actualizăm window-ul.
         Window.clear(sf::Color(COLOR_BG.r, COLOR_BG.g, COLOR_BG.b));
@@ -206,6 +208,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
         Window.draw(cursorVisual);
         Window.draw(Bar);
         Window.draw(Slider);
+        Window.draw(barAtBottom);
         Window.display();
     }
 }
