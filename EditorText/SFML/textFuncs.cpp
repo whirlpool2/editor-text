@@ -109,7 +109,7 @@ void cursorAnimate(sf::RectangleShape& cursor, sf::Clock& blinkInterval, bool& v
     }
 }
 
-unsigned int cursorClickPos(sf::Vector2i& mousePos, textDocument& doc, sf::Text textObject)
+unsigned long long cursorClickPos(sf::Vector2i& mousePos, textDocument& doc, sf::Text textObject)
 {
     sf::Vector2f mousePosFloat = { mousePos.x * 1.0f, mousePos.y * 1.0f };
     sf::String text = textObject.getString();

@@ -157,44 +157,51 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                             currLinelength = doc.getLineLength(doc.cursorPos - 1);
                         if (currLinelength + doc.cursorPos >= doc.charCount)
                             doc.cursorPos = doc.charCount;
-                        else if (doc.getCursorLine(doc.cursorPos + currLinelength + 1) != doc.getCursorLine(doc.cursorPos) + 1) {
+                        else if (doc.getCursorLine(doc.cursorPos + currLinelength + 1) != doc.getCursorLine(doc.cursorPos) + 1)
+                        {
                             while (doc.cursorPos < doc.charCount && doc.getChar(doc.cursorPos)->c != '\n')
-                                doc.cursorPos++;//daca nu merge fa do while
-                            doc.cursorPos++;    //na ca nu ma faci do while ca merge si asa
+                            {
+                                doc.cursorPos++;
+                            }
+
+                            doc.cursorPos++;
                             doc.cursorPos += doc.getLineLength(doc.cursorPos);
                         }
-                        else {
+                        else
+                        {
                             doc.cursorPos += currLinelength + 1;
                         }
                     }
-
-                    else if (doc.getLineCount() == doc.getCursorLine(doc.cursorPos) - 1) {//daca suntem pe ultima linie
-                        doc.cursorPos = doc.charCount;                                    //ne ducem la capatul ei
+                    // Dacă suntem pe ultima linie ne ducem la capătul ei.
+                    else if (doc.getLineCount() == doc.getCursorLine(doc.cursorPos) - 1)
+                    {
+                        doc.cursorPos = doc.charCount;
                     }
                 }
                 if (event.key.code == sf::Keyboard::Up && doc.cursorPos > 0) // Trecem la linia precedentă.
                 {
-                    if (doc.getCursorLine(doc.cursorPos) == 1 or doc.cursorPos == 0) {
+                    if (doc.getCursorLine(doc.cursorPos) == 1 or doc.cursorPos == 0)
+                    {
                         doc.cursorPos = doc.getLineLength(doc.cursorPos);
-                        cout << "SIGAMA";
                     }
-                    else {
+                    else
+                    {
                         int currLineLength = doc.getLineLength(doc.cursorPos);
                         int prevLineLength = doc.getLineLength(doc.cursorPos - currLineLength - 2); //-2 ca ai si '\n'
-                        cout << "Linie curenta : " << currLineLength << " Linia dinainte: " << prevLineLength << endl;
-                        //Duc cursorul la inceputul liniei curente
+                        cout << "Linie curenta : " << currLineLength << endl << " Linia dinainte: " << prevLineLength << endl;
+                        // Duc cursorul la inceputul liniei curente
                         int currLineNumber = doc.getCursorLine(doc.cursorPos);
-                        int posinLine = 0;//Memorez pe ce pozitie este cursorul
-                        while (doc.getCursorLine(doc.cursorPos - 1) == currLineNumber) {
+                        int posInLine = 0;//Memorez pe ce pozitie este cursorul
+                        while (doc.getCursorLine(doc.cursorPos - 1) == currLineNumber)
+                        {
                             doc.cursorPos--;
-                            posinLine++;
+                            posInLine++;
                         }
                         cout << "Poz curr : " << doc.cursorPos << " Cat scad: " << posinLine << endl;
-                        if (posinLine > prevLineLength)
+                        if (posInLine > prevLineLength)
                             doc.cursorPos--;
                         else doc.cursorPos = doc.cursorPos - (prevLineLength - posinLine + 1);
                     }
-                    
                 }
                 
                 if (event.key.code == sf::Keyboard::Equal && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) // Zoom-in (CTRL + '=')
