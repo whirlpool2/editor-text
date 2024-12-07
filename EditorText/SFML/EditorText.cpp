@@ -150,61 +150,30 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                 }
                 if (event.key.code == sf::Keyboard::Down && doc.cursorPos < doc.charCount) // Trecem la linia următoare.
                 {
-                    if (doc.getLineCount() != doc.getCursorLine(doc.cursorPos) - 1) // Daca nu sunt pe ultima linie
+                    if (doc.getCursorLine() == doc.getLineCount() - 1)
                     {
-                        int currLinelength = doc.getLineLength(doc.cursorPos);
-                        //cred ca este inutil IF ul asta dar merge asa ca nu-l scot
-                        if (doc.cursorPos == '\n')
-                            currLinelength = doc.getLineLength(doc.cursorPos - 1);
-                        if (currLinelength + doc.cursorPos >= doc.charCount)
-                            doc.cursorPos = doc.charCount;
-                        else if (doc.getCursorLine(doc.cursorPos + currLinelength + 1) != doc.getCursorLine(doc.cursorPos) + 1)
-                        {
-                            while (doc.cursorPos < doc.charCount && doc.getChar(doc.cursorPos)->c != '\n')
-                            {
-                                doc.cursorPos++;
-                            }
-
-                            doc.cursorPos++;
-                            doc.cursorPos += doc.getLineLength(doc.cursorPos);
-                        }
-                        else
-                        {
-                            doc.cursorPos += currLinelength + 1;
-                        }
-                    }
-                    // Dacă suntem pe ultima linie ne ducem la capătul ei.
-                    else if (doc.getLineCount() == doc.getCursorLine(doc.cursorPos) - 1)
+						doc.cursorPos = doc.charCount;
+					}
+                    else
                     {
-                        doc.cursorPos = doc.charCount;
+                        unsigned int p = doc.getCursorPositionInLine();
+                        doc.gotoNextLine();
+                        doc.setCursorPositionInLine(p);
                     }
                 }
                 if (event.key.code == sf::Keyboard::Up && doc.cursorPos > 0) // Trecem la linia precedentă.
                 {
-                    if (doc.getCursorLine(doc.cursorPos) == 1 or doc.cursorPos == 0)
+                    if (doc.getCursorLine() == 0)
                     {
-                        doc.cursorPos = doc.getLineLength(doc.cursorPos);
+                        doc.cursorPos = 0;
                     }
                     else
                     {
-                        int currLineLength = doc.getLineLength(doc.cursorPos);
-                        int prevLineLength = doc.getLineLength(doc.cursorPos - currLineLength - 2); //-2 ca ai si '\n'
-                        cout << "Linie curenta : " << currLineLength << endl << " Linia dinainte: " << prevLineLength << endl;
-                        // Duc cursorul la inceputul liniei curente
-                        int currLineNumber = doc.getCursorLine(doc.cursorPos);
-                        int posInLine = 0;//Memorez pe ce pozitie este cursorul
-                        while (doc.getCursorLine(doc.cursorPos - 1) == currLineNumber)
-                        {
-                            doc.cursorPos--;
-                            posInLine++;
-                        }
-                        cout << "Poz curr : " << doc.cursorPos << " Cat scad: " << posInLine << endl;
-                        if (posInLine > prevLineLength)
-                            doc.cursorPos--;
-                        else doc.cursorPos = doc.cursorPos - (prevLineLength - posInLine + 1);
+                        unsigned int p = doc.getCursorPositionInLine();
+                        doc.gotoPrevLine();
+                        doc.setCursorPositionInLine(p);
                     }
                 }
-
                 if (event.key.code == sf::Keyboard::Equal && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) // Zoom-in (CTRL + '=')
                 {
                     fontSize = fontSize + 4;
@@ -243,8 +212,8 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
         ScrollBar(event, Window, Bar, Slider, isDragged, scrollPos);
 
         sf::Text barAtBottom;
-        int cursorLine = doc.getCursorLine(doc.cursorPos);
-        int linePos = doc.getLinePosition(doc.cursorPos);
+        int cursorLine = doc.getCursorLine();
+        int linePos = doc.getCursorPositionInLine();
         bottomBar(barAtBottom, cursorLine, linePos, font, (unsigned int)(Window.getSize().y));
 
         // Actualizăm window-ul.

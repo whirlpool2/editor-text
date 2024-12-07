@@ -136,6 +136,11 @@ unsigned long long textDocument::getCursorLineLength()
 	int lineLength = 0;
 	character* p = this->getChar(this->cursorPos);
 
+    if (p == nullptr)
+    {
+        return 0;
+    }
+
 	// Pentru a afla lungimea liniei curente, ne ducem la începutul ei și numărăm caracterele până la întâlnirea unui '\n'.
 	while (p->prev->c != '\n' && p != nullptr)
 	{
@@ -155,6 +160,11 @@ unsigned long long textDocument::getCursorPositionInLine()
 	unsigned long long pos = 0;
 	character* p = getChar(cursorPos);
 
+    if (p == nullptr)
+    {
+        return 0;
+    }
+
 	// Mergem înapoi până la începutul liniei, numărând caracterele.
 	while (p->prev->c != '\n' && p != nullptr)
 	{
@@ -171,7 +181,11 @@ character* textDocument::getLineStart(unsigned long long line)
 
 void textDocument::setCursorPositionInLine(unsigned int pos)
 {
-	this->cursorPos = this->cursorPos - getCursorPositionInLine() + pos;
+	if (pos > this->getCursorLineLength())
+	{
+		pos = this->getCursorLineLength();
+	}
+	this->cursorPos = this->cursorPos - this->getCursorPositionInLine() + pos;
 }
 
 void textDocument::gotoNextLine()
@@ -188,6 +202,12 @@ void textDocument::gotoNextLine()
 void textDocument::gotoPrevLine()
 {
 	character* p = this->getChar(this->cursorPos);
+
+    if (p == nullptr)
+    {
+        return;
+    }
+
 	while (p->c != '\n' && p != nullptr)
 	{
 		p = p->prev;
