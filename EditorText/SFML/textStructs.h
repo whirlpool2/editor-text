@@ -33,15 +33,19 @@ struct textDocument
     void deleteChar();
 
 	// Returnează numărul de linii din documentul text.
-    //GRIJA CA RETURNEAZA CU INDEXARE DE LA 0
     unsigned long long getLineCount();
 
     // Returnează numărul liniei la care se află cursorul
-    //GRIJA CA ASTA AFISEAZA CU INDEXARE DE LA 1
 	unsigned long long getCursorLine(int cursorPos);
 
-    //Returneaza lungimea liniei curente
-    unsigned long long getLineLength(int cursorPos);
+	// Returnează poziția cursorului în linia curentă.
+	unsigned long long getPositionInLine();
+
+    // Returnează lungimea liniei curente.
+    unsigned long long getLineLength(unsigned long long cursorPos);
+
+    // Setează poziția cursorului relativ la linia curentă.
+	void setCursorPositionInLine(unsigned int pos);
 };
 
 // CONSTS

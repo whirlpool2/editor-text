@@ -161,7 +161,8 @@ void deleteCharInTextObject(textDocument* doc, sf::Text& textObject)
 	doc->deleteChar();
 }
 
-void bottomBar(sf::Text& bottomBar, int lineNumber, int linePos, sf::Font& font, unsigned int windowHeight) {
+void bottomBar(sf::Text& bottomBar, int lineNumber, int linePos, sf::Font& font, unsigned int windowHeight)
+{
     std::string barText = "Line: " + std::to_string(lineNumber) + " Ch: " + std::to_string(linePos);
     bottomBar.setFont(font);
     bottomBar.setString(barText);
@@ -169,3 +170,5 @@ void bottomBar(sf::Text& bottomBar, int lineNumber, int linePos, sf::Font& font,
     bottomBar.setPosition(575, windowHeight - 30);
     bottomBar.setFillColor(sf::Color(255, 255, 255, 100));
 }
+
+unsigned long long 
