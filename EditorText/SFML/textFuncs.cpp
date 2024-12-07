@@ -8,36 +8,36 @@ sf::String docToString(textDocument* doc)
 
 	character* p = doc->first;
 	while (p != nullptr)
-	{
-		result += p->c;
+    {
+        result += p->c;
 		p = p->next;
-	}
+    }
 
-	return result;
+    return result;
 }
 
 sf::String docToVisible(textDocument* doc, sf::RenderWindow& window, sf::Text& textObject, unsigned int firstLine)
 {
 	sf::String result = "";
-	unsigned int lineCount = 0;
+    unsigned int lineCount = 0;
 
 	character* p = doc->getChar(0);
 	while (p != nullptr)
-	{
+    {
 		if (lineCount >= firstLine + visibleLineCount(window, textObject))
-		{
-			break;
-		}
-		if (lineCount >= firstLine)
-		{
-			result += p->c;
-		}
-		if (p->c == '\n')
-		{
-			lineCount++;
-		}
+        {
+            break;
+        }
+        if (lineCount >= firstLine)
+        {
+            result += p->c;
+        }
+        if (p->c == '\n')
+        {
+            lineCount++;
+        }
 		p = p->next;
-	}
+    }
 
     return result;
 }
@@ -133,7 +133,7 @@ unsigned long long cursorClickPos(sf::Vector2i& mousePos, textDocument& doc, sf:
 
 unsigned int visibleLineCount(sf::RenderWindow& window, sf::Text textObject)
 {
-	const sf::Font* font = textObject.getFont();
+    const sf::Font* font = textObject.getFont();
 	return window.getSize().y / font->getLineSpacing(textObject.getCharacterSize());
 }
 
@@ -145,24 +145,25 @@ void updateTextObject(textDocument* doc, sf::RenderWindow& window, sf::Text& tex
 
 void insertCharInTextObject(textDocument* doc, sf::Text& textObject, char c)
 {
-	std::cout << "Cursor pos is " << doc->cursorPos << std::endl;
-	sf::String text = textObject.getString();
-	text.insert(doc->cursorPos, c);
-	textObject.setString(text);
-	doc->insertChar(c);
+    std::cout << "Cursor pos is " << doc->cursorPos << std::endl;
+    sf::String text = textObject.getString();
+    text.insert(doc->cursorPos, c);
+    textObject.setString(text);
+    doc->insertChar(c);
 }
 
 void deleteCharInTextObject(textDocument* doc, sf::Text& textObject)
 {
     std::cout << "Cursor pos is " << doc->cursorPos << std::endl;
-	sf::String text = textObject.getString();
-	text.erase(doc->cursorPos - 1, 1);
-	textObject.setString(text);
-	doc->deleteChar();
+    sf::String text = textObject.getString();
+    text.erase(doc->cursorPos - 1, 1);
+    textObject.setString(text);
+    doc->deleteChar();
 }
 
-void bottomBar(sf::Text& bottomBar, int lineNumber, int linePos, sf::Font& font, unsigned int windowHeight)
-{
+void bottomBar(sf::Text& bottomBar, int lineNumber, int linePos, sf::Font& font, unsigned int windowHeight) {
+    if (linePos == '\n')
+        linePos = 0;
     std::string barText = "Line: " + std::to_string(lineNumber) + " Ch: " + std::to_string(linePos);
     bottomBar.setFont(font);
     bottomBar.setString(barText);
