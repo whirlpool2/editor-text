@@ -176,7 +176,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                 {
                     if (doc.getCursorLine(doc.cursorPos) == 1 or doc.cursorPos == 0) {
                         doc.cursorPos = doc.getLineLength(doc.cursorPos);
-                        cout << "SIGAMA";
+                        cout << "SIGMA";
                     }
                     else {
                         int currLineLength = doc.getLineLength(doc.cursorPos);
