@@ -42,6 +42,9 @@ struct textDocument
 
     //Returneaza lungimea liniei curente
     unsigned long long getLineLength(int cursorPos);
+
+    //Returneaza pozitia pe linia pe care ne aflam
+    int getLinePosition(int cursorPos);
 };
 
 // CONSTS

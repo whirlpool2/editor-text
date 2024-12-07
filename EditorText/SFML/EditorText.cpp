@@ -194,9 +194,9 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                             doc.cursorPos--;
                         else doc.cursorPos = doc.cursorPos - (prevLineLength - posinLine + 1);
                     }
-                    
+
                 }
-                
+
                 if (event.key.code == sf::Keyboard::Equal && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) // Zoom-in (CTRL + '=')
                 {
                     fontSize = fontSize + 4;
@@ -206,7 +206,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                 if (event.key.code == sf::Keyboard::Dash && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) // Zoom-out (CTRL + '-')
                 {
                     fontSize = (fontSize > 6) ? fontSize - 4 : fontSize;
-                    text.setCharacterSize(fontSize);    
+                    text.setCharacterSize(fontSize);
                     cursorVisual.setSize(sf::Vector2f(2, text.getCharacterSize()));
                 }
             }
@@ -235,7 +235,9 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
         ScrollBar(event, Window, Bar, Slider, isDragged, scrollPos);
 
         sf::Text barAtBottom;
-        bottomBar(barAtBottom, (int)(doc.getCursorLine(doc.cursorPos)), (int)(doc.cursorPos), font, (unsigned int)(Window.getSize().y));
+        int cursorLine = doc.getCursorLine(doc.cursorPos);
+        int linePos = doc.getLinePosition(doc.cursorPos);
+        bottomBar(barAtBottom, cursorLine, linePos, font, (unsigned int)(Window.getSize().y));
 
         // Actualizăm window-ul.
         Window.clear(sf::Color(COLOR_BG.r, COLOR_BG.g, COLOR_BG.b));
