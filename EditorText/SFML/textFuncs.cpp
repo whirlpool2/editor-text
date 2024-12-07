@@ -170,5 +170,3 @@ void bottomBar(sf::Text& bottomBar, int lineNumber, int linePos, sf::Font& font,
     bottomBar.setPosition(575, windowHeight - 30);
     bottomBar.setFillColor(sf::Color(255, 255, 255, 100));
 }
-
-unsigned long long 

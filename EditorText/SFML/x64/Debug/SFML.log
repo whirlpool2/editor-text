@@ -1,39 +1,37 @@
-﻿D:\Visual Studio Community 202\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (SFML.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(531,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (SFML.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   EditorText.cpp
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(69,63): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(69,63): warning C4244:         with
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(69,63): warning C4244:         [
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(69,63): warning C4244:             T=float
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(69,63): warning C4244:         ]
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(153,68): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(154,67): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(154,44): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(157,78): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(157,63): warning C4244: '=': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(160,83): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(160,112): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(164,67): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(171,73): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(177,46): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(178,62): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(182,67): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(182,44): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(183,95): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(183,44): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(186,67): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(186,44): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(188,64): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(204,79): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(204,79): warning C4244:         with
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(204,79): warning C4244:         [
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(204,79): warning C4244:             T=float
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(204,79): warning C4244:         ]
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(210,79): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(210,79): warning C4244:         with
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(210,79): warning C4244:         [
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(210,79): warning C4244:             T=float
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(210,79): warning C4244:         ]
-C:\Users\lucas\source\repos\editor-text\EditorText\SFML\EditorText.cpp(238,59): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(69,63): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(69,63): warning C4244:         with
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(69,63): warning C4244:         [
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(69,63): warning C4244:             T=float
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(69,63): warning C4244:         ]
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(153,68): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(154,44): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(157,63): warning C4244: '=': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(160,83): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(160,112): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(176,73): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(183,46): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(189,44): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(190,44): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(193,67): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(193,44): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(195,64): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(211,79): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(211,79): warning C4244:         with
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(211,79): warning C4244:         [
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(211,79): warning C4244:             T=float
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(211,79): warning C4244:         ]
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(217,79): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(217,79): warning C4244:         with
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(217,79): warning C4244:         [
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(217,79): warning C4244:             T=float
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(217,79): warning C4244:         ]
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\EditorText.cpp(245,59): warning C4244: 'argument': conversion from 'unsigned __int64' to 'int', possible loss of data
+  textFuncs.cpp
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\textFuncs.cpp(137,28): warning C4244: 'return': conversion from 'float' to 'unsigned int', possible loss of data
+C:\Users\Stef\source\repos\editor-text\EditorText\SFML\textFuncs.cpp(170,45): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+  Generating Code...
 sfml-graphics-s-d.lib(Transformable.obj) : warning LNK4099: PDB '' was not found with 'sfml-graphics-s-d.lib(Transformable.obj)' or at ''; linking object as if no debug info
 sfml-graphics-s-d.lib(Color.obj) : warning LNK4099: PDB '' was not found with 'sfml-graphics-s-d.lib(Color.obj)' or at ''; linking object as if no debug info
 sfml-graphics-s-d.lib(VertexArray.obj) : warning LNK4099: PDB '' was not found with 'sfml-graphics-s-d.lib(VertexArray.obj)' or at ''; linking object as if no debug info
@@ -92,4 +90,4 @@ sfml-system-s-d.lib(ClockImpl.obj) : warning LNK4099: PDB '' was not found with 
 sfml-system-s-d.lib(MutexImpl.obj) : warning LNK4099: PDB '' was not found with 'sfml-system-s-d.lib(MutexImpl.obj)' or at ''; linking object as if no debug info
 sfml-system-s-d.lib(SleepImpl.obj) : warning LNK4099: PDB '' was not found with 'sfml-system-s-d.lib(SleepImpl.obj)' or at ''; linking object as if no debug info
 sfml-system-s-d.lib(ThreadLocalImpl.obj) : warning LNK4099: PDB '' was not found with 'sfml-system-s-d.lib(ThreadLocalImpl.obj)' or at ''; linking object as if no debug info
-  SFML.vcxproj -> C:\Users\lucas\Source\Repos\editor-text\EditorText\x64\Debug\Editor Text.exe
+  SFML.vcxproj -> C:\Users\Stef\Source\Repos\editor-text\EditorText\x64\Debug\Editor Text.exe

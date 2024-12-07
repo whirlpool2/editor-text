@@ -35,17 +35,26 @@ struct textDocument
 	// Returnează numărul de linii din documentul text.
     unsigned long long getLineCount();
 
-    // Returnează numărul liniei la care se află cursorul
-	unsigned long long getCursorLine(int cursorPos);
+	// Returnează numărul liniei la care se află cursorul (indexat de la 0).
+	unsigned long long getCursorLine();
 
-	// Returnează poziția cursorului în linia curentă.
-	unsigned long long getPositionInLine();
+	// Returnează poziția cursorului în linia curentă (indexată de la 0).
+	unsigned long long getCursorPositionInLine();
 
     // Returnează lungimea liniei curente.
-    unsigned long long getLineLength(unsigned long long cursorPos);
+    unsigned long long getCursorLineLength();
+
+    // Returnează un pointer la primul caracter al unei linii date.
+	character* getLineStart(unsigned long long line);
 
     // Setează poziția cursorului relativ la linia curentă.
 	void setCursorPositionInLine(unsigned int pos);
+
+    // Setează poziția cursorului pe primul caracter al următoarei linii.
+    void gotoNextLine();
+
+    // Setează poziția cursorului pe primul caracter al liniei precedente.
+    void gotoPrevLine();
 };
 
 // CONSTS
