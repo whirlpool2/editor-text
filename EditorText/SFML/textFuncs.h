@@ -6,6 +6,9 @@
 // Convertește structura de document text într-un string.
 sf::String docToString(textDocument* doc);
 
+// Afișează conținutul structurii textDocument în consolă.
+void debugString(textDocument* doc);
+
 // Convertește structura de document text într-un string ce conține doar liniile vizibile,
 // în funcție de dimensiunea fontului și a mărimii ferestrei.
 sf::String docToVisible(textDocument* doc, sf::RenderWindow& window, sf::Text& textObject, unsigned int firstLine);
@@ -42,4 +45,12 @@ void insertCharInTextObject(textDocument* doc, sf::Text& textObject, char c);
 void deleteCharInTextObject(textDocument* doc, sf::Text& textObject);
 
 //Functie pentru generare bottomBar pe care afisam linia curenta si pozitia curenta pe linie
-void bottomBar(sf::Text& bottomBar, int lineNumber, int linePos, sf::Font& font, unsigned int windowHeight);
+void bottomBar(textDocument& doc, sf::Text& bottomBar, sf::Font& font, unsigned int windowHeight);
+
+// Încarcă un fișier într-un obiect textDocument.
+// Nu se setează aici și obiectul text pentru a permite schimbarea între documente pe același obiect text.
+void loadFile(textDocument& doc, char* path);
+
+// Salvează un obiect textDocument într-un fișier.
+// Nu se setează aici și obiectul text pentru a permite schimbarea între documente pe același obiect text.
+void saveFile(textDocument& doc, char* path);

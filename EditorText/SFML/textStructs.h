@@ -50,11 +50,11 @@ struct textDocument
     // Setează poziția cursorului relativ la linia curentă.
 	void setCursorPositionInLine(unsigned int pos);
 
-    // Setează poziția cursorului pe primul caracter al următoarei linii.
-    void gotoNextLine();
+    // Setează poziția cursorului pe următorul '\n'.
+    void gotoNextNewline();
 
-    // Setează poziția cursorului pe primul caracter al liniei precedente.
-    void gotoPrevLine();
+    // Setează poziția cursorului pe precedentul '\n'.
+    void gotoPrevNewline();
 };
 
 // CONSTS

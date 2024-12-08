@@ -1,9 +1,9 @@
-﻿#include "textFuncs.h"
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include "textFuncs.h"
 #include <iostream>
 
 sf::String docToString(textDocument* doc)
 {
-
 	sf::String result = "";
 
 	character* p = doc->first;
@@ -14,6 +14,35 @@ sf::String docToString(textDocument* doc)
     }
 
     return result;
+}
+
+void debugString(textDocument* doc)
+{
+    character* p = doc->first;
+    while (p != nullptr)
+    {
+		if (p->c == '\n')
+		{
+			std::cout << "\\n";
+		}
+		else
+		{
+			std::cout << p->c;
+		}
+        p = p->next;
+    }
+    
+    std::cout << std::endl;
+
+	for (int i = 0; i < doc->cursorPos; i++)
+	{
+		if (doc->getChar(i)!= nullptr && doc->getChar(i)->c == '\n')
+		{
+			std::cout << " ";
+		}
+		std::cout << " ";
+	}
+    std::cout << "^ (" << doc->cursorPos << ")" << std::endl;
 }
 
 sf::String docToVisible(textDocument* doc, sf::RenderWindow& window, sf::Text& textObject, unsigned int firstLine)
@@ -145,7 +174,7 @@ void updateTextObject(textDocument* doc, sf::RenderWindow& window, sf::Text& tex
 
 void insertCharInTextObject(textDocument* doc, sf::Text& textObject, char c)
 {
-    std::cout << "Cursor pos is " << doc->cursorPos << std::endl;
+    // std::cout << "DEBUG: Cursor pos is " << doc->cursorPos << " (relative to line: " << doc->getCursorPositionInLine() << ")" << std::endl;
     sf::String text = textObject.getString();
     text.insert(doc->cursorPos, c);
     textObject.setString(text);
@@ -154,20 +183,53 @@ void insertCharInTextObject(textDocument* doc, sf::Text& textObject, char c)
 
 void deleteCharInTextObject(textDocument* doc, sf::Text& textObject)
 {
-    std::cout << "Cursor pos is " << doc->cursorPos << std::endl;
+    // std::cout << "DEBUG: Cursor pos is " << doc->cursorPos << " (relative to line: " << doc->getCursorPositionInLine() << ")" << std::endl;
     sf::String text = textObject.getString();
     text.erase(doc->cursorPos - 1, 1);
     textObject.setString(text);
     doc->deleteChar();
 }
 
-void bottomBar(sf::Text& bottomBar, int lineNumber, int linePos, sf::Font& font, unsigned int windowHeight) {
-    if (linePos == '\n')
-        linePos = 0;
-    std::string barText = "Line: " + std::to_string(lineNumber) + " Ch: " + std::to_string(linePos);
+void bottomBar(textDocument& doc, sf::Text& bottomBar, sf::Font& font, unsigned int windowHeight)
+{
+    std::string barText = "Line: " + std::to_string(doc.getCursorLine()) + " Ch: " + std::to_string(doc.getCursorPositionInLine());
     bottomBar.setFont(font);
     bottomBar.setString(barText);
     bottomBar.setCharacterSize(20);
     bottomBar.setPosition(575, windowHeight - 30);
     bottomBar.setFillColor(sf::Color(255, 255, 255, 100));
+}
+
+void loadFile(textDocument& doc, char* path)
+{
+	FILE* file = fopen(path, "r");
+	if (file == nullptr)
+	{
+		std::cerr << "Fisierul " << path << " nu a fost gasit.\n";
+		return;
+	}
+	doc.init();
+	char c;
+	while ((c = fgetc(file)) != EOF)
+	{
+		doc.insertChar(c);
+	}
+	fclose(file);
+}
+
+void saveFile(textDocument& doc, char* path)
+{
+	FILE* file = fopen(path, "w");
+	if (file == nullptr)
+	{
+		std::cerr << "Fisierul " << path << " nu a putut fi deschis pentru scriere.\n";
+		return;
+	}
+	character* p = doc.first;
+	while (p != nullptr)
+	{
+		fputc(p->c, file);
+		p = p->next;
+	}
+	fclose(file);
 }
