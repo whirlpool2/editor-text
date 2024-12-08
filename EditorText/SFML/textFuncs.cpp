@@ -233,3 +233,24 @@ void saveFile(textDocument& doc, char* path)
 	}
 	fclose(file);
 }
+
+void scrollUp(unsigned int& firstLine) {
+    if (firstLine > 0)
+        firstLine--;
+}
+
+void scrollDown(unsigned int& firstLine, textDocument* doc, sf::RenderWindow& window, sf::Text& textCurent) {
+    unsigned int maxLines = visibleLineCount(window, textCurent);
+    unsigned int totalLines = 0;
+
+    character* p = doc->getChar(0);
+    while (p != nullptr) {
+        if (p->c == '\n') {
+            totalLines++;
+        }
+        p = p->next;
+    }
+    if (firstLine + maxLines < totalLines) {
+        firstLine++;
+    }
+}

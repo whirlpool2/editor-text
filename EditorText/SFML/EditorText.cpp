@@ -61,6 +61,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
     sf::Text text;
 
     int fontSize = 24;
+    unsigned int firstLine = 0;
 
     // Declarăm forma pentru cursorul vizual.
     sf::RectangleShape cursorVisual;
@@ -80,7 +81,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
     bool isDragged = false;
     float scrollPos = 0.0f;
 
-    text.setString(docToString(&doc));
+    updateTextObject(&doc, Window, text, firstLine);
 
     while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul rulează la infinit.
     {
@@ -133,7 +134,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                 {
                     cout << "Cursorul este la o linie mai mare decat numarul de linii vizibile. (" << doc.getCursorLine() << " > " << visibleLineCount(Window, text) << ")" << endl;
                     updateTextObject(&doc, Window, text, doc.getCursorLine() - visibleLineCount(Window, text));
-                }
+            }
                 */
 
                 // Test pentru funcția docToString. Se va șterge, și va fi apelată la nevoie ulterior.
@@ -154,23 +155,23 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                     unsigned long long linePos = doc.getCursorPositionInLine();
 
                     // Efectuăm toate acestea doar dacă NU suntem la sfârșitul documentului.
-					if (doc.getChar(doc.cursorPos) != nullptr)
-					{
-						// În cazul în care ne aflăm la sfârșitul unei linii, ne aflăm deja unde trebuie.
+                    if (doc.getChar(doc.cursorPos) != nullptr)
+                    {
+                        // În cazul în care ne aflăm la sfârșitul unei linii, ne aflăm deja unde trebuie.
                         // În caz contrar, trebuie să ajungem la sfârșitul ei.
-						if (doc.getChar(doc.cursorPos)->c != '\n')
-						{
-                            doc.gotoNextNewline();
-						}
-
-                        // Dacă linie de pe care venim este mai lungă decât cea pe care mergem,
-						// considerăm poziția nouă a fi pe ultimul caracter al liniei.
-                        if (linePos > doc.getCursorLineLength())
+                        if (doc.getChar(doc.cursorPos)->c != '\n')
                         {
-							linePos = doc.getCursorLineLength();
+                            doc.gotoNextNewline();
                         }
 
-						// Ne deplasăm până la poziția echivalentă, sau până terminăm linia.
+                        // Dacă linie de pe care venim este mai lungă decât cea pe care mergem,
+                        // considerăm poziția nouă a fi pe ultimul caracter al liniei.
+                        if (linePos > doc.getCursorLineLength())
+                        {
+                            linePos = doc.getCursorLineLength();
+                        }
+
+                        // Ne deplasăm până la poziția echivalentă, sau până terminăm linia.
                         for (int i = 0; i < linePos + 1; i++) // +1 pentru a sări '\n'-ul.
                         {
                             doc.cursorPos++;
@@ -179,7 +180,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                                 break;
                             }
                         }
-					}
+                    }
                 }
                 if (event.key.code == sf::Keyboard::Up && doc.cursorPos > 0) // Trecem la linia precedentă.
                 {
@@ -191,7 +192,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                         doc.cursorPos--;
                     }
 
-					// Avem două '\n', unul ce marchează începutul liniei curente, și unul ce marchează
+                    // Avem două '\n', unul ce marchează începutul liniei curente, și unul ce marchează
                     // începutul liniei precedente.
                     doc.gotoPrevNewline();
                     doc.gotoPrevNewline();
@@ -218,9 +219,16 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                     text.setCharacterSize(fontSize);
                     cursorVisual.setSize(sf::Vector2f(2, text.getCharacterSize()));
                 }
-                // cout << "CURSOR: " << doc.cursorPos << endl;
-                // cout << "CHARCOUNT: " << doc.charCount << endl;
-				// debugString(&doc); // Pentru monitorizarea memoriei efective a structurii textDocument.
+                if (event.key.code == sf::Keyboard::PageDown)
+                {
+                    scrollDown(firstLine, &doc, Window, text);
+                }
+                if (event.key.code == sf::Keyboard::PageUp)
+                {
+                    scrollUp(firstLine);
+                }
+
+                updateTextObject(&doc, Window, text, firstLine);
             }
         }
 
@@ -249,7 +257,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
         sf::Text bottomBarText;
         int cursorLine = doc.getCursorLine();
         int linePos = doc.getCursorPositionInLine();
-		bottomBar(doc, bottomBarText, font, Window.getSize().y);
+        bottomBar(doc, bottomBarText, font, Window.getSize().y);
 
         // Actualizăm window-ul.
         Window.clear(sf::Color(COLOR_BG.r, COLOR_BG.g, COLOR_BG.b));

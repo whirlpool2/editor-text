@@ -54,3 +54,7 @@ void loadFile(textDocument& doc, char* path);
 // Salvează un obiect textDocument într-un fișier.
 // Nu se setează aici și obiectul text pentru a permite schimbarea între documente pe același obiect text.
 void saveFile(textDocument& doc, char* path);
+
+//Functiile cele doua care urmeaza sunt folosite pentru permiterea scroll-ului
+void scrollUp(unsigned int& firstLine);
+void scrollDown(unsigned int& firstLine, textDocument* doc, sf::RenderWindow& window, sf::Text& textCurent);
