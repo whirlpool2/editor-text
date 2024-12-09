@@ -148,6 +148,8 @@ void cursorClickPos(sf::Vector2i& mousePos, textDocument& doc, sf::Text textObje
     linie de click (în funcție de coordonata Y a clickului).
     Apoi, parcurgem acea linie și ne oprim ori când am găsit un caracter aflat sub cursor, ori
 	când am ajuns la sfârșitul liniei.
+
+    WARNING: Nu este așa optimizată cum credeam. Trebuie văzute celelalte funcții.
     */
 
     sf::Vector2f mousePosFloat = { mousePos.x * 1.0f, mousePos.y * 1.0f };
