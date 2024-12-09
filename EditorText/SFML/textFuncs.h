@@ -44,7 +44,13 @@ void insertCharInTextObject(textDocument* doc, sf::Text& textObject, char c);
 // Șterge caracterul de la poziția cursorului din obiectul text.
 void deleteCharInTextObject(textDocument* doc, sf::Text& textObject);
 
-//Functie pentru generare bottomBar pe care afisam linia curenta si pozitia curenta pe linie
+// Mută cursorul în jos pe verticală.
+void moveCursorDown(textDocument& doc);
+
+// Mută cursorul în sus pe verticală.
+void moveCursorUp(textDocument& doc);
+
+// Generează o bară ce afișează numărul liniei și numărul caracterului curent din aceasta.
 void bottomBar(textDocument& doc, sf::Text& bottomBar, sf::Font& font, unsigned int windowHeight);
 
 // Încarcă un fișier într-un obiect textDocument.

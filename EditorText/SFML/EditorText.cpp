@@ -150,62 +150,13 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                 {
                     doc.cursorPos++;
                 }
-                if (event.key.code == sf::Keyboard::Down && doc.cursorPos < doc.charCount) // Trecem la linia următoare.
+                if (event.key.code == sf::Keyboard::Down) // Trecem la linia următoare.
                 {
-                    unsigned long long linePos = doc.getCursorPositionInLine();
-
-                    // Efectuăm toate acestea doar dacă NU suntem la sfârșitul documentului.
-                    if (doc.getChar(doc.cursorPos) != nullptr)
-                    {
-                        // În cazul în care ne aflăm la sfârșitul unei linii, ne aflăm deja unde trebuie.
-                        // În caz contrar, trebuie să ajungem la sfârșitul ei.
-                        if (doc.getChar(doc.cursorPos)->c != '\n')
-                        {
-                            doc.gotoNextNewline();
-                        }
-
-                        // Dacă linie de pe care venim este mai lungă decât cea pe care mergem,
-                        // considerăm poziția nouă a fi pe ultimul caracter al liniei.
-                        if (linePos > doc.getCursorLineLength())
-                        {
-                            linePos = doc.getCursorLineLength();
-                        }
-
-                        // Ne deplasăm până la poziția echivalentă, sau până terminăm linia.
-                        for (int i = 0; i < linePos + 1; i++) // +1 pentru a sări '\n'-ul.
-                        {
-                            doc.cursorPos++;
-                            if (doc.getChar(doc.cursorPos) == nullptr || doc.getChar(doc.cursorPos)->c == '\n')
-                            {
-                                break;
-                            }
-                        }
-                    }
+                    moveCursorDown(doc);
                 }
-                if (event.key.code == sf::Keyboard::Up && doc.cursorPos > 0) // Trecem la linia precedentă.
+                if (event.key.code == sf::Keyboard::Up) // Trecem la linia precedentă.
                 {
-                    unsigned long long linePos = doc.getCursorPositionInLine();
-
-                    // Dacă cursorul este la sfârșitul documentului, plasăm poziția lui pe ultimul caracter.
-                    if (doc.getChar(doc.cursorPos) == nullptr)
-                    {
-                        doc.cursorPos--;
-                    }
-
-                    // Avem două '\n', unul ce marchează începutul liniei curente, și unul ce marchează
-                    // începutul liniei precedente.
-                    doc.gotoPrevNewline();
-                    doc.gotoPrevNewline();
-
-                    // Ne deplasăm până la poziția echivalentă, sau până terminăm linia.
-                    for (int i = 0; i <= linePos; i++)
-                    {
-                        doc.cursorPos++;
-                        if (doc.getChar(doc.cursorPos)->c == '\n')
-                        {
-                            break;
-                        }
-                    }
+					moveCursorUp(doc);
                 }
                 if (event.key.code == sf::Keyboard::Equal && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) // Zoom-in (CTRL + '=')
                 {

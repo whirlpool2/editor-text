@@ -234,6 +234,75 @@ void saveFile(textDocument& doc, char* path)
 	fclose(file);
 }
 
+void moveCursorDown(textDocument& doc)
+{
+    if (doc.cursorPos >= doc.charCount)
+    {
+        return;
+    }
+
+    unsigned long long linePos = doc.getCursorPositionInLine();
+
+    // Efectuăm toate acestea doar dacă NU suntem la sfârșitul documentului.
+    if (doc.getChar(doc.cursorPos) != nullptr)
+    {
+        // În cazul în care ne aflăm la sfârșitul unei linii, ne aflăm deja unde trebuie.
+        // În caz contrar, trebuie să ajungem la sfârșitul ei.
+        if (doc.getChar(doc.cursorPos)->c != '\n')
+        {
+            doc.gotoNextNewline();
+        }
+
+        // Dacă linie de pe care venim este mai lungă decât cea pe care mergem,
+        // considerăm poziția nouă a fi pe ultimul caracter al liniei.
+        if (linePos > doc.getCursorLineLength())
+        {
+            linePos = doc.getCursorLineLength();
+        }
+
+        // Ne deplasăm până la poziția echivalentă, sau până terminăm linia.
+        for (int i = 0; i < linePos + 1; i++) // +1 pentru a sări '\n'-ul.
+        {
+            doc.cursorPos++;
+            if (doc.getChar(doc.cursorPos) == nullptr || doc.getChar(doc.cursorPos)->c == '\n')
+            {
+                break;
+            }
+        }
+    }
+}
+
+void moveCursorUp(textDocument& doc)
+{
+    if (doc.cursorPos <= 0)
+    {
+        return;
+    }
+
+    unsigned long long linePos = doc.getCursorPositionInLine();
+
+    // Dacă cursorul este la sfârșitul documentului, plasăm poziția lui pe ultimul caracter.
+    if (doc.getChar(doc.cursorPos) == nullptr)
+    {
+        doc.cursorPos--;
+    }
+
+    // Avem două '\n', unul ce marchează începutul liniei curente, și unul ce marchează
+    // începutul liniei precedente.
+    doc.gotoPrevNewline();
+    doc.gotoPrevNewline();
+
+    // Ne deplasăm până la poziția echivalentă, sau până terminăm linia.
+    for (int i = 0; i <= linePos; i++)
+    {
+        doc.cursorPos++;
+        if (doc.getChar(doc.cursorPos)->c == '\n')
+        {
+            break;
+        }
+    }
+}
+
 void scrollUp(unsigned int& firstLine) {
     if (firstLine > 0)
         firstLine--;
