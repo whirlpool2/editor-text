@@ -5,6 +5,7 @@ void textDocument::init()
     this->first = nullptr;
     this->charCount = 0;
     this->cursorPos = 0;
+    this->firstVisibleLine = 0;
 }
 
 character* textDocument::getChar(unsigned long long pos)

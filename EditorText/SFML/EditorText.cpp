@@ -81,7 +81,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
     bool isDragged = false;
     float scrollPos = 0.0f;
 
-    updateTextObject(&doc, Window, text, firstLine);
+    updateTextObject(&doc, Window, text);
 
     while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul rulează la infinit.
     {
@@ -172,14 +172,15 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                 }
                 if (event.key.code == sf::Keyboard::PageDown)
                 {
-                    scrollDown(firstLine, &doc, Window, text);
+					scrollDown(doc, Window, text);
                 }
                 if (event.key.code == sf::Keyboard::PageUp)
                 {
-                    scrollUp(firstLine);
+                    scrollUp(doc, Window, text);
                 }
 
-                updateTextObject(&doc, Window, text, firstLine);
+                // updateTextObject(&doc, Window, text);
+				updateWholeTextObject(&doc, Window, text);
             }
         }
 

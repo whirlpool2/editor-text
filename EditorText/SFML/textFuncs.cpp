@@ -45,19 +45,20 @@ void debugString(textDocument* doc)
     std::cout << "^ (" << doc->cursorPos << ")" << std::endl;
 }
 
-sf::String docToVisible(textDocument* doc, sf::RenderWindow& window, sf::Text& textObject, unsigned int firstLine)
+sf::String docToVisible(textDocument* doc, sf::RenderWindow& window, sf::Text& textObject)
 {
 	sf::String result = "";
-    unsigned int lineCount = 0;
+    unsigned long long lineCount = 0;
+	unsigned long long maximumVisibleLines = visibleLineCount(window, textObject);
 
-	character* p = doc->getChar(0);
+	character* p = doc->first;
 	while (p != nullptr)
     {
-		if (lineCount >= firstLine + visibleLineCount(window, textObject))
+		if (lineCount >= doc->firstVisibleLine + maximumVisibleLines)
         {
             break;
         }
-        if (lineCount >= firstLine)
+        if (lineCount >= doc->firstVisibleLine)
         {
             result += p->c;
         }
@@ -166,10 +167,16 @@ unsigned int visibleLineCount(sf::RenderWindow& window, sf::Text textObject)
 	return window.getSize().y / font->getLineSpacing(textObject.getCharacterSize());
 }
 
-void updateTextObject(textDocument* doc, sf::RenderWindow& window, sf::Text& textObject, unsigned int firstLine)
+void updateTextObject(textDocument* doc, sf::RenderWindow& window, sf::Text& textObject)
 {
-    sf::String visibleLines = docToVisible(doc, window, textObject, firstLine);
+    sf::String visibleLines = docToVisible(doc, window, textObject);
     textObject.setString(visibleLines);
+}
+
+void updateWholeTextObject(textDocument* doc, sf::RenderWindow& window, sf::Text& textObject)
+{
+    sf::String text = docToString(doc);
+    textObject.setString(text);
 }
 
 void insertCharInTextObject(textDocument* doc, sf::Text& textObject, char c)
@@ -303,23 +310,45 @@ void moveCursorUp(textDocument& doc)
     }
 }
 
-void scrollUp(unsigned int& firstLine) {
-    if (firstLine > 0)
-        firstLine--;
+void scrollUp(textDocument& doc, sf::RenderWindow& window, sf::Text& textObject)
+{
+    // O mică problemă cu aceste funcții, poziția cursorului nu mai este corectă dacă
+	// trunchiem string-ul la documentul vizibil. Astfel, orice operație pe text nu mai
+    // este corectă vizual.
+
+    /*
+	if (doc.firstVisibleLine > 5)
+	{
+		doc.firstVisibleLine -= 5;
+	}
+	else
+	{
+		doc.firstVisibleLine = 0;
+	}
+    */
+
+    float lineSpacing = textObject.getLineSpacing() * textObject.getCharacterSize();
+    float verticalOffset = 5 * lineSpacing;
+
+    textObject.move(0, verticalOffset);
+
 }
 
-void scrollDown(unsigned int& firstLine, textDocument* doc, sf::RenderWindow& window, sf::Text& textCurent) {
-    unsigned int maxLines = visibleLineCount(window, textCurent);
-    unsigned int totalLines = 0;
+void scrollDown(textDocument& doc, sf::RenderWindow& window, sf::Text& textObject)
+{
+    /*
+	if (doc.firstVisibleLine < doc.getLineCount() - 5)
+	{
+		doc.firstVisibleLine += 5;
+	}
+	else
+	{
+		doc.firstVisibleLine = doc.getLineCount() - visibleLineCount(window, textObject);
+	}
+    */
 
-    character* p = doc->getChar(0);
-    while (p != nullptr) {
-        if (p->c == '\n') {
-            totalLines++;
-        }
-        p = p->next;
-    }
-    if (firstLine + maxLines < totalLines) {
-        firstLine++;
-    }
+    float lineSpacing = textObject.getLineSpacing() * textObject.getCharacterSize();
+    float verticalOffset = 5 * lineSpacing;
+
+    textObject.move(0, -verticalOffset);
 }

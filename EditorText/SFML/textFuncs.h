@@ -11,7 +11,7 @@ void debugString(textDocument* doc);
 
 // Convertește structura de document text într-un string ce conține doar liniile vizibile,
 // în funcție de dimensiunea fontului și a mărimii ferestrei.
-sf::String docToVisible(textDocument* doc, sf::RenderWindow& window, sf::Text& textObject, unsigned int firstLine);
+sf::String docToVisible(textDocument* doc, sf::RenderWindow& window, sf::Text& textObject);
 
 // Returnează distanța între 2 puncte determinate de perechi de float-uri.
 float distVec2f(sf::Vector2f u, sf::Vector2f v);
@@ -36,7 +36,10 @@ unsigned long long cursorClickPos(sf::Vector2i& mousePos, textDocument& doc, sf:
 unsigned int visibleLineCount(sf::RenderWindow& window, sf::Text textObject);
 
 // Actualizează obiectul text cu textul nou din document.
-void updateTextObject(textDocument* doc, sf::RenderWindow& window, sf::Text& textObject, unsigned int firstLine);
+void updateTextObject(textDocument* doc, sf::RenderWindow& window, sf::Text& textObject);
+
+// Actualizează obiectul text cu textul întreg conținut în structură.
+void updateWholeTextObject(textDocument* doc, sf::RenderWindow& window, sf::Text& textObject);
 
 // Inserează un caracter în obiectul text la poziția cursorului.
 void insertCharInTextObject(textDocument* doc, sf::Text& textObject, char c);
@@ -61,6 +64,8 @@ void loadFile(textDocument& doc, char* path);
 // Nu se setează aici și obiectul text pentru a permite schimbarea între documente pe același obiect text.
 void saveFile(textDocument& doc, char* path);
 
-//Functiile cele doua care urmeaza sunt folosite pentru permiterea scroll-ului
-void scrollUp(unsigned int& firstLine);
-void scrollDown(unsigned int& firstLine, textDocument* doc, sf::RenderWindow& window, sf::Text& textCurent);
+// Dă scroll 5 linii în sus, prin schimbarea a cărei linii este prima.
+void scrollUp(textDocument& doc, sf::RenderWindow& window, sf::Text& textObject);
+
+// Dă scroll 5 linii în jos, prin schimbarea a cărei linii este prima.
+void scrollDown(textDocument& doc, sf::RenderWindow& window, sf::Text& textObject);

@@ -19,6 +19,7 @@ struct textDocument
     character* first;
     unsigned long long charCount;
     unsigned long long cursorPos;
+    unsigned long long firstVisibleLine;
 
 	// Inițializează documentul text vid.
     void init();
