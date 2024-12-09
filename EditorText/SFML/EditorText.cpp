@@ -99,7 +99,8 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
                     sf::Vector2i mousePos = sf::Mouse::getPosition(Window);
-                    doc.cursorPos = cursorClickPos(mousePos, doc, text);
+                    cursorClickPos(mousePos, doc, text);
+					cout << "Cursor position: " << doc.cursorPos << endl;
                 }
             }
             // Dacă event-ul curent presupune caractere date de la tastatură...

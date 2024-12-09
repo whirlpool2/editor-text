@@ -30,7 +30,7 @@ void setFont(sf::Text& textObject, sf::Font& font, unsigned int size, RGBColor c
 void cursorAnimate(sf::RectangleShape& cursor, sf::Clock& blinkInterval, bool& visible);
 
 // Returnează poziția cursorului cea mai apropiată de locația click-ului.
-unsigned long long cursorClickPos(sf::Vector2i& mousePos, textDocument& doc, sf::Text textObject);
+void cursorClickPos(sf::Vector2i& mousePos, textDocument& doc, sf::Text textObject);
 
 // Returnează numărul de linii care pot fi afișate în funcție de dimensiunea fontului și a ferestrei.
 unsigned int visibleLineCount(sf::RenderWindow& window, sf::Text textObject);
