@@ -141,71 +141,26 @@ void cursorAnimate(sf::RectangleShape& cursor, sf::Clock& blinkInterval, bool& v
 
 void cursorClickPos(sf::Vector2i& mousePos, textDocument& doc, sf::Text textObject)
 {
-    /*
-    Optimizare
-    
-    În loc să parcurgem tot documentul, caracter cu caracter, aflăm care este cea mai apropiată
-    linie de click (în funcție de coordonata Y a clickului).
-    Apoi, parcurgem acea linie și ne oprim ori când am găsit un caracter aflat sub cursor, ori
-	când am ajuns la sfârșitul liniei.
-
-    WARNING: Nu este așa optimizată cum credeam. Trebuie văzute celelalte funcții.
-    */
-
     sf::Vector2f mousePosFloat = { mousePos.x * 1.0f, mousePos.y * 1.0f };
     sf::String text = textObject.getString();
     int fontSize = textObject.getCharacterSize();
-	float lineHeight = textObject.getLineSpacing() * textObject.getCharacterSize();
 
-    // Uneori, ne pune pe linia de dedesubt. Bănuiesc că are de a face cu centrarea clickului
-	// pe linie. Ar trebui rezolvată problema mai riguros, dar pentru moment, această soluție
-	// funcționează.
-    mousePosFloat.y = mousePosFloat.y - lineHeight * 0.5;
-
-    // Avem 3 cazuri:
-    // 1. Click peste cursorul curent.
-    // 2. Click sub cursorul curent.
-    // 3. Click sub întreg textul.
-    // Sunt tratate în ordinea 1, 3, 2, deoarece în așa fel condițiile se exclud una pe alta.
-	if (mousePosFloat.y < textObject.findCharacterPos(doc.cursorPos).y)
-	{
-		while (absDiff(mousePosFloat.y, textObject.findCharacterPos(doc.cursorPos).y) > lineHeight)
-		{
-            doc.gotoPrevNewline();
-		}
-	}
-    else if (mousePosFloat.y > textObject.findCharacterPos(doc.charCount).y + lineHeight)
+    // Verificăm fiecare caracter dacă se află la cel mult o dimensiune de caracter distanță de click.
+    for (unsigned int i = 0; i < text.getSize(); i++)
     {
-		doc.cursorPos = doc.charCount;
-		return;
+        sf::Vector2f charPos = textObject.findCharacterPos(i);
+        if (distVec2f(charPos, mousePosFloat) <= fontSize)
+        {
+            doc.cursorPos = i + 1;
+            return;
+        }
+        if (absDiff(mousePosFloat.y, charPos.y) <= fontSize && text[i] == '\n')
+        {
+            doc.cursorPos = i;
+            return;
+        }
     }
-	else if (mousePosFloat.y > textObject.findCharacterPos(doc.cursorPos).y)
-	{
-		while (absDiff(mousePosFloat.y, textObject.findCharacterPos(doc.cursorPos).y) > lineHeight)
-		{
-			doc.gotoNextNewline();
-		}
-	}
-
-    // Suntem pe un '\n', ce marchează începutul următoarei linii.
-    // Ne dăm un caracter înapoi pentru a ne pune pe linia dorită.
-    doc.cursorPos--;
-    doc.setCursorPositionInLine(0);
-
-	while (absDiff(mousePosFloat.x, textObject.findCharacterPos(doc.cursorPos).x) > fontSize / 2 && doc.getChar(doc.cursorPos)->c != '\n')
-	{
-		doc.cursorPos++;
-	}
-
-    // Verificăm niște condiții extreme, în cazul în care s-a greșit enorm undeva.
-    if (doc.cursorPos < 0)
-    {
-		doc.cursorPos = 0;
-    }
-    else if (doc.cursorPos > doc.charCount)
-    {
-        doc.cursorPos = doc.charCount;
-    }
+    doc.cursorPos = doc.charCount;
 }
 
 unsigned int visibleLineCount(sf::RenderWindow& window, sf::Text textObject)
