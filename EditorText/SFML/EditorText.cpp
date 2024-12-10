@@ -170,6 +170,10 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                     text.setCharacterSize(fontSize);
                     cursorVisual.setSize(sf::Vector2f(2, text.getCharacterSize()));
                 }
+				if (event.key.code == sf::Keyboard::S && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+				{
+					saveFile(doc, (char*)"test.txt");
+				}
                 if (event.key.code == sf::Keyboard::PageDown)
                 {
 					scrollDown(doc, Window, text);
