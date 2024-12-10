@@ -199,14 +199,26 @@ void deleteCharInTextObject(textDocument* doc, sf::Text& textObject)
     doc->deleteChar();
 }
 
-void bottomBar(textDocument& doc, sf::Text& bottomBar, sf::Font& font, unsigned int windowHeight)
+//Am optimizat functia bottomBar, folosindu-ma de reactualizarea pozitiei numai cand are loc un event
+void initializeBottomBar(sf::Text& bottomBar, sf::Font& font, unsigned int windowHeight, sf::RectangleShape& bottomBorder)
 {
-    std::string barText = "Line: " + std::to_string(doc.getCursorLine()) + " Ch: " + std::to_string(doc.getCursorPositionInLine());
-    bottomBar.setFont(font);
-    bottomBar.setString(barText);
-    bottomBar.setCharacterSize(20);
-    bottomBar.setPosition(575, windowHeight - 30);
-    bottomBar.setFillColor(sf::Color(255, 255, 255, 100));
+	bottomBar.setFont(font);
+	bottomBar.setCharacterSize(16);
+    bottomBar.setFillColor(sf::Color::White);
+	
+
+    bottomBar.setOrigin(bottomBar.getGlobalBounds().width, bottomBar.getGlobalBounds().height);
+	bottomBar.setPosition(windowHeight - 10, windowHeight - 5);
+
+	bottomBorder.setSize(sf::Vector2f(windowHeight - 20, 20));
+	bottomBorder.setFillColor(sf::Color::Black);
+	bottomBorder.setPosition(0, windowHeight - 20);
+}
+
+void updateBottomBar(sf::Text& bottomBar, textDocument& doc)
+{
+	bottomBar.setString("Line: " + std::to_string(doc.getCursorLine()) + " | Char: " + std::to_string(doc.getCursorPositionInLine()));
+	bottomBar.setOrigin(bottomBar.getGlobalBounds().width + 40, bottomBar.getGlobalBounds().height);
 }
 
 void loadFile(textDocument& doc, char* path)

@@ -76,6 +76,10 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
     // Setăm fontul la unul arbitrar.
     setFont(text, font, 24, COLOR_TEXT, (char*)"Fonts/CascadiaMono.ttf");
 
+    sf::Text bottomBarText;
+    sf::RectangleShape bottomBorder;
+    initializeBottomBar(bottomBarText, font, Window.getSize().y, bottomBorder);
+
     // cout << visibleLineCount(Window, text) << endl;
 
     bool isDragged = false;
@@ -92,7 +96,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
             {
                 Window.close();
             }
-
+			updateBottomBar(bottomBarText, doc);
             // Daca este apăsat click stânga.
             if (event.type == sf::Event::MouseButtonPressed)
             {
@@ -210,10 +214,9 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
 
         ScrollBar(event, Window, Bar, Slider, isDragged, scrollPos);
 
-        sf::Text bottomBarText;
+        
         int cursorLine = doc.getCursorLine();
         int linePos = doc.getCursorPositionInLine();
-        bottomBar(doc, bottomBarText, font, Window.getSize().y);
 
         // Actualizăm window-ul.
         Window.clear(sf::Color(COLOR_BG.r, COLOR_BG.g, COLOR_BG.b));
@@ -221,6 +224,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
         Window.draw(cursorVisual);
         Window.draw(Bar);
         Window.draw(Slider);
+        Window.draw(bottomBorder);
         Window.draw(bottomBarText);
         Window.display();
     }

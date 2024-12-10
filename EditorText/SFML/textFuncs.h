@@ -53,8 +53,13 @@ void moveCursorDown(textDocument& doc);
 // Mută cursorul în sus pe verticală.
 void moveCursorUp(textDocument& doc);
 
+//Initial era o functie bottomBar care initializa si updata dar am separat-o in doua functii pentru a actualiza 
+// cand are loc un event care actualizeaza pozitia cursorului
 // Generează o bară ce afișează numărul liniei și numărul caracterului curent din aceasta.
-void bottomBar(textDocument& doc, sf::Text& bottomBar, sf::Font& font, unsigned int windowHeight);
+void initializeBottomBar(sf::Text& bottomBar, sf::Font& font, unsigned int windowHeight, sf::RectangleShape& bottomBorder);
+
+// Actualizeaza bara de jos cu numarul liniei si numarul caracterului curent din aceasta.
+void updateBottomBar(sf::Text& bottomBar, textDocument& doc);
 
 // Încarcă un fișier într-un obiect textDocument.
 // Nu se setează aici și obiectul text pentru a permite schimbarea între documente pe același obiect text.
