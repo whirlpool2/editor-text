@@ -8,50 +8,6 @@
 
 using namespace std;
 
-// Implementează scrollbar-ul pentru text.
-void ScrollBar(sf::Event& event, sf::RenderWindow& window, sf::RectangleShape& background, sf::RectangleShape& slider, bool& isDragged, float& scrollPos)
-{
-    background.setSize(sf::Vector2f(20, 800));
-    background.setPosition(780, 0);
-    background.setFillColor(sf::Color(200, 200, 200));
-
-    slider.setSize(sf::Vector2f(20, 50));
-    slider.setPosition(780, scrollPos * (background.getSize().y - slider.getSize().y));
-    slider.setFillColor(sf::Color(100, 100, 100));
-
-    if (event.type == sf::Event::MouseButtonPressed)
-    {
-        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-        if (slider.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)))
-        {
-            isDragged = true;
-        }
-    }
-    else if (event.type == sf::Event::MouseButtonReleased)
-    {
-        isDragged = false;
-    }
-    else if (event.type == sf::Event::MouseMoved && isDragged)
-    {
-        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-        float newY = mousePos.y - (slider.getSize().y / 2.0f);
-        float backgroundTop = background.getPosition().y;
-        float backgroundBottom = background.getPosition().y + background.getSize().y - slider.getSize().y;
-
-        if (newY < backgroundTop)
-        {
-            newY = backgroundTop;
-        }
-        if (newY > backgroundBottom)
-        {
-            newY = backgroundBottom;
-        }
-
-        slider.setPosition(slider.getPosition().x, newY);
-        float scrollLimit = background.getSize().y - slider.getSize().y;
-        scrollPos = (slider.getPosition().y - backgroundTop) / scrollLimit;
-    }
-}
 
 
 // Primește informații de la tastatură și modifică documentul corespunzător.

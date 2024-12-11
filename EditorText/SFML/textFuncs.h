@@ -74,3 +74,6 @@ void scrollUp(textDocument& doc, sf::RenderWindow& window, sf::Text& textObject)
 
 // Dă scroll 5 linii în jos, prin schimbarea a cărei linii este prima.
 void scrollDown(textDocument& doc, sf::RenderWindow& window, sf::Text& textObject);
+
+// Functie pentru creare bara scroll
+void ScrollBar(sf::Event& event, sf::RenderWindow& window, sf::RectangleShape& background, sf::RectangleShape& slider, bool& isDragged, float& scrollPos);
