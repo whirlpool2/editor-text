@@ -2,6 +2,13 @@
 Proiect la "Introducere în programare", 2024-2025, realizat de Bereșteanu Mihail, Mihalache Ștefan, Pascaniuc Lucas
 
 # Lucruri de făcut
+- [x] Randarea unui string de text.
+- [x] Structură de listă dublă-înlănțuită pentru reținerea unui document text.
+- [x] Navigare pe orizontală cu săgețile.
+- [x] Navigare pe verticală cu săgețile.
+- [x] Afișarea poziției cursorului în document (numărul liniei și poziția în linie).
+- [x] Schimbarea dimensiunii fontului folosind `CTRL` + `=` și `CTRL` + `-`.
+- [x] Scroll vizual.
 - [x] Încărcarea și salvarea fișierelor.
     - ⚠️ Nu se suportă codificări înafară de ANSI/ASCII. 
 - [x] Optimizare bottomBar.
