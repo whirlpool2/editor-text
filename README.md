@@ -6,6 +6,7 @@ Proiect la "Introducere în programare", 2024-2025, realizat de Bereșteanu Miha
 - [x] Structură de listă dublă-înlănțuită pentru reținerea unui document text.
 - [x] Navigare pe orizontală cu săgețile.
 - [x] Navigare pe verticală cu săgețile.
+- [x] Navigare folosind click.
 - [x] Afișarea poziției cursorului în document (numărul liniei și poziția în linie).
 - [x] Schimbarea dimensiunii fontului folosind `CTRL` + `=` și `CTRL` + `-`.
 - [x] Scroll vizual.
