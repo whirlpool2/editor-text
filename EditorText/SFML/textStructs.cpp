@@ -99,6 +99,34 @@ unsigned long long textDocument::getLineCount()
     return lineCount;
 }
 
+
+unsigned long long textDocument::getACursorLine(int cursorpos)
+{
+    unsigned long long lineCount = 0;
+    unsigned long long i = 0;
+    character* p = this->first;
+    if (cursorpos > this->charCount)
+        return 0;
+
+    if (p == nullptr)
+        return 0;
+    
+
+    while (p->next != nullptr and cursorpos != i)
+    {
+        p = p->next;
+        i++;
+
+        if (p->c == '\n')
+            lineCount++;
+        
+    }
+    if (p->c != '\n' or cursorpos == this->charCount)
+        lineCount++;
+
+    return lineCount;
+}
+
 unsigned long long textDocument::getCursorLine()
 {
 	unsigned long long count = 0;
@@ -127,6 +155,27 @@ unsigned long long textDocument::getCursorLine()
 	return count;
 }
 
+unsigned long long textDocument ::getALineLength(int CursorPos) {
+    if (CursorPos > this->charCount)
+        return 0;
+    int LineLength = 0;
+    int currLine = getACursorLine(CursorPos) - 1;//functioneaza bine
+
+    unsigned long long lineCount = 0;
+    character* p = this->first;
+    if (p->next == nullptr)
+        return 1;
+    while (p != nullptr and currLine >= lineCount) {
+
+        if (currLine == lineCount)
+            LineLength++;
+        if (p->c == '\n')
+            lineCount++;
+        p = p->next;
+    }
+    return LineLength - 1;
+
+}
 unsigned long long textDocument::getCursorLineLength()
 {
     unsigned long long originalPos = this->cursorPos;

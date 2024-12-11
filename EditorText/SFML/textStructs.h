@@ -45,6 +45,11 @@ struct textDocument
     // Returnează lungimea liniei curente.
     unsigned long long getCursorLineLength();
 
+    //Returneaza Lungimea Liniei de la pozitia  cursorPos
+	unsigned long long getALineLength(int CursorPos);
+
+    unsigned long long getACursorLine(int cursorpos);
+
     // Returnează un pointer la primul caracter al unei linii date.
 	character* getLineStart(unsigned long long line);
 

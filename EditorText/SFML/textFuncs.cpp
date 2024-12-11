@@ -164,7 +164,7 @@ void cursorClickPos(sf::Vector2i& mousePos, textDocument& doc, sf::Text textObje
 }
 
 unsigned int visibleLineCount(sf::RenderWindow& window, sf::Text textObject)
-{
+{   
     const sf::Font* font = textObject.getFont();
 	return window.getSize().y / font->getLineSpacing(textObject.getCharacterSize());
 }
@@ -255,6 +255,28 @@ void saveFile(textDocument& doc, char* path)
 	fclose(file);
 }
 
+void moveCursorUp(textDocument& doc) {
+    if (doc.getACursorLine(doc.cursorPos) == 1 or doc.cursorPos == 0) {
+        doc.cursorPos = doc.getALineLength(doc.cursorPos);
+    }
+    else {
+        int currLineLength = doc.getALineLength(doc.cursorPos);
+        int prevLineLength = doc.getALineLength(doc.cursorPos - currLineLength - 2); //-2 ca ai si '\n'
+        std::cout << "Linie curenta : " << currLineLength << " Linia dinainte: " << prevLineLength << std::endl;
+        //Duc cursorul la inceputul liniei curente
+        int currLineNumber = doc.getACursorLine(doc.cursorPos);
+        int posinLine = 0;//Memorez pe ce pozitie este cursorul
+        while (doc.getACursorLine(doc.cursorPos - 1) == currLineNumber) {
+            doc.cursorPos--;
+            posinLine++;
+        }
+        std::cout << "Poz curr : " << doc.cursorPos << " Cat scad: " << posinLine << std::endl;
+        if (posinLine > prevLineLength)
+            doc.cursorPos--;
+        else doc.cursorPos = doc.cursorPos - (prevLineLength - posinLine + 1);
+    }
+}
+/*
 void moveCursorDown(textDocument& doc)
 {
     if (doc.cursorPos >= doc.charCount)
@@ -292,7 +314,33 @@ void moveCursorDown(textDocument& doc)
         }
     }
 }
+*/
+void moveCursorDown(textDocument& doc) {
+    
+        if (doc.getLineCount() != doc.getACursorLine(doc.cursorPos) - 1) {// Daca nu sunt pe ultima linie
+            int currLinelength = doc.getALineLength(doc.cursorPos);
 
+            //cred ca este inutil IF ul asta dar merge asa ca nu-l scot
+            if (doc.cursorPos == '\n')
+                currLinelength = doc.getALineLength(doc.cursorPos - 1);
+            if (currLinelength + doc.cursorPos >= doc.charCount)
+                doc.cursorPos = doc.charCount;
+            //Daca linia curenta e mai mare decat urmatoarea
+            else if (doc.getACursorLine(doc.cursorPos + currLinelength + 1) != doc.getACursorLine(doc.cursorPos) + 1) {
+                while (doc.cursorPos < doc.charCount && doc.getChar(doc.cursorPos)->c != '\n')
+                    doc.cursorPos++;//daca nu merge fa do while
+
+                doc.cursorPos++;    //na ca nu ma faci do while ca merge si asa
+                doc.cursorPos += doc.getALineLength(doc.cursorPos);
+            }
+            else {
+                doc.cursorPos += currLinelength + 1;
+            }
+        }
+        else if (doc.getLineCount() == doc.getACursorLine(doc.cursorPos) - 1) //daca suntem pe ultima linie
+            doc.cursorPos = doc.charCount;                                    //ne ducem la capatul ei
+}
+/*
 void moveCursorUp(textDocument& doc)
 {
     if (doc.cursorPos <= 0)
@@ -322,7 +370,7 @@ void moveCursorUp(textDocument& doc)
             break;
         }
     }
-}
+}*/
 
 void scrollUp(textDocument& doc, sf::RenderWindow& window, sf::Text& textObject)
 {
