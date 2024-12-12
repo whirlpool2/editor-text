@@ -517,5 +517,18 @@ void makeScrollBarWork(sf::Event& event, textDocument& doc, sf::RenderWindow& wi
             scrollUp(doc, window, textObject);
         }
     }
+    //verificare daca folosesc mouse wheel pentru scroll, acum trebuie sa fac o conexiune in cele doua cazuri ca sa se mute si slider-ul
+	else if (event.type == sf::Event::MouseWheelScrolled)
+	{
+		if (event.mouseWheelScroll.delta > 0)
+		{
+			scrollUp(doc, window, textObject);
+            slider.move(0, verticalOffset);
+		}
+		else if (event.mouseWheelScroll.delta < 0)
+		{
+			scrollDown(doc, window, textObject);
+            slider.move(0, -verticalOffset);
+		}
+	}
 }
-
