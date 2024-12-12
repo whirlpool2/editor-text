@@ -77,3 +77,6 @@ void scrollDown(textDocument& doc, sf::RenderWindow& window, sf::Text& textObjec
 
 // Functie pentru creare bara scroll
 void ScrollBar(sf::Event& event, sf::RenderWindow& window, sf::RectangleShape& background, sf::RectangleShape& slider, bool& isDragged, float& scrollPos);
+
+//Functie pentru functionarea scroll bar-ului
+void makeScrollBarWork(sf::Event& event, textDocument& doc, sf::RenderWindow& window, sf::RectangleShape& background, sf::RectangleShape& slider, bool& isDragged, float& scrollPosNew, float& scrollPosCurrent, sf::Text& textObject);

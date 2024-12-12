@@ -373,31 +373,37 @@ void moveCursorUp(textDocument& doc)
 }*/
 
 void scrollUp(textDocument& doc, sf::RenderWindow& window, sf::Text& textObject)
-{
+    {
     // O mică problemă cu aceste funcții, poziția cursorului nu mai este corectă dacă
 	// trunchiem string-ul la documentul vizibil. Astfel, orice operație pe text nu mai
     // este corectă vizual.
 
     /*
 	if (doc.firstVisibleLine > 5)
-	{
+    {
 		doc.firstVisibleLine -= 5;
-	}
+    }
 	else
 	{
 		doc.firstVisibleLine = 0;
-	}
+}
     */
 
     float lineSpacing = textObject.getLineSpacing() * textObject.getCharacterSize();
     float verticalOffset = 5 * lineSpacing;
+
+    //conditie oprire sa nu putem da pageup cand suntem partial la inceputul textului
+	if (textObject.getPosition().y >= 10)
+	{
+		return;
+	}
 
     textObject.move(0, verticalOffset);
 
 }
 
 void scrollDown(textDocument& doc, sf::RenderWindow& window, sf::Text& textObject)
-{
+    {
     /*
 	if (doc.firstVisibleLine < doc.getLineCount() - 5)
 	{
@@ -406,7 +412,7 @@ void scrollDown(textDocument& doc, sf::RenderWindow& window, sf::Text& textObjec
 	else
 	{
 		doc.firstVisibleLine = doc.getLineCount() - visibleLineCount(window, textObject);
-	}
+    }
     */
 
     float lineSpacing = textObject.getLineSpacing() * textObject.getCharacterSize();
@@ -459,3 +465,57 @@ void ScrollBar(sf::Event& event, sf::RenderWindow& window, sf::RectangleShape& b
         scrollPos = (slider.getPosition().y - backgroundTop) / scrollLimit;
     }
 }
+
+void makeScrollBarWork(sf::Event& event, textDocument& doc, sf::RenderWindow& window, sf::RectangleShape& background, sf::RectangleShape& slider, bool& isDragged, float& scrollPosNew, float& scrollPosCurrent, sf::Text& textObject)
+{
+    float lineSpacing = textObject.getLineSpacing() * textObject.getCharacterSize();
+    float verticalOffset = 5 * lineSpacing;
+    float totalTextHeight = doc.getLineCount() * lineSpacing;
+    float viewHeight = background.getSize().y;
+
+    //Daca dau click pe slider si il duc in jos, duc textul sus , altfel il duc jos
+    if (event.type == sf::Event::MouseButtonPressed)
+    {
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        if (slider.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)))
+        {
+            isDragged = true;
+        }
+    }
+    else if (event.type == sf::Event::MouseButtonReleased)
+    {
+        isDragged = false;
+    }
+    else if (event.type == sf::Event::MouseMoved && isDragged)
+    {
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+        float newY = mousePos.y - (slider.getSize().y / 2.0f);
+        float backgroundTop = background.getPosition().y;
+        float backgroundBottom = background.getPosition().y + background.getSize().y - slider.getSize().y;
+
+        if (newY < backgroundTop)
+        {
+            newY = backgroundTop;
+        }
+        if (newY > backgroundBottom)
+        {
+            newY = backgroundBottom;
+        }
+
+        slider.setPosition(slider.getPosition().x, newY);
+        float scrollLimit = background.getSize().y - slider.getSize().y;
+        scrollPosNew = (slider.getPosition().y - backgroundTop) / scrollLimit;
+
+        if (scrollPosNew > scrollPosCurrent)
+        {
+            scrollPosCurrent = scrollPosNew;
+            scrollDown(doc, window, textObject);
+        }
+        else if (scrollPosNew < scrollPosCurrent)
+        {
+            scrollPosCurrent = scrollPosNew;
+            scrollUp(doc, window, textObject);
+        }
+    }
+}
+

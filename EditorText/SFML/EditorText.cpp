@@ -19,6 +19,9 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
     int fontSize = 24;
     unsigned int firstLine = 0;
 
+    sf::RectangleShape Bar;
+    sf::RectangleShape Slider;
+
     // Declarăm forma pentru cursorul vizual.
     sf::RectangleShape cursorVisual;
     sf::Clock cursorBlinkInterval;
@@ -100,6 +103,9 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                 // Test pentru funcția docToString. Se va șterge, și va fi apelată la nevoie ulterior.
                 // debugString(&doc);
             }
+            //implementare makeScrollBarWork
+			float scrollPosCurrent = scrollPos;
+			makeScrollBarWork(event, doc, Window, Bar, Slider, isDragged, scrollPos, scrollPosCurrent, text);
             if (event.type == sf::Event::KeyPressed) // Acest caz tratează tastele ce nu produc caractere.
             {
                 if (event.key.code == sf::Keyboard::Left && doc.cursorPos > 0)
@@ -163,10 +169,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
         // Se animează cursorul.
         cursorAnimate(cursorVisual, cursorBlinkInterval, cursorVisible);
 
-        //creez scrollbar si animatie
 
-        sf::RectangleShape Bar;
-        sf::RectangleShape Slider;
 
         ScrollBar(event, Window, Bar, Slider, isDragged, scrollPos);
 
