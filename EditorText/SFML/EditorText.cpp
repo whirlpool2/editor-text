@@ -24,7 +24,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
 
     // Declarăm forma pentru cursorul vizual.
     sf::RectangleShape cursorVisual;
-    sf::Clock cursorBlinkInterval;
+    sf::Clock cursorClock;
     bool cursorVisible = true;
     cursorVisual.setFillColor(sf::Color(COLOR_TEXT.r, COLOR_TEXT.g, COLOR_TEXT.b));
     cursorVisual.setSize(sf::Vector2f(2, text.getCharacterSize()));
@@ -63,6 +63,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                 {
                     sf::Vector2i mousePos = sf::Mouse::getPosition(Window);
                     cursorClickPos(mousePos, doc, text);
+                    updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
                 }
             }
             // Dacă event-ul curent presupune caractere date de la tastatură...
@@ -102,6 +103,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
 
                 // Test pentru funcția docToString. Se va șterge, și va fi apelată la nevoie ulterior.
                 // debugString(&doc);
+                updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
             }
             //implementare makeScrollBarWork
 			float scrollPosCurrent = scrollPos;
@@ -151,26 +153,12 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
 
                 // updateTextObject(&doc, Window, text);
 				updateWholeTextObject(&doc, Window, text);
+				updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
             }
         }
 
-        // Se actualizează poziția cursorului vizual.
-        if (doc.charCount > 0 && doc.cursorPos > 0)
-        {
-            sf::Vector2f cursorVisualPos = text.findCharacterPos(doc.cursorPos);
-            cursorVisual.setPosition(cursorVisualPos.x, cursorVisualPos.y);
-            // Funcția findCharacterPos returnează poziția unui caracter dintr-un text ca o pereche de 2 float-uri.
-        }
-        else // Dacă currentText este gol, documentul este gol. Atunci, cursorul este poziționat unde ar veni primul caracter.
-        {
-            cursorVisual.setPosition(text.getPosition().x, text.getPosition().y);
-        }
-
         // Se animează cursorul.
-        cursorAnimate(cursorVisual, cursorBlinkInterval, cursorVisible);
-
-
-
+        cursorAnimate(cursorVisual, cursorClock, cursorVisible);
         ScrollBar(event, Window, Bar, Slider, isDragged, scrollPos);
 
         

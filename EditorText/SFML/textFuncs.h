@@ -27,7 +27,7 @@ sf::Font loadFont(char* path);
 void setFont(sf::Text& textObject, sf::Font& font, unsigned int size, RGBColor color, char* path);
 
 // Animează cursorul vizual în funcție de intervalul de timp dat.
-void cursorAnimate(sf::RectangleShape& cursor, sf::Clock& blinkInterval, bool& visible);
+void cursorAnimate(sf::RectangleShape& cursor, sf::Clock& cursorClock, bool& visible);
 
 // Returnează poziția cursorului cea mai apropiată de locația click-ului.
 void cursorClickPos(sf::Vector2i& mousePos, textDocument& doc, sf::Text textObject);
@@ -40,6 +40,10 @@ void updateTextObject(textDocument* doc, sf::RenderWindow& window, sf::Text& tex
 
 // Actualizează obiectul text cu textul întreg conținut în structură.
 void updateWholeTextObject(textDocument* doc, sf::RenderWindow& window, sf::Text& textObject);
+
+// Actualizează cursorul vizual în funcție de poziția cursorului din document.
+// Restartează și animația prin resetarea ceasului.
+void updateCursorVisual(textDocument& doc, sf::Text& textObject, sf::RectangleShape& cursorVisual, sf::Clock& cursorClock, bool& cursorVisible);
 
 // Inserează un caracter în obiectul text la poziția cursorului.
 void insertCharInTextObject(textDocument* doc, sf::Text& textObject, char c);
