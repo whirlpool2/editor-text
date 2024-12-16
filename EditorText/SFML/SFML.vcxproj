@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EditorText.cpp" />
+    <ClCompile Include="menuFuncs.cpp" />
     <ClCompile Include="textFuncs.cpp" />
     <ClCompile Include="textStructs.cpp" />
   </ItemGroup>
@@ -148,6 +149,7 @@
     <Font Include="Fonts\CascadiaMono.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="menuFuncs.h" />
     <ClInclude Include="textFuncs.h" />
     <ClInclude Include="textStructs.h" />
   </ItemGroup>
