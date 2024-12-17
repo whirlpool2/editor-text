@@ -6,7 +6,7 @@
 #include "textFuncs.h"
 #include "menuFuncs.h"
 #include <stdlib.h>
-
+#include "textSelection.h"
 using namespace std;
 
 void initEscMenu(sf::RenderWindow& window, sf::Font& font, fullscreenMenu& menu)
@@ -60,7 +60,7 @@ void handleEscMenu(sf::RenderWindow& window, sf::Font& font, sf::Event& event, f
 }
 
 // Primește informații de la tastatură și modifică documentul corespunzător.
-void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
+void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelection& textSelection)
 {
     sf::Font font;
     sf::Text text;
@@ -171,26 +171,37 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                 makeScrollBarWork(event, doc, Window, Bar, Slider, isDragged, scrollPos, scrollPosCurrent, text);
                 if (event.type == sf::Event::KeyPressed) // Acest caz tratează tastele ce nu produc caractere.
                 {
-                    if (event.key.code == sf::Keyboard::Escape)
-                    {
-                        menuActive = !menuActive;
+                    //Avem cazurile pentru selectie cu shift
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)) {
+                        if (doc.cursorPos > 0 && event.key.code == sf::Keyboard::Left) {
+
+                            textSelection.updateSelectedTextKeys(doc, text, sf::Vector2i(-1, 0));
+                        }
+                        if (doc.cursorPos < doc.charCount && event.key.code == sf::Keyboard::Right) {
+                            textSelection.updateSelectedTextKeys(doc, text, sf::Vector2i(1, 0));
+                        }
+                        if (event.key.code == sf::Keyboard::Up) {
+                            textSelection.updateSelectedTextKeys(doc, text, sf::Vector2i(0, -1));
+                        }
+                        if (event.key.code == sf::Keyboard::Down) {
+                            textSelection.updateSelectedTextKeys(doc, text, sf::Vector2i(0, 1));
+                        }
                     }
-                    if (event.key.code == sf::Keyboard::Left && doc.cursorPos > 0)
-                    {
-                        doc.cursorPos--;
+                    //Daca nu e apasat shift, atunci doar mutam cursorul
+                    else {
+                        //Vector2i(0, 0) inseamna ca nu se selecteaza nimic
+                        textSelection.updateSelectedTextKeys(doc, text, sf::Vector2i(0, 0));
+                        if (event.key.code == sf::Keyboard::Left && doc.cursorPos > 0)
+                            doc.cursorPos--;
+                        if (event.key.code == sf::Keyboard::Right && doc.cursorPos < doc.charCount)
+                            doc.cursorPos++;
+                        if (event.key.code == sf::Keyboard::Down) // Trecem la linia următoare.
+                            moveCursorDown(doc);
+                        if (event.key.code == sf::Keyboard::Up) // Trecem la linia precedentă.
+                            moveCursorUp(doc);
+
                     }
-                    if (event.key.code == sf::Keyboard::Right && doc.cursorPos < doc.charCount)
-                    {
-                        doc.cursorPos++;
-                    }
-                    if (event.key.code == sf::Keyboard::Down) // Trecem la linia următoare.
-                    {
-                        moveCursorDown(doc);
-                    }
-                    if (event.key.code == sf::Keyboard::Up) // Trecem la linia precedentă.
-                    {
-                        moveCursorUp(doc);
-                    }
+
                     if (event.key.code == sf::Keyboard::Equal && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) // Zoom-in (CTRL + '=')
                     {
                         fontSize = fontSize + 4;
@@ -249,6 +260,7 @@ int main()
     EditorText.setFramerateLimit(60);
 
     textDocument doc;
+    TextSelection textSelection;
 
     doc.init();
 
@@ -279,7 +291,7 @@ int main()
     }
     */
     
-    handleKeyboardInput(EditorText, doc);
+    handleKeyboardInput(EditorText, doc, textSelection);
 
     return 0;
 }

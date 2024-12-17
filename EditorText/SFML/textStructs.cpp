@@ -23,7 +23,68 @@ character* textDocument::getChar(unsigned long long pos)
     }
     return p;
 }
+/*
+character* textDocument::getChar(unsigned long long pos)
+{
+    if (pos >= this->charCount)
+    {
+        return nullptr;
+    }
 
+    if (this->first == nullptr)
+    {
+        return nullptr;
+    }
+
+	// Vede daca cursorul e mai aproape de inceput sau de pozitia data
+    unsigned long long distanceFromStart = pos;
+    unsigned long long distanceFromCursor = (this->cursorPos > pos) ? (this->cursorPos - pos) : (pos - this->cursorPos);
+
+    character* p = nullptr;
+    unsigned long long currentPos = 0;
+
+    // Iar aici verificam in care caz ne incadram
+    if (distanceFromStart <= distanceFromCursor)
+    {
+        p = this->first;
+        currentPos = 0;
+    }
+    else
+    {
+        // In else incepem de la pozitia cursorului
+        // De la 0 la pozitia cursorului
+        p = this->first;
+        currentPos = 0;
+        while (currentPos < this->cursorPos)
+        {
+            p = p->next;
+            currentPos++;
+        }
+    }
+
+    if (currentPos <= pos)
+    {
+		// Mergem inainte
+        while (currentPos < pos)
+        {
+            p = p->next;
+            currentPos++;
+        }
+    }
+    else
+    {
+        // Ne intoarcem
+        while (currentPos > pos)
+        {
+            p = p->prev;
+            currentPos--;
+        }
+    }
+
+    return p;
+}
+
+*/
 void textDocument::insertChar(char c)
 {
     character* p = new character;

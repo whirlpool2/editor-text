@@ -330,19 +330,27 @@ void moveCursorUp(textDocument& doc) {
     }
     else {
         int currLineLength = doc.getALineLength(doc.cursorPos);
-        int prevLineLength = doc.getALineLength(doc.cursorPos - currLineLength - 2); //-2 ca ai si '\n'
-        std::cout << "Linie curenta : " << currLineLength << " Linia dinainte: " << prevLineLength << std::endl;
+
+
         //Duc cursorul la inceputul liniei curente
+
         int currLineNumber = doc.getACursorLine(doc.cursorPos);
+        int currCursorPos = doc.cursorPos;
         int posinLine = 0;//Memorez pe ce pozitie este cursorul
-        while (doc.getACursorLine(doc.cursorPos - 1) == currLineNumber) {
+
+        while (doc.getACursorLine(doc.cursorPos) == doc.getACursorLine(currCursorPos)) {
             doc.cursorPos--;
             posinLine++;
         }
-        std::cout << "Poz curr : " << doc.cursorPos << " Cat scad: " << posinLine << std::endl;
-        if (posinLine > prevLineLength)
-            doc.cursorPos--;
-        else doc.cursorPos = doc.cursorPos - (prevLineLength - posinLine + 1);
+
+        std::cout << "CURRLINE LENGTH" << currLineLength << ' ';
+        int prevLineLength = doc.getALineLength(doc.cursorPos); //-2 ca ai si '\n'
+
+        std::cout << "PrevLineLength: " << prevLineLength << " PosinLine: " << posinLine << std::endl;
+        if (prevLineLength >= posinLine)
+            doc.cursorPos = doc.cursorPos - (prevLineLength - posinLine + 1);
+
+
     }
 }
 /*

@@ -30,6 +30,9 @@
     <ClCompile Include="menuFuncs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="textSelection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Font Include="Fonts\CascadiaMono.ttf">
@@ -44,6 +47,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="menuFuncs.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="textSelection.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
