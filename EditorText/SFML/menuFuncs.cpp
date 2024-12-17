@@ -160,7 +160,7 @@ void inputBox::init(sf::RenderWindow& window, sf::Font& font, float width, float
 	input.setPosition(inputArea.getPosition().x + height/8, inputArea.getPosition().y + height/8);
 }
 
-char* inputBox::handleInput(sf::Event event, bool& inputBoxActive)
+char* inputBox::handleInput(sf::Event event, bool& inputBoxActive, void (*function)(const char*))
 {
 	// std::cout << inputText << " (" << inputTextLength << ")" << std::endl;
 	if (event.type == sf::Event::KeyPressed)
@@ -193,6 +193,10 @@ char* inputBox::handleInput(sf::Event event, bool& inputBoxActive)
 			else if (key == 13) // 13 = enter
 			{
 				inputBoxActive = false;
+				if (function != nullptr)
+				{
+					function(inputText);
+				}
 				return inputText;
 			}
 			update();

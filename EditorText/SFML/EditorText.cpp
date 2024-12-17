@@ -9,6 +9,16 @@
 
 using namespace std;
 
+enum menuOptions
+{
+	NEW,
+	OPEN,
+	SAVE,
+	SAVE_AS,
+	INFO,
+	EXIT
+};
+
 void initEscMenu(sf::RenderWindow& window, sf::Font& font, fullscreenMenu& menu)
 {
 	menu.init();
@@ -59,6 +69,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
     bool menuActive = false;
     fullscreenMenu menu;
     initEscMenu(Window, font, menu);
+    unsigned int menuOption;
 
 	// Declarăm input box-ul.
     // Inițializarea se va face după caz, în funcție de opțiunea aleasă în meniu.
@@ -75,7 +86,21 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
         {
             if (inputBoxActive)
             {
-				input.handleInput(event, inputBoxActive);
+                char* userInput = input.handleInput(event, inputBoxActive);
+                if (inputBoxActive == false)
+                {
+                    switch (menuOption)
+                    {
+                    case OPEN:
+                        loadFile(doc, userInput);
+                        updateWholeTextObject(&doc, Window, text);
+                        break;
+                    case SAVE_AS:
+                        saveFile(doc, userInput);
+                        break;
+                    }
+                    menuActive = false;
+                }
             }
             if (menuActive)
             {
@@ -98,26 +123,31 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
                             case 0:
                                 // New
                                 cout << "New" << endl;
+                                menuOption = NEW;
                                 break;
                             case 1:
                                 // Open
                                 cout << "Open" << endl;
+                                menuOption = OPEN;
 								input.init(Window, font, 600, 32, "Enter file path:");
 								inputBoxActive = true;
                                 break;
                             case 2:
                                 // Save
                                 cout << "Save" << endl;
+                                menuOption = SAVE;
                                 break;
 							case 3:
 								// Save as
+								cout << "Save as" << endl;
+								menuOption = SAVE_AS;
                                 input.init(Window, font, 600, 32, "Enter file save path:");
                                 inputBoxActive = true;
-								cout << "Save as" << endl;
 								break;
                             case 4:
 								// Info
 								cout << "Info" << endl;
+                                menuOption = INFO;
 								break;
                             case 5:
                                 // Exit

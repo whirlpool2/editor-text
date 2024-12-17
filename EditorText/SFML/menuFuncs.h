@@ -65,7 +65,8 @@ struct inputBox
 	// Permite scrierea în input box.
 	// La apel, se preia input-ul de la tastatură și se adaugă la inputText.
 	// Când se apasă enter, se închide box-ul și se returnează input-ul.
-	char* handleInput(sf::Event event, bool& inputBoxVisible);
+	// Input-ul este pasat unei funcții precizate ca argument, dar este și returnat ca și char*.
+	char* handleInput(sf::Event event, bool& inputBoxVisible, void (*function)(const char*) = nullptr);
 
 	// Actualizează grafica textului introdus.
 	void update();
