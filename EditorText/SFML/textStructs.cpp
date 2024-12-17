@@ -237,6 +237,26 @@ unsigned long long textDocument ::getALineLength(int CursorPos) {
     return LineLength - 1;
 
 }
+
+void textDocument::deleteText(unsigned long long start, unsigned long long end) {
+	if (start >= end)
+		return;
+	character* p = getChar(start);
+	character* q = getChar(end);
+	if (p->prev != nullptr)
+		p->prev->next = q;
+	if (q->next != nullptr)
+		q->next->prev = p;
+	if (p == this->first)
+		this->first = q;
+	while (p != q) {
+		character* aux = p;
+		p = p->next;
+		delete aux;
+		this->charCount--;
+	}
+	return;
+}
 unsigned long long textDocument::getCursorLineLength()
 {
     unsigned long long originalPos = this->cursorPos;

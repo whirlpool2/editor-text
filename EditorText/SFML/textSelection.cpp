@@ -75,16 +75,33 @@ void TextSelection::updateSelectedTextKeys(textDocument& doc, sf::Text& text, sf
 
     //Verific daca se selecteaza corect
     std::cout << "SELSTART: " << SelStart << " SELEND: " << SelEnd << std::endl << std::endl;
+    
 }
 
 //De facut Hightlight ul pe 17.12.2024
 //De facut copy paste pe 18.12.2024
 
+//functie stergere
 
 
 
 
+void TextSelection::drawHighLight(sf::RenderWindow& window, sf::Text& text, textDocument& doc) {
+    //daca avem o selectie, atunci ii dam highlight
+    if (isSelected) {
+		sf::RectangleShape highlight;//cream un dreptunghi pentru highlight
+		highlight.setFillColor(sf::Color(170, 210, 230, 128));//setam culoarea dreptunghiului, albastru transparent
+		//parcurgem textul si punem highlight pe textul selectat
+        //can i make it so i can 
+        for (unsigned long long i = SelStart; i < SelEnd; ++i) {
+            sf::Vector2f position = text.findCharacterPos(i); //luam pozitia caracterului curent
+			highlight.setPosition(position);//setam pozitia dreptunghiului de highlight
+			highlight.setSize(sf::Vector2f(text.getCharacterSize(), text.getCharacterSize() * 1.2f));//setam dimensiunile dreptunghiului
+			window.draw(highlight);//desenam dreptunghiul, ca sa apara vizual pe ecran
+        }
+    }
 
+}
 
 
 

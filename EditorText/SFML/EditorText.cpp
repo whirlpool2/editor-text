@@ -138,7 +138,9 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                         // Dacă se apasă backspace și se poate șterge...
                         if (key == 8 && doc.charCount != 0 && doc.cursorPos > 0)
                         {
-                            deleteCharInTextObject(&doc, text);
+                            //deleteCharInTextObject(&doc, text);
+							//textSelection.deleteSelectedText(doc, text, textSelection, cursorVisual, cursorClock, cursorVisible, Window);
+                        
                         }
                         else if (key >= 32 && key <= 126)
                         {
@@ -240,6 +242,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
 
         // Actualizăm window-ul.
         Window.clear(sf::Color(COLOR_BG.r, COLOR_BG.g, COLOR_BG.b));
+        textSelection.drawHighLight(Window, text, doc);
         Window.draw(text);
         Window.draw(cursorVisual);
         Window.draw(Bar);

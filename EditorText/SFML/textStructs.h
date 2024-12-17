@@ -27,6 +27,9 @@ struct textDocument
     // Returnează un pointer la caracterul de la poziția pos.
     character* getChar(unsigned long long pos);
 
+    //functie pentru a sterge un interval de text
+	void deleteText(unsigned long long start, unsigned long long end);
+
 	// Inserează un caracter în documentul text la poziția cursorului.
     void insertChar(char c);
 
