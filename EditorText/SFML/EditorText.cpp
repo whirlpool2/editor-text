@@ -9,7 +9,55 @@
 
 using namespace std;
 
+void initEscMenu(sf::RenderWindow& window, sf::Font& font, fullscreenMenu& menu)
+{
+	menu.init();
+	menu.addButton("New");
+	menu.addButton("Open");
+	menu.addButton("Save");
+	menu.addButton("Exit");
+    menu.update(window, font);
+}
 
+void handleEscMenu(sf::RenderWindow& window, sf::Font& font, sf::Event& event, fullscreenMenu& menu, bool& menuActive)
+{
+    if (event.type == sf::Event::KeyPressed)
+    {
+        if (event.key.code == sf::Keyboard::Escape)
+        {
+            menuActive = !menuActive;
+        }
+    }
+    if (event.type == sf::Event::MouseButtonPressed)
+    {
+        if (event.mouseButton.button == sf::Mouse::Left)
+        {
+            int clickedButton = menu.getClickedButton(sf::Mouse::getPosition(window));
+            if (clickedButton != -1)
+            {
+                switch (clickedButton)
+                {
+                case 0:
+                    // New
+                    cout << "New" << endl;
+                    break;
+                case 1:
+                    // Open
+                    cout << "Open" << endl;
+                    break;
+                case 2:
+                    // Save
+                    cout << "Save" << endl;
+                    break;
+                case 3:
+                    // Exit
+                    window.close();
+                    break;
+                }
+            }
+        }
+    }
+}
 
 // Primește informații de la tastatură și modifică documentul corespunzător.
 void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
@@ -48,12 +96,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
     // Declarăm și inițializăm meniul.
     bool menuActive = false;
     fullscreenMenu menu;
-    menu.init();
-    menu.addButton("New");
-    menu.addButton("Open");
-    menu.addButton("Save");
-    menu.addButton("Exit");
-    menu.update(Window, font);
+    initEscMenu(Window, font, menu);
 
     // Actualizăm conținutul textului (pentru a prelua datele încărcate).
     updateTextObject(&doc, Window, text);
@@ -65,42 +108,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
         {
             if (menuActive)
             {
-				if (event.type == sf::Event::KeyPressed)
-				{
-					if (event.key.code == sf::Keyboard::Escape)
-					{
-						menuActive = !menuActive;
-					}
-				}
-                if (event.type == sf::Event::MouseButtonPressed)
-                {
-                    if (event.mouseButton.button == sf::Mouse::Left)
-                    {
-                        int clickedButton = menu.getClickedButton(sf::Mouse::getPosition(Window));
-                        if (clickedButton != -1)
-                        {
-                            switch (clickedButton)
-                            {
-                            case 0:
-                                // New
-                                cout << "New" << endl;
-                                break;
-                            case 1:
-                                // Open
-                                cout << "Open" << endl;
-                                break;
-                            case 2:
-                                // Save
-                                cout << "Save" << endl;
-                                break;
-                            case 3:
-                                // Exit
-                                Window.close();
-                                break;
-                            }
-                        }
-                    }
-                }
+				handleEscMenu(Window, font, event, menu, menuActive);
             }
             else
             {
