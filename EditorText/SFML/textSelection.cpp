@@ -103,8 +103,35 @@ void TextSelection::drawHighLight(sf::RenderWindow& window, sf::Text& text, text
 
 }
 
+void TextSelection::deleteSelectedText(textDocument& doc, sf::Text& text, TextSelection& selection,
+    sf::RectangleShape& cursorVisual, sf::Clock& cursorClock,
+    bool& cursorVisible, sf::RenderWindow& window) {
+    if (!selection.isSelected || selection.SelStart >= selection.SelEnd) {
+        return;
+    }
 
+    // Sterg textul selectat
+    doc.deleteText(selection.SelStart, selection.SelEnd);
 
+    // Fac legatura intre caracterul de start si urmatorul dupa cel sters pentru a nu avea crash-uri
+    character* startChar = doc.getChar(selection.SelStart - 1);
+    character* nextChar = doc.getChar(selection.SelStart);
+    if (startChar != nullptr && nextChar != nullptr) {
+        startChar->next = nextChar;
+        nextChar->prev = startChar;
+    }
+
+	// Actualizez pozitia cursorului cu cea de la startul selectiei
+    doc.cursorPos = selection.SelStart;
+
+    // Resetez parametrul pt verificarea textului selectat
+    selection.isSelected = false;
+    selection.SelStart = selection.SelEnd = doc.cursorPos;
+
+    // Actualizez textul si cursorul
+    updateTextObject(&doc, window, text);
+    updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
+}
 
 
 

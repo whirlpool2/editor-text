@@ -136,11 +136,14 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                         char key = static_cast<char>(event.text.unicode);
 
                         // Dacă se apasă backspace și se poate șterge...
-                        if (key == 8 && doc.charCount != 0 && doc.cursorPos > 0)
-                        {
-                            //deleteCharInTextObject(&doc, text);
-							//textSelection.deleteSelectedText(doc, text, textSelection, cursorVisual, cursorClock, cursorVisible, Window);
-                        
+                        if (key == 8 && doc.charCount != 0 && doc.cursorPos > 0) {
+                            if (textSelection.isSelected) {
+                                //daca am shift apasat si dau delete se sterge tot continutul selectat
+                                textSelection.deleteSelectedText(doc, text, textSelection, cursorVisual, cursorClock, cursorVisible, Window);
+                            }
+                            else {
+                                deleteCharInTextObject(&doc, text);
+                            }
                         }
                         else if (key >= 32 && key <= 126)
                         {

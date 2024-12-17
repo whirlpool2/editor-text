@@ -126,6 +126,8 @@ void textDocument::deleteChar()
     {
         return;
     }
+    unsigned long long originalPos = this->cursorPos;
+
     character* p = this->getChar(this->cursorPos - 1);
     if (p->prev != nullptr)
     {
@@ -141,8 +143,7 @@ void textDocument::deleteChar()
     }
     delete p;
     this->charCount--;
-    this->cursorPos--;
-    return;
+    this->cursorPos = originalPos - 1;
 }
 
 unsigned long long textDocument::getLineCount()
@@ -239,24 +240,43 @@ unsigned long long textDocument ::getALineLength(int CursorPos) {
 }
 
 void textDocument::deleteText(unsigned long long start, unsigned long long end) {
-	if (start >= end)
-		return;
-	character* p = getChar(start);
-	character* q = getChar(end);
-	if (p->prev != nullptr)
-		p->prev->next = q;
-	if (q->next != nullptr)
-		q->next->prev = p;
-	if (p == this->first)
-		this->first = q;
-	while (p != q) {
-		character* aux = p;
-		p = p->next;
-		delete aux;
-		this->charCount--;
-	}
-	return;
+    if (start >= end || start >= this->charCount || end > this->charCount)
+        return;
+
+    unsigned long long originalPos = this->cursorPos;
+    character* p = getChar(start);
+    character* q = getChar(end);
+
+    if (p == nullptr || q == nullptr)
+        return;
+
+    if (p->prev != nullptr)
+        p->prev->next = q;
+    if (q != nullptr && q->next != nullptr)
+        q->next->prev = p->prev;
+
+    if (p == this->first)
+        this->first = q;
+
+    while (p != q) {
+        character* aux = p;
+        p = p->next;
+        delete aux;
+        this->charCount--;
+    }
+
+    // Ajustez pozitie cursor
+    if (originalPos >= end) {
+        this->cursorPos = originalPos - (end - start);
+    }
+    else if (originalPos >= start) {
+        this->cursorPos = start;
+    }
+    else {
+        this->cursorPos = originalPos;
+    }
 }
+
 unsigned long long textDocument::getCursorLineLength()
 {
     unsigned long long originalPos = this->cursorPos;
@@ -333,35 +353,26 @@ void textDocument::gotoNextNewline()
     }
 }
 
-void textDocument::gotoPrevNewline()
-{
+void textDocument::gotoPrevNewline() {
     character* p = this->getChar(this->cursorPos);
     bool endOfDoc = false;
 
-	if (this->charCount == 0)
-	{
-		return;
-	}
-
-    // Dacă caracterul curent nu există, probabil ne aflăm la sfârșitul documentului.
-    if (p == nullptr)
-    {
-		endOfDoc = true;
+    if (p == nullptr) {
+        endOfDoc = true;
         p = this->getChar(this->cursorPos - 1);
     }
-    
-	// Dacă caracterul curent este '\n', îl ignorăm și trecem în interiorul liniei.
-	if (p != nullptr && p->c == '\n' && !endOfDoc)
-	{
-		p = p->prev;
-		this->cursorPos--;
-	}
 
-	// Căutăm precedentul '\n'.
-	while (p != nullptr && p->c != '\n')
-	{
-		p = p->prev;
-		this->cursorPos--;
-	}
+    if (p != nullptr && p->c == '\n' && !endOfDoc) {
+        p = p->prev;
+        this->cursorPos--;
+    }
 
+    while (p != nullptr && p->c != '\n') {
+        p = p->prev;
+        this->cursorPos--;
+
+        if (p == nullptr) {
+            break;
+        }
+    }
 }
