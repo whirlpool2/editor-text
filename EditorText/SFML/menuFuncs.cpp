@@ -126,3 +126,91 @@ void handleMenuInput(sf::RenderWindow& Window, sf::Font& font, fullscreenMenu& m
 		}
 	}
 }
+
+void inputBox::init(sf::RenderWindow& window, sf::Font& font, float width, float height, const char* desc)
+{
+	this->width = width;
+	this->height = height;
+	strcpy_s(descriptionText, desc);
+	
+	for (int i = 0; i < 128; i++)
+	{
+		inputText[i] = '\0';
+	}
+
+	inputTextLength = 0;
+
+	background.setSize(sf::Vector2f(window.getSize().x, window.getSize().y));
+	background.setPosition(0, 0);
+	background.setFillColor(sf::Color(0, 0, 0, 128));
+
+	inputArea.setSize(sf::Vector2f(width, height));
+	inputArea.setPosition((window.getSize().x - width) / 2, (window.getSize().y - height) / 2);
+	inputArea.setFillColor(sf::Color(COLOR_BG.r * 0.75, COLOR_BG.g * 0.75, COLOR_BG.b * 0.75));
+	inputArea.setOutlineColor(sf::Color(COLOR_TEXT.r, COLOR_TEXT.g, COLOR_TEXT.b));
+	inputArea.setOutlineThickness(2);
+	
+	description.setFont(font);
+	description.setString(descriptionText);
+	description.setPosition(inputArea.getPosition().x, inputArea.getPosition().y - description.getGlobalBounds().height - 20);
+
+	input.setFont(font);
+	input.setCharacterSize(height * 0.75);
+	input.setString(inputText);
+	input.setPosition(inputArea.getPosition().x + height/8, inputArea.getPosition().y + height/8);
+}
+
+char* inputBox::handleInput(sf::Event event, bool& inputBoxActive)
+{
+	// std::cout << inputText << " (" << inputTextLength << ")" << std::endl;
+	if (event.type == sf::Event::KeyPressed)
+	{
+		if (event.key.code == sf::Keyboard::Escape)
+		{
+			inputBoxActive = false;
+			return inputText;
+		}
+	}
+	
+	if (event.type == sf::Event::TextEntered)
+	{
+		std::cout << "Event text entered" << std::endl;
+		update();
+		if (event.text.unicode < 128)
+		{
+			char key = static_cast<char>(event.text.unicode);
+			std::cout << key << std::endl;
+			if (key == 8 && inputTextLength) // 8 = backspace
+			{
+				inputText[strlen(inputText) - 1] = '\0';
+				inputTextLength--;
+			}
+			else if (key >= 32 && key <= 126) // 32-126 = caractere de la tastatura
+			{
+				inputText[inputTextLength] = key;
+				inputTextLength++;
+			}
+			else if (key == 13) // 13 = enter
+			{
+				inputBoxActive = false;
+				return inputText;
+			}
+			update();
+		}
+	}
+	return inputText;
+}
+
+void inputBox::update()
+{
+	input.setString(inputText);
+	// input.setPosition(inputArea.getPosition().x + 10, inputArea.getPosition().y + 10);
+}
+
+void inputBox::draw(sf::RenderWindow& window, sf::Font& font)
+{
+	window.draw(background);
+	window.draw(inputArea);
+	window.draw(description);
+	window.draw(input);
+}

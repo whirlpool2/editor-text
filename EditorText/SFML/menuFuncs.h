@@ -43,6 +43,37 @@ struct fullscreenMenu
 	int getClickedButton(sf::Vector2i mousePos);
 };
 
+// Structură pentru un input box, cu un text descriptiv centrat deasupra.
+// Input box-ul va fi centrat pe ecran, și va întuneca fundalul.
+struct inputBox
+{
+	sf::RectangleShape background; // Folosit pentru întunecarea fundalului.
+	sf::RectangleShape inputArea;  // Zona efectivă de input. (Casetă de text cu fundalul mai închis decât COLOR_BG și contur COLOR_TEXT)
+	sf::Text description;
+	sf::Text input;
+	char descriptionText[64];
+	char inputText[128];
+	unsigned int inputTextLength;
+	float width;
+	float height;
+	float x;
+	float y;
+
+	// Inițializează input box-ul cu valorile date.
+	void init(sf::RenderWindow& window, sf::Font& font, float width, float height, const char* desc);
+	
+	// Permite scrierea în input box.
+	// La apel, se preia input-ul de la tastatură și se adaugă la inputText.
+	// Când se apasă enter, se închide box-ul și se returnează input-ul.
+	char* handleInput(sf::Event event, bool& inputBoxVisible);
+
+	// Actualizează grafica textului introdus.
+	void update();
+
+	// Desenează input box-ul pe ecran.
+	void draw(sf::RenderWindow& window, sf::Font& font);
+};
+
 // Deschide meniul și așteaptă input de la utilizator.
 // Momentan, detectarea deschiderii se face în funcția handleKeyboardInput (CTRL+M), iar ieșirea din meniu
 // se face cu ESC, lucru detectat în această funcție.

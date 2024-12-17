@@ -15,48 +15,10 @@ void initEscMenu(sf::RenderWindow& window, sf::Font& font, fullscreenMenu& menu)
 	menu.addButton("New");
 	menu.addButton("Open");
 	menu.addButton("Save");
+    menu.addButton("Save as");
+    menu.addButton("Info");
 	menu.addButton("Exit");
     menu.update(window, font);
-}
-
-void handleEscMenu(sf::RenderWindow& window, sf::Font& font, sf::Event& event, fullscreenMenu& menu, bool& menuActive)
-{
-    if (event.type == sf::Event::KeyPressed)
-    {
-        if (event.key.code == sf::Keyboard::Escape)
-        {
-            menuActive = !menuActive;
-        }
-    }
-    if (event.type == sf::Event::MouseButtonPressed)
-    {
-        if (event.mouseButton.button == sf::Mouse::Left)
-        {
-            int clickedButton = menu.getClickedButton(sf::Mouse::getPosition(window));
-            if (clickedButton != -1)
-            {
-                switch (clickedButton)
-                {
-                case 0:
-                    // New
-                    cout << "New" << endl;
-                    break;
-                case 1:
-                    // Open
-                    cout << "Open" << endl;
-                    break;
-                case 2:
-                    // Save
-                    cout << "Save" << endl;
-                    break;
-                case 3:
-                    // Exit
-                    window.close();
-                    break;
-                }
-            }
-        }
-    }
 }
 
 // Primește informații de la tastatură și modifică documentul corespunzător.
@@ -98,6 +60,11 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
     fullscreenMenu menu;
     initEscMenu(Window, font, menu);
 
+	// Declarăm input box-ul.
+    // Inițializarea se va face după caz, în funcție de opțiunea aleasă în meniu.
+	bool inputBoxActive = false;
+	inputBox input;
+
     // Actualizăm conținutul textului (pentru a prelua datele încărcate).
     updateTextObject(&doc, Window, text);
 
@@ -106,9 +73,60 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
         sf::Event event;
         while (Window.pollEvent(event)) // Verificăm event-ul curent.
         {
+            if (inputBoxActive)
+            {
+				input.handleInput(event, inputBoxActive);
+            }
             if (menuActive)
             {
-				handleEscMenu(Window, font, event, menu, menuActive);
+                if (event.type == sf::Event::KeyPressed)
+                {
+                    if (event.key.code == sf::Keyboard::Escape)
+                    {
+                        menuActive = !menuActive;
+                    }
+                }
+                if (event.type == sf::Event::MouseButtonPressed)
+                {
+                    if (event.mouseButton.button == sf::Mouse::Left)
+                    {
+                        int clickedButton = menu.getClickedButton(sf::Mouse::getPosition(Window));
+                        if (clickedButton != -1)
+                        {
+                            switch (clickedButton)
+                            {
+                            case 0:
+                                // New
+                                cout << "New" << endl;
+                                break;
+                            case 1:
+                                // Open
+                                cout << "Open" << endl;
+								input.init(Window, font, 600, 32, "Enter file path:");
+								inputBoxActive = true;
+                                break;
+                            case 2:
+                                // Save
+                                cout << "Save" << endl;
+                                break;
+							case 3:
+								// Save as
+                                input.init(Window, font, 600, 32, "Enter file save path:");
+                                inputBoxActive = true;
+								cout << "Save as" << endl;
+								break;
+                            case 4:
+								// Info
+								cout << "Info" << endl;
+								break;
+                            case 5:
+                                // Exit
+                                Window.close();
+                                break;
+                            }
+                        }
+                    }
+                }
             }
             else
             {
@@ -239,6 +257,10 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc)
         {
 			menu.draw(Window, font);
         }
+        if (inputBoxActive)
+        {
+            input.draw(Window, font);
+        }
         Window.display();
     }
 }
@@ -276,6 +298,42 @@ int main()
         EditorText.clear(sf::Color(COLOR_BG.r, COLOR_BG.g, COLOR_BG.b));
         menu.draw(EditorText, font);
 		EditorText.display();
+    }
+    */
+    
+    /*
+    sf::Font font;
+    sf::Text text;
+    setFont(text, font, 24, COLOR_TEXT, (char*)"Fonts/CascadiaMono.ttf");
+
+    inputBox input;
+	input.init(EditorText, font, 600, 100, "Introduceti textul:");
+	bool inputBoxActive = true;
+
+    char* inputString = nullptr;
+
+    while (EditorText.isOpen())
+    {
+        sf::Event event;
+        while (EditorText.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                EditorText.close();
+            }
+            if (inputBoxActive)
+            {
+				inputString = input.handleInput(event, inputBoxActive);
+                input.update();
+            }
+        }
+        EditorText.clear(sf::Color(COLOR_BG.r, COLOR_BG.g, COLOR_BG.b));
+        if (inputBoxActive)
+        {
+            input.draw(EditorText, font);
+        }
+        
+        EditorText.display();
     }
     */
     
