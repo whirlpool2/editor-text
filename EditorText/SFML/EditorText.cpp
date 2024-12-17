@@ -32,7 +32,7 @@ void initEscMenu(sf::RenderWindow& window, sf::Font& font, fullscreenMenu& menu)
 }
 
 // Primește informații de la tastatură și modifică documentul corespunzător.
-void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelection& textSelection)
+void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelection& textSelection, char* path)
 {
     sf::Font font;
     sf::Text text;
@@ -99,6 +99,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                         saveFile(doc, userInput);
                         break;
                     }
+					path = userInput;
                     menuActive = false;
                 }
             }
@@ -224,6 +225,10 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                 makeScrollBarWork(event, doc, Window, Bar, Slider, isDragged, scrollPos, scrollPosCurrent, text);
                 if (event.type == sf::Event::KeyPressed) // Acest caz tratează tastele ce nu produc caractere.
                 {
+					if (event.key.code == sf::Keyboard::Escape)
+					{
+						menuActive = !menuActive;
+					}
                     //Avem cazurile pentru selectie cu shift
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)) {
                         if (doc.cursorPos > 0 && event.key.code == sf::Keyboard::Left) {
@@ -252,7 +257,6 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                             moveCursorDown(doc);
                         if (event.key.code == sf::Keyboard::Up) // Trecem la linia precedentă.
                             moveCursorUp(doc);
-
                     }
 
                     if (event.key.code == sf::Keyboard::Equal && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) // Zoom-in (CTRL + '=')
@@ -269,7 +273,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                     }
                     if (event.key.code == sf::Keyboard::S && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
                     {
-                        saveFile(doc, (char*)"test.txt");
+                        saveFile(doc, path);
                     }
                     if (event.key.code == sf::Keyboard::PageDown || cursorVisual.getPosition().y > Window.getSize().y - 50)
                     {
@@ -323,9 +327,9 @@ int main()
     doc.init();
 
     // Schimbă asta dacă vrei să încarci un fișier.
-    char path[] = "test.txt";
+    char* path = nullptr;
     
-    loadFile(doc, path);
+    // loadFile(doc, path);
 
     /*
     sf::Font font;
@@ -385,7 +389,7 @@ int main()
     }
     */
     
-    handleKeyboardInput(EditorText, doc, textSelection);
+    handleKeyboardInput(EditorText, doc, textSelection, path);
 
     return 0;
 }
