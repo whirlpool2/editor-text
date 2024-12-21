@@ -15,7 +15,7 @@ int min(int a, int b)
 {
     return a < b ? a : b;
 }
-void TextSelection::updateSelectedTextKeys(textDocument& doc, sf::Text& text, sf::Vector2i direction) {
+void TextSelection::updateSelectedTextKeys(textDocument& doc, sf::Text& text, sf::Vector2i direction, bool isControlPressed) {
     //Daca nu e apasat niciun buton, selectia se intrerupe
 
 
@@ -24,7 +24,7 @@ void TextSelection::updateSelectedTextKeys(textDocument& doc, sf::Text& text, sf
     //pentru ca anchoreaza inceputul selectiei, trebuie doar sa fac minimul pentru a obtine inceputul selectiei si maximul pentru a obtine sfarsitul selectiei
 
 
-    if (direction.x == 0 && direction.y == 0)
+    if (direction.x == 0 && direction.y == 0 && isControlPressed == 0)
     {
         SelStart = doc.cursorPos;
         SelEnd = doc.cursorPos;
@@ -107,6 +107,13 @@ void TextSelection::deleteSelectedText(textDocument& doc, sf::Text& text, TextSe
     sf::RectangleShape& cursorVisual, sf::Clock& cursorClock,
     bool& cursorVisible, sf::RenderWindow& window) {
     if (!selection.isSelected || selection.SelStart >= selection.SelEnd) {
+		std::cout << "No text selected.\n" << selection.SelStart << "  " << selection.SelEnd << '\n';
+
+		if (selection.SelStart != selection.SelEnd)
+			doc.deleteText(selection.SelStart, selection.SelEnd);
+        else
+            deleteCharInTextObject(&doc, text);
+
         return;
     }
 
@@ -133,6 +140,50 @@ void TextSelection::deleteSelectedText(textDocument& doc, sf::Text& text, TextSe
     updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
 }
 
+void TextSelection::copyText(textDocument& doc) {
+    //Daca nu e nimic selectat, nu avem ce copia
+    if (!isSelected) {
+        return;
+    }
+    //Daca e selectat ceva, atunci copiem textul selectat
+    character* start = doc.getChar(SelStart);
+    character* end = doc.getChar(SelEnd);
+    character* currentchar = start;
+    std::string TextToCopy;
+	//Parcurgem teextul selectat si il punem intr-un string care va fi la final copiat in clipboard
+    while (currentchar != nullptr and currentchar != end) {
+        TextToCopy += currentchar->c;
+        currentchar = currentchar->next;
+    }
+
+    sf::Clipboard::setString(TextToCopy);
+}
+
+void TextSelection::pasteText(textDocument& doc, sf::Text& text, sf::RenderWindow& window, sf::RectangleShape& cursorVisual,
+    sf::Clock& cursorClock, bool& cursorVisible) {
+
+    //Verificam daca avem un text selectat care trebuie inlocuit	
+    if (isSelected) 
+		doc.deleteText(SelStart, SelEnd);
+    
+    std::string textToPaste = sf::Clipboard::getString();
+
+
+    //Daca nu e nimic in clipboard, nu avem ce lipi
+    if (textToPaste.size() == 0)
+        return;
+	
+    
+    for (int iterator = 0; iterator < textToPaste.size(); iterator++) {
+		insertCharInTextObject(&doc, text, textToPaste[iterator]);
+	}
+	//Actualizam textul si cursorul
+	updateTextObject(&doc, window, text);
+	updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
+	//Resetez selectia
+	isSelected = false;
+	SelStart = SelEnd = doc.cursorPos;
+}
 
 
 

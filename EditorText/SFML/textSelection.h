@@ -25,11 +25,14 @@ struct TextSelection
 		sf::RectangleShape& cursorVisual, sf::Clock& cursorClock, bool& cursorVisible, sf::RenderWindow& window);
 
 	//Functie pentru a lipi textul copiat
-	void pasteText(textDocument& doc, sf::Text& text);
+	void pasteText(textDocument& doc, sf::Text& text, sf::RenderWindow& window, sf::RectangleShape& cursorVisual,
+		sf::Clock& cursorClock, bool& cursorVisible);
+
+
 
 
 	//Functie pentru a actualiza textul selectat dupa shift + arrow keys
-	void updateSelectedTextKeys(textDocument& doc, sf::Text& text, sf::Vector2i direction);
+	void updateSelectedTextKeys(textDocument& doc, sf::Text& text, sf::Vector2i direction, bool isControlPressed);
 
 	//Functie pentru a da highlight la text
 	void drawHighLight(sf::RenderWindow& window, sf::Text& text, textDocument& doc);

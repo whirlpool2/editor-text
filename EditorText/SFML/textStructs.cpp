@@ -1,5 +1,5 @@
 ﻿#include "textStructs.h"
-
+#include <iostream>
 void textDocument::init()
 {
     this->first = nullptr;
@@ -7,7 +7,7 @@ void textDocument::init()
     this->cursorPos = 0;
     this->firstVisibleLine = 0;
 }
-
+/*
 character* textDocument::getChar(unsigned long long pos)
 {
     if (pos >= this->charCount)
@@ -22,7 +22,22 @@ character* textDocument::getChar(unsigned long long pos)
         i++;
     }
     return p;
-}
+}*/
+
+character* textDocument::getChar(unsigned long long pos)
+    {
+        if (this->first == nullptr || pos >= this->charCount)
+            return nullptr;
+      
+        unsigned long long i = 0;
+        character* p = this->first;
+        while (p != nullptr && i < pos)
+        {
+            p = p->next;
+            i++;
+        }
+        return p;
+    }
 /*
 character* textDocument::getChar(unsigned long long pos)
 {
@@ -242,14 +257,16 @@ unsigned long long textDocument ::getALineLength(int CursorPos) {
 void textDocument::deleteText(unsigned long long start, unsigned long long end) {
     if (start >= end || start >= this->charCount || end > this->charCount)
         return;
-
+    if(start > end)
+		std::swap(start, end);
     unsigned long long originalPos = this->cursorPos;
     character* p = getChar(start);
     character* q = getChar(end);
 
-    if (p == nullptr || q == nullptr)
+    if (p == nullptr || q == nullptr) {
         return;
-
+    
+    }
     if (p->prev != nullptr)
         p->prev->next = q;
     if (q != nullptr && q->next != nullptr)
