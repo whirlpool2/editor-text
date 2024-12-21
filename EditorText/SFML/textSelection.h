@@ -37,4 +37,6 @@ struct TextSelection
 	//Functie pentru a da highlight la text
 	void drawHighLight(sf::RenderWindow& window, sf::Text& text, textDocument& doc);
 
+	//Functie pentru a actualiza textul selectat dupa mouse
+	void updateSelectedTextMouse(textDocument& doc, sf::Text& text, sf::Vector2i mousePosition, bool isMousePressed);
 };

@@ -26,9 +26,11 @@ void TextSelection::updateSelectedTextKeys(textDocument& doc, sf::Text& text, sf
 
     if (direction.x == 0 && direction.y == 0 && isControlPressed == 0)
     {
+        std::cout << "SE RESETEAZA< DA" << std::endl;
         SelStart = doc.cursorPos;
         SelEnd = doc.cursorPos;
         isSelected = false;
+        return;
     }
 
     //Daca e apasat shift, atunci continuam sau incepem selectia
@@ -185,7 +187,26 @@ void TextSelection::pasteText(textDocument& doc, sf::Text& text, sf::RenderWindo
 	SelStart = SelEnd = doc.cursorPos;
 }
 
+void TextSelection::updateSelectedTextMouse(textDocument& doc, sf::Text& text, sf::Vector2i mousePosition, bool isMousePressed) {
+    if (!isMousePressed) {
+        isSelected = false;
+        return;
+    }
 
+    if (!isSelected) {
+        selectionAnchor = doc.cursorPos;
+        isSelected = true;
+    }
+
+    
+    doc.cursorPos = getCursorPosFromMouse(doc, text, mousePosition);
+
+    SelStart = min(selectionAnchor, doc.cursorPos);
+    SelEnd = max(selectionAnchor, doc.cursorPos);
+
+    // Check if selection is still active
+    isSelected = (SelStart != SelEnd);
+}
 
 
 

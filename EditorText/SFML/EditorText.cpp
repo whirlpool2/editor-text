@@ -76,6 +76,10 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
 	bool inputBoxActive = false;
 	inputBox input;
 
+
+    //Bool pentru mouse
+	bool isMousePressed = false;
+
     // Actualizăm conținutul textului (pentru a prelua datele încărcate).
     updateTextObject(&doc, Window, text);
 
@@ -171,9 +175,14 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                 {
                     if (event.mouseButton.button == sf::Mouse::Left)
                     {
+                        isMousePressed = true;
                         sf::Vector2i mousePos = sf::Mouse::getPosition(Window);
                         cursorClickPos(mousePos, doc, text);
                         updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
+                    }
+					if (event.type == sf::Event::MouseButtonReleased)
+					{
+						isMousePressed = false;
                     }
                 }
                 
@@ -231,7 +240,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                     //Avem cazurile pentru selectie cu shift
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)) {
                         if (doc.cursorPos > 0 && event.key.code == sf::Keyboard::Left) {
-
+							
                             textSelection.updateSelectedTextKeys(doc, text, sf::Vector2i(-1, 0), isControlPressed);
                         }
                         if (doc.cursorPos < doc.charCount && event.key.code == sf::Keyboard::Right) {
@@ -262,7 +271,16 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                     if (isControlPressed)
 					{
 						std::cout << "SIGGGMA" << std::endl;
-						
+					
+						//CTRL + A comanda de select all
+                        if (event.key.code == sf::Keyboard::A) {
+							textSelection.SelStart = 0;
+							textSelection.SelEnd = doc.charCount - 1;
+                            doc.cursorPos = doc.charCount;
+							textSelection.isSelected = true;
+							isControlPressed = true;
+                        }
+
                         //CTRL + C comanda de copiere
                         if (event.key.code == sf::Keyboard::C)
 						{

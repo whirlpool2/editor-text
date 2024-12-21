@@ -84,3 +84,4 @@ void ScrollBar(sf::Event& event, sf::RenderWindow& window, sf::RectangleShape& b
 
 //Functie pentru functionarea scroll bar-ului
 void makeScrollBarWork(sf::Event& event, textDocument& doc, sf::RenderWindow& window, sf::RectangleShape& background, sf::RectangleShape& slider, bool& isDragged, float& scrollPosNew, float& scrollPosCurrent, sf::Text& textObject);
+unsigned long long getCursorPosFromMouse(textDocument& doc, sf::Text& text, sf::Vector2i mousePosition);

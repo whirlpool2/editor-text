@@ -324,6 +324,9 @@ void saveFile(textDocument& doc, char* path)
 	fclose(file);
 }
 
+
+
+
 void moveCursorUp(textDocument& doc) {
     if (doc.getACursorLine(doc.cursorPos) == 1 or doc.cursorPos == 0) {
         doc.cursorPos = doc.getALineLength(doc.cursorPos);
@@ -609,3 +612,139 @@ void makeScrollBarWork(sf::Event& event, textDocument& doc, sf::RenderWindow& wi
 		}
 	}
 }
+
+unsigned long long getCursorPosFromMouse(textDocument& doc, sf::Text& text, sf::Vector2i mousePosition) {
+    sf::Vector2f mousePosFloat = { static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y) };
+    sf::String textString = text.getString();
+    int fontSize = text.getCharacterSize();
+
+    // Check if the click is below the text
+    if (mousePosFloat.y >= text.findCharacterPos(doc.charCount - 1).y + fontSize) {
+        return doc.charCount;
+    }
+
+    // Binary search to find the line
+    unsigned long long left = 0;
+    unsigned long long right = doc.charCount - 1;
+    while (left <= right) {
+        unsigned long long mid = (left + right) / 2;
+        sf::Vector2f charPos = text.findCharacterPos(mid);
+        if (mousePosFloat.y >= charPos.y && mousePosFloat.y <= charPos.y + fontSize) {
+            doc.cursorPos = mid;
+            break;
+        }
+        if (charPos.y < mousePosFloat.y) {
+            left = mid + 1;
+        }
+        else {
+            right = mid - 1;
+        }
+    }
+
+    // Adjust cursor position within the line
+    left = doc.cursorPos;
+    doc.gotoNextNewline();
+    right = doc.cursorPos;
+
+    while (left <= right) {
+        unsigned long long mid = (left + right) / 2;
+        sf::Vector2f charPos = text.findCharacterPos(mid);
+        if (mousePosFloat.x >= charPos.x && mousePosFloat.x <= charPos.x + fontSize) {
+            return mid;
+        }
+        if (charPos.x < mousePosFloat.x) {
+            left = mid + 1;
+        }
+        else {
+            right = mid - 1;
+        }
+    }
+
+    return doc.cursorPos;
+}
+
+
+/*
+void cursorClickPos(sf::Vector2i& mousePos, textDocument& doc, sf::Text textObject)
+{
+    sf::Vector2f mousePosFloat = { mousePos.x * 1.0f, mousePos.y * 1.0f };
+    sf::String text = textObject.getString();
+    int fontSize = textObject.getCharacterSize(); // -2 pentru a îmbunătăți precizia.
+
+    // Verificăm dacă click-ul este mai jos de text.
+	if (mousePosFloat.y >= textObject.findCharacterPos(doc.charCount - 1).y + fontSize)
+	{
+		doc.cursorPos = doc.charCount;
+		return;
+	}
+   
+    /*
+    Folosim 2 căutări binare.
+	
+	Prima căutare binară va amplasa cursorul pe un caracter din linia pe care se află click-ul.
+	În cazul în care click-ul este mai jos decât ultimul caracter din linie, cursorul va fi plasat pe ultimul caracter.
+	În cazul în s-a dat click pe o linie, dar click-ul este mai în dreapta decât ultimul caracter, cursorul va fi plasat pe ultimul caracter.
+    În rest, putem să trecem la următoarea căutare binară.
+
+	A doua căutare binară va amplasa cursorul pe caracterul cel mai apropiat de click.
+    Limitele acestei căutări sunt primul și ultimul caracter din linie, aflate prin mutarea cursorului între '\n'-uri.
+    
+
+unsigned long long left = 0;
+unsigned long long right = doc.charCount - 1;
+while (left <= right)
+{
+    unsigned long long mid = (left + right) / 2;
+    sf::Vector2f charPos = textObject.findCharacterPos(mid);
+    if (mousePosFloat.y >= charPos.y && mousePosFloat.y <= charPos.y + fontSize)
+    {
+        doc.cursorPos = mid;
+    }
+    if (charPos.y < mousePosFloat.y)
+    {
+        left = mid + 1;
+    }
+    else
+    {
+        right = mid - 1;
+    }
+}
+
+// Dacă ne aflăm pe prima linie, nu există niciun '\n' înainte de cursor.
+// Atunci, ne ducem pe primul caracter.
+if (doc.getCursorLine() == 0)
+{
+    doc.cursorPos = 0;
+}
+else
+{
+    doc.gotoPrevNewline();
+}
+left = doc.cursorPos;
+doc.gotoNextNewline();
+right = doc.cursorPos;
+
+if (textObject.findCharacterPos(doc.cursorPos).x + fontSize <= mousePosFloat.x)
+{
+    return;
+}
+
+while (left <= right)
+{
+    unsigned long long mid = (left + right) / 2;
+    sf::Vector2f charPos = textObject.findCharacterPos(mid);
+    if (mousePosFloat.x >= charPos.x + 2 && mousePosFloat.x <= charPos.x + fontSize - 2)
+    {
+        doc.cursorPos = mid + 1; // +1 pentru că altfel am fi pe caracterul din stânga. (Trebuie găsită o explicație mai bună)
+        return;
+    }
+    if (charPos.x < mousePosFloat.x)
+    {
+        left = mid + 1;
+    }
+    else
+    {
+        right = mid - 1;
+    }
+}
+}*/
