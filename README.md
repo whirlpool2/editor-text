@@ -20,9 +20,9 @@ Proiect la "Introducere în programare", 2024-2025, realizat de Bereșteanu Miha
     - ~~Poziția în document.~~
 - [x] Optimizare cursorClickPos.
     - ⚠️ Deși e mult mai rapidă, funcția încă merge relativ încet la 20000 caractere, trebuie să vedem restul programului și funcțiile din SFML ce fac.
-- [ ] Selecție
+- [x] Selecție
     - Posibilitatea de a înlocui textul selectat.
-- [ ] Funcții copy, paste și cut.
+- [x] Funcții copy, paste și cut.
 - [ ] Funcții find și replace.
 - [x] Meniuri
     - [ ] Deschiderea fișierelor, crearea de fișiere noi
