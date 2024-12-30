@@ -502,6 +502,8 @@ void scrollDown(textDocument& doc, sf::RenderWindow& window, sf::Text& textObjec
 }
 
 // Implementează scrollbar-ul pentru text.
+
+//TREBUIE ADAUGAT PARAMETRU PENTRU A PUTEA DA RESIZE SCROLL BARULUI!!!!!
 void ScrollBar(sf::Event& event, sf::RenderWindow& window, sf::RectangleShape& background, sf::RectangleShape& slider, bool& isDragged, float& scrollPos)
 {
     background.setSize(sf::Vector2f(20, 800));
@@ -612,57 +614,6 @@ void makeScrollBarWork(sf::Event& event, textDocument& doc, sf::RenderWindow& wi
 		}
 	}
 }
-
-unsigned long long getCursorPosFromMouse(textDocument& doc, sf::Text& text, sf::Vector2i mousePosition) {
-    sf::Vector2f mousePosFloat = { static_cast<float>(mousePosition.x), static_cast<float>(mousePosition.y) };
-    sf::String textString = text.getString();
-    int fontSize = text.getCharacterSize();
-
-    // Check if the click is below the text
-    if (mousePosFloat.y >= text.findCharacterPos(doc.charCount - 1).y + fontSize) {
-        return doc.charCount;
-    }
-
-    // Binary search to find the line
-    unsigned long long left = 0;
-    unsigned long long right = doc.charCount - 1;
-    while (left <= right) {
-        unsigned long long mid = (left + right) / 2;
-        sf::Vector2f charPos = text.findCharacterPos(mid);
-        if (mousePosFloat.y >= charPos.y && mousePosFloat.y <= charPos.y + fontSize) {
-            doc.cursorPos = mid;
-            break;
-        }
-        if (charPos.y < mousePosFloat.y) {
-            left = mid + 1;
-        }
-        else {
-            right = mid - 1;
-        }
-    }
-
-    // Adjust cursor position within the line
-    left = doc.cursorPos;
-    doc.gotoNextNewline();
-    right = doc.cursorPos;
-
-    while (left <= right) {
-        unsigned long long mid = (left + right) / 2;
-        sf::Vector2f charPos = text.findCharacterPos(mid);
-        if (mousePosFloat.x >= charPos.x && mousePosFloat.x <= charPos.x + fontSize) {
-            return mid;
-        }
-        if (charPos.x < mousePosFloat.x) {
-            left = mid + 1;
-        }
-        else {
-            right = mid - 1;
-        }
-    }
-
-    return doc.cursorPos;
-}
-
 
 
 /*

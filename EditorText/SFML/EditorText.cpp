@@ -170,6 +170,18 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                 {
                     Window.close();
                 }
+                if (event.type == sf::Event::Resized)
+                {
+					// memoram noile dimensiuni ale ferestrei
+                    sf::Vector2u newSize(event.size.width, event.size.height);
+					// actualizam dimensiunea textului ca sa arate la fel pe ecran
+                    fontSize = fontSize * newSize.y / Window.getSize().y;
+
+                    Window.setView(sf::View(sf::FloatRect(0, 0, newSize.x, newSize.y)));
+                    initializeBottomBar(bottomBarText, font, newSize.y, bottomBorder);
+                    updateWholeTextObject(&doc, Window, text);
+                }
+                
                 updateBottomBar(bottomBarText, doc);
                 // Daca este apăsat click stânga.
                 if (event.type == sf::Event::MouseButtonPressed)
