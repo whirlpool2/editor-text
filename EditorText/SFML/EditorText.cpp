@@ -78,6 +78,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
 
 
     //Bool pentru mouse
+    bool wasMousePressed = false;
 	bool isMousePressed = false;
 
     // Actualizăm conținutul textului (pentru a prelua datele încărcate).
@@ -175,15 +176,49 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                 {
                     if (event.mouseButton.button == sf::Mouse::Left)
                     {
+						//La selectia cu mouse, pentru implementarea curenta
+                        //avem un caz care trebuie tratat
+                        //Daca facem o selectie cu mouse ul, dupa ce dam release la click stanga
+                        //Daca dam click din nou va trebui sa resetam selectia, asa ca aceste 2 if uri
+                        //au rolul de a trata cazul acesta
+						//Primul if nu pare sa faca sens dar Ajuta sa nu plesneasca programul
+						//cel de al 2 lea if reseteaza selectia
+                        //Daca mouse ul nu este apasat acum dar a fos apasat inainte inseamna ca resetam selectia
+                        if(!isMousePressed && !wasMousePressed)
+							textSelection.isSelected = false;
+                        else if (!isMousePressed && wasMousePressed) {
+                            textSelection.isSelected = false;
+							wasMousePressed = false;
+                        }
+						//Facem update la textul selectat
                         isMousePressed = true;
                         sf::Vector2i mousePos = sf::Mouse::getPosition(Window);
-                        cursorClickPos(mousePos, doc, text);
+						cursorClickPos(mousePos, doc, text);
+						textSelection.updateSelectedTextMouse(doc, text, mousePos, isMousePressed,
+                            Window, cursorVisual, cursorClock, cursorVisible);
                         updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
                     }
-					if (event.type == sf::Event::MouseButtonReleased)
-					{
-						isMousePressed = false;
+                }
+				//Daca butonul mouse-ului este eliberat atunci indicam asta algoritmului ca sa nu mai faca selectie
+                   
+                if (event.type == sf::Event::MouseButtonReleased)
+                {
+                    if (event.mouseButton.button == sf::Mouse::Left) {
+                        isMousePressed = false;
+                        wasMousePressed = true;
                     }
+					
+                }
+        
+                if (event.type == sf::Event::MouseMoved) {
+                    if (isMousePressed) {
+                        
+                        sf::Vector2i mousePos = sf::Mouse::getPosition(Window);
+						textSelection.updateSelectedTextMouse(doc, text, mousePos, isMousePressed,
+							Window, cursorVisual, cursorClock, cursorVisible);
+						updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
+                    }
+
                 }
                 
                 // Dacă event-ul curent presupune caractere date de la tastatură...
@@ -193,7 +228,11 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                     {
                         // Convertim tasta apăsată într-un char.
                         char key = static_cast<char>(event.text.unicode);
-
+                        // Daca exista o selecție activa, stergem textul selectat.
+                        if (textSelection.isSelected)
+                        {
+                            textSelection.deleteSelectedText(doc, text, textSelection, cursorVisual, cursorClock, cursorVisible, Window);
+                        }
                         // Dacă se apasă backspace și se poate șterge...
                         if (key == 8 && doc.charCount != 0 && doc.cursorPos > 0) {
                                 //daca am shift apasat si dau delete se sterge tot continutul selectat

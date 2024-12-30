@@ -187,28 +187,30 @@ void TextSelection::pasteText(textDocument& doc, sf::Text& text, sf::RenderWindo
 	SelStart = SelEnd = doc.cursorPos;
 }
 
-void TextSelection::updateSelectedTextMouse(textDocument& doc, sf::Text& text, sf::Vector2i mousePosition, bool isMousePressed) {
-    if (!isMousePressed) {
-        isSelected = false;
-        return;
-    }
 
-    if (!isSelected) {
-        selectionAnchor = doc.cursorPos;
-        isSelected = true;
-    }
 
-    
-    doc.cursorPos = getCursorPosFromMouse(doc, text, mousePosition);
-
+void TextSelection::updateSelectedTextMouse(textDocument& doc, sf::Text& text, sf::Vector2i mousePosition, bool isMousePressed,
+    sf::RenderWindow& window, sf::RectangleShape& cursorVisual,
+    sf::Clock& cursorClock, bool& cursorVisible) {
+	if (!isMousePressed) {
+		return;
+	}
+	if (!isSelected) {
+		selectionAnchor = doc.cursorPos;
+		isSelected = true;
+	}
+	//Updatez pozitia cursorului
+	cursorClickPos(mousePosition, doc, text);
     SelStart = min(selectionAnchor, doc.cursorPos);
-    SelEnd = max(selectionAnchor, doc.cursorPos);
-
-    // Check if selection is still active
+	SelEnd = max(selectionAnchor, doc.cursorPos);   
+    //Verificam daca selectia e activa
     isSelected = (SelStart != SelEnd);
+ 
+    updateTextObject(&doc, window, text);
+    updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
+
+
 }
-
-
 
 //VARIANTA 2 DACA E NEVOEI DE MODIFICARE
 /*void TextSelection::updateSelectedText(textDocument& doc, sf::Text& text, sf::Vector2i direction, bool isShiftPressed) {

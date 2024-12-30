@@ -664,6 +664,7 @@ unsigned long long getCursorPosFromMouse(textDocument& doc, sf::Text& text, sf::
 }
 
 
+
 /*
 void cursorClickPos(sf::Vector2i& mousePos, textDocument& doc, sf::Text textObject)
 {
