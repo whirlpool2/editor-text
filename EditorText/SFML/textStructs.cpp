@@ -256,6 +256,8 @@ unsigned long long textDocument ::getALineLength(int CursorPos) {
 
 void textDocument::deleteText(unsigned long long start, unsigned long long end) {
     //Verific un bug, sterg mai incol
+	std::cout << start << " " << end << std::endl;
+    std::cout << "Intru aici si la copiere" << std::endl;
     if (start > end)
         std::swap(start, end);
 

@@ -112,9 +112,8 @@ void TextSelection::deleteSelectedText(textDocument& doc, sf::Text& text,
     
     if (!isSelected or SelEnd <= SelStart){
         std::cout << "Nu este selectat text" << std::endl;
-	   if (SelStart != SelEnd)
-		   doc.deleteText(SelStart, SelEnd);
-	   else
+	   if (SelStart == SelEnd)
+		   
 		   deleteCharInTextObject(&doc, text);
        return;
    }

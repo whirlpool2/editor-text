@@ -236,6 +236,46 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                 // Dacă event-ul curent presupune caractere date de la tastatură...
                 if (event.type == sf::Event::TextEntered)
                 {
+                    //Pentru selectie, resetam pentru fiecare caz isSelected pentru a putea efectua stergerea si pentru a evita
+					//sa se reseteze selectia cand nu trebuie
+
+                    //cazul cand apasam o tasta
+                    if (event.text.unicode >= 32 and event.text.unicode <= 126) {
+                        // Convertim tasta apăsată într-un char.
+                        char key = static_cast<char>(event.text.unicode);
+                        // Daca exista o selecție activa, stergem textul selectat.
+                        if (textSelection.isSelected)
+                        {
+                            textSelection.deleteSelectedText(doc, text, cursorVisual, cursorClock, cursorVisible, Window);
+                        }
+                        insertCharInTextObject(&doc, text, key);
+                        textSelection.isSelected = false;
+
+                    }
+                    //backspace
+                    else if (event.text.unicode == 8) {
+                        if (textSelection.isSelected)
+                        {
+                            textSelection.deleteSelectedText(doc, text, cursorVisual, cursorClock, cursorVisible, Window);
+                        }
+                        else
+                        {
+                            deleteCharInTextObject(&doc, text);
+                        }
+                        textSelection.isSelected = false;
+                    }
+                    //enter
+                    else if (event.text.unicode == 13) {
+                        if (textSelection.isSelected)
+                        {
+                            textSelection.deleteSelectedText(doc, text, cursorVisual, cursorClock, cursorVisible, Window);
+                        }
+                        insertCharInTextObject(&doc, text, '\n');
+                        textSelection.isSelected = false;
+                    }
+                    updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
+                    
+                    /*
                     if (event.text.unicode < 128)
                     {
                         // Convertim tasta apăsată într-un char.
@@ -244,7 +284,8 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                         if (textSelection.isSelected)
                         {
                             textSelection.deleteSelectedText(doc, text,  cursorVisual, cursorClock, cursorVisible, Window);
-                        }
+							std::cout << "Textul selectat a fost sters" << std::endl;
+                         }
                         // Dacă se apasă backspace și se poate șterge...
                         if (key == 8 && doc.charCount != 0 && doc.cursorPos > 0) {
                                 //daca am shift apasat si dau delete se sterge tot continutul selectat
@@ -276,7 +317,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
 
                     // Test pentru funcția docToString. Se va șterge, și va fi apelată la nevoie ulterior.
                     // debugString(&doc);
-                    updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
+                   // updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
                 }
                 //implementare makeScrollBarWork
                 float scrollPosCurrent = scrollPos;
@@ -306,10 +347,9 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                             textSelection.updateSelectedTextKeys(doc, text, sf::Vector2i(0, 1), isControlPressed);
                         }
                     }
-                    //Daca nu e apasat shift, atunci doar mutam cursorul
+                    //Cazurile cu ctrl
                     else if (isControlPressed)
                     {
-                        std::cout << "SIGGGMA" << std::endl;
 
                         //CTRL + A comanda de select all
                         if (event.key.code == sf::Keyboard::A) {
@@ -321,36 +361,46 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                         }
 
                         //CTRL + C comanda de copiere
-                        if (event.key.code == sf::Keyboard::C)
+                        else if (event.key.code == sf::Keyboard::C)
                         {
+							std::cout << "Selectia a fost Copiata" << std::endl;
                             textSelection.copyText(doc);
                         }
                         //CTRL + X, comanda de cut
-                        if (event.key.code == sf::Keyboard::X)
+                        else if (event.key.code == sf::Keyboard::X)
                         {
                             textSelection.copyText(doc);
                             textSelection.deleteSelectedText(doc, text, cursorVisual, cursorClock, cursorVisible, Window);
                         }
                         //CTRL + V comanda de paste
-                        if (event.key.code == sf::Keyboard::V)
+                        else if (event.key.code == sf::Keyboard::V)
                         {
                             textSelection.pasteText(doc, text, Window, cursorVisual, cursorClock, cursorVisible);
                         }
                     }
                     else {
                         //Vector2i(0, 0) inseamna ca nu se selecteaza nimic
-                        textSelection.updateSelectedTextKeys(doc, text, sf::Vector2i(0, 0), isControlPressed);
-                        if (event.key.code == sf::Keyboard::Left && doc.cursorPos > 0)
+                        if (event.key.code == sf::Keyboard::Left && doc.cursorPos > 0) {
                             doc.cursorPos--;
-                        if (event.key.code == sf::Keyboard::Right && doc.cursorPos < doc.charCount)
+                            textSelection.isSelected = false;
+                        }
+                        if (event.key.code == sf::Keyboard::Right && doc.cursorPos < doc.charCount){
                             doc.cursorPos++;
+							textSelection.isSelected = false;
+                        }
                         if (event.key.code == sf::Keyboard::Down) // Trecem la linia următoare.
+                        {
                             moveCursorDown(doc);
+							textSelection.isSelected = false;
+                        }
                         if (event.key.code == sf::Keyboard::Up) // Trecem la linia precedentă.
+                        {
                             moveCursorUp(doc);
-                    }
+							textSelection.isSelected = false;
+                        }
+                        }
 					
-					//Cazurile de copiere, cut si paste
+					
                     
                     if (event.key.code == sf::Keyboard::Equal && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) // Zoom-in (CTRL + '=')
                     {
