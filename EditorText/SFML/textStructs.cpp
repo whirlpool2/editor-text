@@ -255,43 +255,77 @@ unsigned long long textDocument ::getALineLength(int CursorPos) {
 }
 
 void textDocument::deleteText(unsigned long long start, unsigned long long end) {
-    if (start >= end || start >= this->charCount || end > this->charCount)
-        return;
-    if(start > end)
-		std::swap(start, end);
-    unsigned long long originalPos = this->cursorPos;
-    character* p = getChar(start);
-    character* q = getChar(end);
+    //Verific un bug, sterg mai incol
+    if (start > end)
+        std::swap(start, end);
 
-    if (p == nullptr || q == nullptr) {
+    //verific daca intervalul e valid
+    if (start >= this->charCount || end > this->charCount)
         return;
+
+    unsigned long long initialPos = this->cursorPos;
+    character* startchar = getChar(start);
+    character* endchar = getChar(end);
+    //daca nu exista caracterul de startatunci iesim, pentru end nu verificam
+    // pntru ca functia getChar returneaza nullptr pentru ultima pozitie
+    if (startchar == nullptr)
+        return;
+    //std::cout << "NICI MACAR NU INTRU AICI" << std::endl;
     
+    //fac legatura dupa stergere
+    //daca nu incepem de la inceput, mergem la sfaristul selectiei
+    if (startchar->prev != nullptr) {
+        startchar->prev->next = endchar;
     }
-    if (p->prev != nullptr)
-        p->prev->next = q;
-    if (q != nullptr && q->next != nullptr)
-        q->next->prev = p->prev;
+	//daca incepem de la inceput atunci lua mpointerul first
+    else
+        this->first = endchar;
 
-    if (p == this->first)
-        this->first = q;
-
-    while (p != q) {
-        character* aux = p;
-        p = p->next;
-        delete aux;
+	//daca nu suntem la sfarsitul documentului facem legatura
+    if(endchar != nullptr)
+		endchar->prev = startchar->prev;
+    
+    
+	//ca sa evitam memory leaks stergem caracterele dintre start si end
+    character* current = startchar;
+    while (current != endchar) {
+        character* next = current->next;
+        delete current;
+        current = next;
         this->charCount--;
     }
+	if (initialPos >= end)
+		this->cursorPos = initialPos - (end - start);
+	else if (initialPos >= start)
+		this->cursorPos = start;
+	else
+		this->cursorPos = initialPos;
 
-    // Ajustez pozitie cursor
-    if (originalPos >= end) {
-        this->cursorPos = originalPos - (end - start);
-    }
-    else if (originalPos >= start) {
-        this->cursorPos = start;
-    }
-    else {
-        this->cursorPos = originalPos;
-    }
+    //if (startchar->prev != nullptr)
+    //    startchar->prev->next = endchar;
+    //if (endchar != nullptr && endchar->next != nullptr)
+    //    q->next->prev = p->prev;
+
+    //if (p == this->first)
+    //    this->first = q;
+
+    //while (p != q) {
+    //    character* aux = p;
+    //    p = p->next;
+    //    delete aux;
+    //    this->charCount--;
+    //}
+
+    //// Ajustez pozitie cursor
+    //if (originalPos >= end) {
+    //    this->cursorPos = originalPos - (end - start);
+    //}
+    //else if (originalPos >= start) {
+    //    this->cursorPos = start;
+    //}
+    //else {
+    //    this->cursorPos = originalPos;
+    //}
 }
 
 unsigned long long textDocument::getCursorLineLength()

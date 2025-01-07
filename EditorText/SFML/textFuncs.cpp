@@ -356,45 +356,7 @@ void moveCursorUp(textDocument& doc) {
 
     }
 }
-/*
-void moveCursorDown(textDocument& doc)
-{
-    if (doc.cursorPos >= doc.charCount)
-    {
-        return;
-    }
 
-    unsigned long long linePos = doc.getCursorPositionInLine();
-
-    // Efectuăm toate acestea doar dacă NU suntem la sfârșitul documentului.
-    if (doc.getChar(doc.cursorPos) != nullptr)
-    {
-        // În cazul în care ne aflăm la sfârșitul unei linii, ne aflăm deja unde trebuie.
-        // În caz contrar, trebuie să ajungem la sfârșitul ei.
-        if (doc.getChar(doc.cursorPos)->c != '\n')
-        {
-            doc.gotoNextNewline();
-        }
-
-        // Dacă linie de pe care venim este mai lungă decât cea pe care mergem,
-        // considerăm poziția nouă a fi pe ultimul caracter al liniei.
-        if (linePos > doc.getCursorLineLength())
-        {
-            linePos = doc.getCursorLineLength();
-        }
-
-        // Ne deplasăm până la poziția echivalentă, sau până terminăm linia.
-        for (int i = 0; i < linePos + 1; i++) // +1 pentru a sări '\n'-ul.
-        {
-            doc.cursorPos++;
-            if (doc.getChar(doc.cursorPos) == nullptr || doc.getChar(doc.cursorPos)->c == '\n')
-            {
-                break;
-            }
-        }
-    }
-}
-*/
 void moveCursorDown(textDocument& doc) {
     
         if (doc.getLineCount() != doc.getACursorLine(doc.cursorPos) - 1) {// Daca nu sunt pe ultima linie
@@ -420,37 +382,7 @@ void moveCursorDown(textDocument& doc) {
         else if (doc.getLineCount() == doc.getACursorLine(doc.cursorPos) - 1) //daca suntem pe ultima linie
             doc.cursorPos = doc.charCount;                                    //ne ducem la capatul ei
 }
-/*
-void moveCursorUp(textDocument& doc)
-{
-    if (doc.cursorPos <= 0)
-    {
-        return;
-    }
 
-    unsigned long long linePos = doc.getCursorPositionInLine();
-
-    // Dacă cursorul este la sfârșitul documentului, plasăm poziția lui pe ultimul caracter.
-    if (doc.getChar(doc.cursorPos) == nullptr)
-    {
-        doc.cursorPos--;
-    }
-
-    // Avem două '\n', unul ce marchează începutul liniei curente, și unul ce marchează
-    // începutul liniei precedente.
-    doc.gotoPrevNewline();
-    doc.gotoPrevNewline();
-
-    // Ne deplasăm până la poziția echivalentă, sau până terminăm linia.
-    for (int i = 0; i <= linePos; i++)
-    {
-        doc.cursorPos++;
-        if (doc.getChar(doc.cursorPos)->c == '\n')
-        {
-            break;
-        }
-    }
-}*/
 
 void scrollUp(textDocument& doc, sf::RenderWindow& window, sf::Text& textObject)
     {
@@ -614,89 +546,3 @@ void makeScrollBarWork(sf::Event& event, textDocument& doc, sf::RenderWindow& wi
 		}
 	}
 }
-
-
-/*
-void cursorClickPos(sf::Vector2i& mousePos, textDocument& doc, sf::Text textObject)
-{
-    sf::Vector2f mousePosFloat = { mousePos.x * 1.0f, mousePos.y * 1.0f };
-    sf::String text = textObject.getString();
-    int fontSize = textObject.getCharacterSize(); // -2 pentru a îmbunătăți precizia.
-
-    // Verificăm dacă click-ul este mai jos de text.
-	if (mousePosFloat.y >= textObject.findCharacterPos(doc.charCount - 1).y + fontSize)
-	{
-		doc.cursorPos = doc.charCount;
-		return;
-	}
-   
-    /*
-    Folosim 2 căutări binare.
-	
-	Prima căutare binară va amplasa cursorul pe un caracter din linia pe care se află click-ul.
-	În cazul în care click-ul este mai jos decât ultimul caracter din linie, cursorul va fi plasat pe ultimul caracter.
-	În cazul în s-a dat click pe o linie, dar click-ul este mai în dreapta decât ultimul caracter, cursorul va fi plasat pe ultimul caracter.
-    În rest, putem să trecem la următoarea căutare binară.
-
-	A doua căutare binară va amplasa cursorul pe caracterul cel mai apropiat de click.
-    Limitele acestei căutări sunt primul și ultimul caracter din linie, aflate prin mutarea cursorului între '\n'-uri.
-    
-
-unsigned long long left = 0;
-unsigned long long right = doc.charCount - 1;
-while (left <= right)
-{
-    unsigned long long mid = (left + right) / 2;
-    sf::Vector2f charPos = textObject.findCharacterPos(mid);
-    if (mousePosFloat.y >= charPos.y && mousePosFloat.y <= charPos.y + fontSize)
-    {
-        doc.cursorPos = mid;
-    }
-    if (charPos.y < mousePosFloat.y)
-    {
-        left = mid + 1;
-    }
-    else
-    {
-        right = mid - 1;
-    }
-}
-
-// Dacă ne aflăm pe prima linie, nu există niciun '\n' înainte de cursor.
-// Atunci, ne ducem pe primul caracter.
-if (doc.getCursorLine() == 0)
-{
-    doc.cursorPos = 0;
-}
-else
-{
-    doc.gotoPrevNewline();
-}
-left = doc.cursorPos;
-doc.gotoNextNewline();
-right = doc.cursorPos;
-
-if (textObject.findCharacterPos(doc.cursorPos).x + fontSize <= mousePosFloat.x)
-{
-    return;
-}
-
-while (left <= right)
-{
-    unsigned long long mid = (left + right) / 2;
-    sf::Vector2f charPos = textObject.findCharacterPos(mid);
-    if (mousePosFloat.x >= charPos.x + 2 && mousePosFloat.x <= charPos.x + fontSize - 2)
-    {
-        doc.cursorPos = mid + 1; // +1 pentru că altfel am fi pe caracterul din stânga. (Trebuie găsită o explicație mai bună)
-        return;
-    }
-    if (charPos.x < mousePosFloat.x)
-    {
-        left = mid + 1;
-    }
-    else
-    {
-        right = mid - 1;
-    }
-}
-}*/

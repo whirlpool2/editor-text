@@ -21,7 +21,7 @@ struct TextSelection
 	void copyText(textDocument& doc);
 
 	//Functie pentru a sterge textul selectat
-	void deleteSelectedText(textDocument& doc, sf::Text& text, TextSelection& selection,
+	void deleteSelectedText(textDocument& doc, sf::Text& text, 
 		sf::RectangleShape& cursorVisual, sf::Clock& cursorClock, bool& cursorVisible, sf::RenderWindow& window);
 
 	//Functie pentru a lipi textul copiat

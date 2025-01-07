@@ -243,12 +243,12 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                         // Daca exista o selecție activa, stergem textul selectat.
                         if (textSelection.isSelected)
                         {
-                            textSelection.deleteSelectedText(doc, text, textSelection, cursorVisual, cursorClock, cursorVisible, Window);
+                            textSelection.deleteSelectedText(doc, text,  cursorVisual, cursorClock, cursorVisible, Window);
                         }
                         // Dacă se apasă backspace și se poate șterge...
                         if (key == 8 && doc.charCount != 0 && doc.cursorPos > 0) {
                                 //daca am shift apasat si dau delete se sterge tot continutul selectat
-                                textSelection.deleteSelectedText(doc, text, textSelection, cursorVisual, cursorClock, cursorVisible, Window);
+                                textSelection.deleteSelectedText(doc, text,  cursorVisual, cursorClock, cursorVisible, Window);
                             
                             
                         }
@@ -284,12 +284,14 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                 if (event.type == sf::Event::KeyPressed) // Acest caz tratează tastele ce nu produc caractere.
                 {
                     bool isControlPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl);
-					if (event.key.code == sf::Keyboard::Escape)
+                    bool isShiftPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift);
+
+                    if (event.key.code == sf::Keyboard::Escape)
 					{
 						menuActive = !menuActive;
 					}
                     //Avem cazurile pentru selectie cu shift
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)) {
+                    if (isShiftPressed) {
                         if (doc.cursorPos > 0 && event.key.code == sf::Keyboard::Left) {
 							
                             textSelection.updateSelectedTextKeys(doc, text, sf::Vector2i(-1, 0), isControlPressed);
@@ -305,6 +307,36 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                         }
                     }
                     //Daca nu e apasat shift, atunci doar mutam cursorul
+                    else if (isControlPressed)
+                    {
+                        std::cout << "SIGGGMA" << std::endl;
+
+                        //CTRL + A comanda de select all
+                        if (event.key.code == sf::Keyboard::A) {
+                            textSelection.SelStart = 0;
+                            textSelection.SelEnd = doc.charCount;
+                            doc.cursorPos = doc.charCount;
+                            textSelection.isSelected = true;
+                            isControlPressed = true;
+                        }
+
+                        //CTRL + C comanda de copiere
+                        if (event.key.code == sf::Keyboard::C)
+                        {
+                            textSelection.copyText(doc);
+                        }
+                        //CTRL + X, comanda de cut
+                        if (event.key.code == sf::Keyboard::X)
+                        {
+                            textSelection.copyText(doc);
+                            textSelection.deleteSelectedText(doc, text, cursorVisual, cursorClock, cursorVisible, Window);
+                        }
+                        //CTRL + V comanda de paste
+                        if (event.key.code == sf::Keyboard::V)
+                        {
+                            textSelection.pasteText(doc, text, Window, cursorVisual, cursorClock, cursorVisible);
+                        }
+                    }
                     else {
                         //Vector2i(0, 0) inseamna ca nu se selecteaza nimic
                         textSelection.updateSelectedTextKeys(doc, text, sf::Vector2i(0, 0), isControlPressed);
@@ -319,36 +351,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                     }
 					
 					//Cazurile de copiere, cut si paste
-                    if (isControlPressed)
-					{
-						std::cout << "SIGGGMA" << std::endl;
-					
-						//CTRL + A comanda de select all
-                        if (event.key.code == sf::Keyboard::A) {
-							textSelection.SelStart = 0;
-							textSelection.SelEnd = doc.charCount - 1;
-                            doc.cursorPos = doc.charCount;
-							textSelection.isSelected = true;
-							isControlPressed = true;
-                        }
-
-                        //CTRL + C comanda de copiere
-                        if (event.key.code == sf::Keyboard::C)
-						{
-							textSelection.copyText(doc);
-						}
-                        //CTRL + X, comanda de cut
-						if (event.key.code == sf::Keyboard::X)
-						{
-							textSelection.copyText(doc);
-							textSelection.deleteSelectedText(doc, text, textSelection, cursorVisual, cursorClock, cursorVisible, Window);
-						}
-						//CTRL + V comanda de paste
-						if (event.key.code == sf::Keyboard::V)
-						{
-							textSelection.pasteText(doc, text, Window, cursorVisual, cursorClock, cursorVisible);
-						}
-					}
+                    
                     if (event.key.code == sf::Keyboard::Equal && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) // Zoom-in (CTRL + '=')
                     {
                         fontSize = fontSize + 4;

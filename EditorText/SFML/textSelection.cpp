@@ -94,52 +94,77 @@ void TextSelection::drawHighLight(sf::RenderWindow& window, sf::Text& text, text
 		sf::RectangleShape highlight;//cream un dreptunghi pentru highlight
 		highlight.setFillColor(sf::Color(170, 210, 230, 128));//setam culoarea dreptunghiului, albastru transparent
 		//parcurgem textul si punem highlight pe textul selectat
-        //can i make it so i can 
+        float SelectSize = (text.getCharacterSize() / 2) * 1.2;//Pentru a avea highlightul o linie constanta
         for (unsigned long long i = SelStart; i < SelEnd; ++i) {
             sf::Vector2f position = text.findCharacterPos(i); //luam pozitia caracterului curent
 			highlight.setPosition(position);//setam pozitia dreptunghiului de highlight
-			highlight.setSize(sf::Vector2f(text.getCharacterSize(), text.getCharacterSize() * 1.2f));//setam dimensiunile dreptunghiului
+			highlight.setSize(sf::Vector2f(SelectSize, text.getCharacterSize() * 1.2f));//setam dimensiunile dreptunghiului
 			window.draw(highlight);//desenam dreptunghiul, ca sa apara vizual pe ecran
         }
     }
 
 }
 
-void TextSelection::deleteSelectedText(textDocument& doc, sf::Text& text, TextSelection& selection,
-    sf::RectangleShape& cursorVisual, sf::Clock& cursorClock,
-    bool& cursorVisible, sf::RenderWindow& window) {
-    if (!selection.isSelected || selection.SelStart >= selection.SelEnd) {
-		std::cout << "No text selected.\n" << selection.SelStart << "  " << selection.SelEnd << '\n';
+void TextSelection::deleteSelectedText(textDocument& doc, sf::Text& text,
+    sf::RectangleShape& cursorVisual, sf::Clock& cursorClock, bool& cursorVisible, sf::RenderWindow& window) {
+   
+    std::cout << "DA INTRU AICI BOULE" << std::endl;
+    
+    if (!isSelected or SelEnd <= SelStart){
+        std::cout << "Nu este selectat text" << std::endl;
+	   if (SelStart != SelEnd)
+		   doc.deleteText(SelStart, SelEnd);
+	   else
+		   deleteCharInTextObject(&doc, text);
+       return;
+   }
 
-		if (selection.SelStart != selection.SelEnd)
-			doc.deleteText(selection.SelStart, selection.SelEnd);
-        else
-            deleteCharInTextObject(&doc, text);
+   //Stergem Selectia
+   doc.deleteText(SelStart, SelEnd);
 
-        return;
-    }
+   character* startChar = doc.getChar(SelStart - 1);
+   character* nextChar = doc.getChar(SelStart);
+   if (startChar != nullptr && nextChar != nullptr) {
+       startChar->next = nextChar;
+       nextChar->prev = startChar;
+   }
+   doc.cursorPos = SelEnd = SelStart;
+   isSelected = false;
+   updateTextObject(&doc, window, text);
+   updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
+    
+ //      if (!selection.isSelected || selection.SelStart >= selection.SelEnd) {
+	//	std::cout << "No text selected.\n" << selection.SelStart << "  " << selection.SelEnd << '\n';
 
-    // Sterg textul selectat
-    doc.deleteText(selection.SelStart, selection.SelEnd);
+	//if (selection.SelStart != selection.SelEnd)
+	//		doc.deleteText(selection.SelStart, selection.SelEnd);
+ //       else
+ //           deleteCharInTextObject(&doc, text);
 
-    // Fac legatura intre caracterul de start si urmatorul dupa cel sters pentru a nu avea crash-uri
-    character* startChar = doc.getChar(selection.SelStart - 1);
-    character* nextChar = doc.getChar(selection.SelStart);
-    if (startChar != nullptr && nextChar != nullptr) {
-        startChar->next = nextChar;
-        nextChar->prev = startChar;
-    }
+ //       return;
+ //   }
 
-	// Actualizez pozitia cursorului cu cea de la startul selectiei
-    doc.cursorPos = selection.SelStart;
+ //   // Sterg textul selectat
+ //   doc.deleteText(selection.SelStart, selection.SelEnd);
 
-    // Resetez parametrul pt verificarea textului selectat
-    selection.isSelected = false;
-    selection.SelStart = selection.SelEnd = doc.cursorPos;
+ //   // Fac legatura intre caracterul de start si urmatorul dupa cel sters pentru a nu avea crash-uri
+ //   character* startChar = doc.getChar(selection.SelStart - 1);
+ //   character* nextChar = doc.getChar(selection.SelStart);
+ //   if (startChar != nullptr && nextChar != nullptr) {
+ //       startChar->next = nextChar;
+ //       nextChar->prev = startChar;
+ //   }
 
-    // Actualizez textul si cursorul
-    updateTextObject(&doc, window, text);
-    updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
+	////// Actualizez pozitia cursorului cu cea de la startul selectiei
+ //   doc.cursorPos = selection.SelStart;
+
+ //   // Resetez parametrul pt verificarea textului selectat
+ //   selection.isSelected = false;
+ //   selection.SelStart = selection.SelEnd = doc.cursorPos;
+
+ //   // Actualizez textul si cursorul
+ //   updateTextObject(&doc, window, text);
+ //   updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
 }
 
 void TextSelection::copyText(textDocument& doc) {
@@ -211,298 +236,3 @@ void TextSelection::updateSelectedTextMouse(textDocument& doc, sf::Text& text, s
 
 
 }
-
-//VARIANTA 2 DACA E NEVOEI DE MODIFICARE
-/*void TextSelection::updateSelectedText(textDocument& doc, sf::Text& text, sf::Vector2i direction, bool isShiftPressed) {
-    if (direction.x == 0 && direction.y == 0)
-    {
-        // Selection is interrupted
-        SelStart = doc.cursorPos;
-        SelEnd = doc.cursorPos;
-        isSelected = false;  // No selection is active
-    }
-
-    // Debug output
-
-    std::cout << "CURSOR POSITION: " << doc.cursorPos << std::endl << "IS SHIFT PRESSED? " << isShiftPressed << std::endl << std::endl;
-    //Mutam cursorul la stanga
-    if (direction.x == -1) {
-        if (doc.cursorPos > 0)
-        {
-            doc.cursorPos--;
-
-            if (isShiftPressed)
-            {
-                if (!isSelected)
-                {
-                    // Inceputul selectiei
-                    SelStart = doc.cursorPos + 1;
-                    SelEnd = doc.cursorPos;
-                    isSelected = true;
-                }
-                else
-                {
-                    // updatam finalul selectiei
-                    SelStart = doc.cursorPos;
-                }
-            }
-            else
-            {
-                // daca nu e shift apasat, resetam selectia
-                SelStart = doc.cursorPos;
-                SelEnd = doc.cursorPos;
-                isSelected = false;
-            }
-
-            // verificam ca intervalul sa fie corect
-            if (SelStart > SelEnd)
-            {
-                std::swap(SelStart, SelEnd);
-            }
-        }
-    }
-    //Mutam cursorul la dreapta
-    else if (direction.x == 1) {
-
-        if (doc.cursorPos < doc.charCount)
-        {
-            doc.cursorPos++;
-
-            if (isShiftPressed)
-            {
-
-                if (!isSelected)
-                {
-                    // Inceput de selecte
-                    SelStart = doc.cursorPos - 1;
-                    SelEnd = doc.cursorPos;
-                    isSelected = true;
-                }
-                else
-                {
-                    // updatam finalul selectiei
-                    SelEnd = doc.cursorPos;
-                }
-            }
-            else
-            {
-                // nu e shift apasat, resetam selectia
-                SelStart = doc.cursorPos;
-                SelEnd = doc.cursorPos;
-                isSelected = false;
-            }
-
-            // Ne asiguram ca intervalul este corect
-            if (SelStart > SelEnd)
-            {
-                std::swap(SelStart, SelEnd);
-            }
-        }
-    }
-    else if (direction.y == -1) {
-        moveCursorUp(doc);
-
-        if (isShiftPressed)
-        {
-            if (!isSelected)
-            {
-                SelStart = doc.cursorPos;
-                SelEnd = doc.cursorPos;
-                isSelected = true;
-            }
-            else
-            {
-                SelEnd = doc.cursorPos;
-            }
-
-
-            if (SelStart > SelEnd)
-            {
-                std::swap(SelStart, SelEnd);
-            }
-        }
-        else
-        {
-            SelStart = doc.cursorPos;
-            SelEnd = doc.cursorPos;
-            isSelected = false;
-        }
-    }
-    else if (direction.y == 1) {
-        moveCursorDown(doc);
-
-        if (isShiftPressed)
-        {
-            if (!isSelected)
-            {
-                SelStart = doc.cursorPos;
-                SelEnd = doc.cursorPos;
-                isSelected = true;
-            }
-            else
-            {
-                SelEnd = doc.cursorPos;
-            }
-
-            if (SelStart > SelEnd)
-            {
-                std::swap(SelStart, SelEnd);
-            }
-        }
-        else
-        {
-            SelStart = doc.cursorPos;
-            SelEnd = doc.cursorPos;
-            isSelected = false;
-        }
-    }
-
-    isSelected = (SelStart != SelEnd);
-    //verific daca sunt calculate corect pozitiile
-    std::cout << "SELSTART: " << SelStart << " SELEND: " << SelEnd << std::endl;
-}*/
-
-
-
-
-
-
-
-
-/* VARIANTA 3 DACA E NEVOIE DE MODIFICARI
-void TextSelection::updateSelectedText(textDocument& doc, sf::Text& text, sf::Vector2i direction) {
-    isSelected = true;
-    if (direction.x == 0 && direction.y == 0)
-    {
-        //daca se intrerupe selectia
-        SelStart = doc.cursorPos;
-        SelEnd = doc.cursorPos;
-        isSelected = false;
-    }
-    std::cout << "POZITIA CURSORUUI ESTE: " << doc.cursorPos << std::endl;
-    //if (direction.x == -1) {
-    //	// la stanga
-    //	if(doc.cursorPos > 0)
-    //	{
-    //		doc.cursorPos--;
-    //		if (isSelected)
-    //		{
-    //			if (doc.cursorPos == SelEnd)
-    //			{
-    //				SelEnd = doc.cursorPos;
-    //			}
-    //			else
-    //			{
-    //				SelStart = doc.cursorPos;
-    //			}
-    //		}
-    //		else
-    //		{
-    //			SelStart = doc.cursorPos;
-    //			SelEnd = doc.cursorPos;
-    //			isSelected = true;
-    //		}
-    //	}
-
-
-    //	/*if (doc.cursorPos > 0) {
-    //		doc.cursorPos--;
-    //		if (lastSelected != firstSelected and doc.cursorPos + 1 == firstSelected) {
-    //			firstSelected = doc.cursorPos;
-    //		}
-    //		else
-    //		{
-    //			lastSelected = doc.cursorPos;
-    //		}
-    //	}*/
-    //}
-    //else if (direction.x == 1) {
-    //	// la dreapta
-    //	if (doc.cursorPos < doc.charCount) {
-    //		doc.cursorPos++;
-    //		if (lastSelected != firstSelected and doc.cursorPos - 1 == lastSelected)
-    //			lastSelected = doc.cursorPos;
-    //		else
-    //		{
-    //			firstSelected = doc.cursorPos;
-    //		}
-    //	}
-    //}
-/*
-    if (direction.x == -1) {
-        // Move cursor to the left
-        if (doc.cursorPos > 0)
-        {
-            doc.cursorPos--;
-
-            if (isSelected)
-            {
-                if (doc.cursorPos == SelEnd)
-                {
-                    SelEnd = doc.cursorPos;
-                }
-                else
-                {
-                    SelStart = doc.cursorPos;
-                }
-            }
-            else
-            {
-                SelStart = doc.cursorPos;
-                SelEnd = doc.cursorPos;
-                isSelected = true;
-            }
-
-            if (SelStart > SelEnd)
-            {
-                std::swap(SelStart, SelEnd);
-            }
-
-            isSelected = (SelStart != SelEnd);
-        }
-    }
-    else if (direction.x == 1) {
-        // Move cursor to the right
-        if (doc.cursorPos < doc.charCount)
-        {
-            doc.cursorPos++;
-
-            if (isSelected)
-            {
-                if (doc.cursorPos == SelStart)
-                {
-                    SelStart = doc.cursorPos;
-                }
-                else
-                {
-                    SelEnd = doc.cursorPos;
-                }
-            }
-            else
-            {
-                SelStart = doc.cursorPos;
-                SelEnd = doc.cursorPos;
-                isSelected = true;
-            }
-
-            if (SelStart > SelEnd)
-            {
-                std::swap(SelStart, SelEnd);
-            }
-
-            isSelected = (SelStart != SelEnd);
-        }
-    }
-
-    else if (direction.y == -1) {
-        //mutam cursorul cu o linie in sus
-        moveCursorUp(doc);
-
-    }
-    else if (direction.y == 1) {
-        //mutam cursorul cu o linie in jos
-        moveCursorDown(doc);
-    }
-    std::cout << "SELSTART: " << SelStart << " SELEND: " << SelEnd << std::endl;
-}
-*/
