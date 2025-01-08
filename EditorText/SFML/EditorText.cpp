@@ -172,30 +172,77 @@ while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul ruleaz�
                 }
             }
         }
-            
-            //Cazurile pentru celelalte butoane din meniu
-            else if (inputBoxActive)
+        else if (findInputActive) {
+			char* findText = findInput.handleInput(event, findInputActive);
+            if (!findInputActive)
             {
-                char* userInput = input.handleInput(event, inputBoxActive);
-                if (!inputBoxActive)
+                // Dupa ce tastam enter, cautam textul in document
+                char* findTextCStr = findInput.getText();
+                if (findTextCStr != nullptr)
                 {
-                    switch (menuOption)
+                    std::string findText(findTextCStr);
+
+                    // Verificam daca exista textul cautat in document
+                    matchPositions = doc.findText(findText);
+                    if (matchPositions.empty())
                     {
-                    case OPEN:
-                        loadFile(doc, userInput);
-                        updateWholeTextObject(&doc, Window, text);
-                        break;
-                    case SAVE_AS:
-                        saveFile(doc, userInput);
-                        break;
+                        // Daca nu am gasit atunci afisam mesajul
+                        message = "Nu au fost gasite aparitii pentru '" + findText;
+                        messageClock.restart();
+                        showMessage = true;
                     }
-                    path = userInput;
-                    menuActive = false;
+                    else
+                    {
+                        // Dam highlight la textul gasit, daca sunt mai multe dam highlight la primul
+                        // Ca sa navigam printre match uri folosim Next si PreviouscurrentMatchIndex = 0;
+                        currentMatchIndex = 0;
+                        textSelection.SelStart = matchPositions[currentMatchIndex] % matchPositions.size();
+                        textSelection.SelEnd = matchPositions[currentMatchIndex] + findText.length();
+                        textSelection.isSelected = true;
+                        doc.cursorPos = textSelection.SelEnd;
+                        updateWholeTextObject(&doc, Window, text);
+                    }
                 }
+                findInputActive = false;
             }
+        }
+        else if (inputBoxActive)
+        {
+            char* userInput = input.handleInput(event, inputBoxActive);
+            if (!inputBoxActive)
+            {
+                switch (menuOption)
+                {
+                case OPEN:
+                    loadFile(doc, userInput);
+                    updateWholeTextObject(&doc, Window, text);
+                    break;
+                case SAVE_AS:
+                    saveFile(doc, userInput);
+                    break;
+                }
+                path = userInput;
+                menuActive = false;
+            }
+        }
+            //Cazurile pentru celelalte butoane din meniu
+            
 			//Cazurile pentru butoanele din meniu
             else if (menuActive)
             {
+                if (event.type == sf::Event::Resized)
+                {
+                    // memoram noile dimensiuni ale ferestrei
+                    sf::Vector2u newSize(event.size.width, event.size.height);
+                    // actualizam dimensiunea textului ca sa arate la fel pe ecran
+                    fontSize = fontSize * newSize.y / Window.getSize().y;
+
+                    Window.setView(sf::View(sf::FloatRect(0, 0, newSize.x, newSize.y)));
+                    initEscMenu(Window, font, menu);
+                    initializeBottomBar(bottomBarText, font, newSize.x, newSize.y, bottomBorder, fontSize);
+                    ScrollBar(event, Window, Bar, Slider, isDragged, scrollPos, newSize.x, newSize.y);
+                    updateWholeTextObject(&doc, Window, text);
+                }
                 if (event.type == sf::Event::KeyPressed)
                 {
                     if (event.key.code == sf::Keyboard::Escape)
@@ -221,6 +268,8 @@ while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul ruleaz�
                                 // New
                                 std::cout << "New" << std::endl;
                                 menuOption = NEW;
+                                doc.init();
+								updateWholeTextObject(&doc, Window, text);
                                 break;
                             case 1:
                                 // Open
