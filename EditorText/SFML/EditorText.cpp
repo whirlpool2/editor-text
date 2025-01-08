@@ -602,6 +602,18 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
         cursorAnimate(cursorVisual, cursorClock, cursorVisible);
 		ScrollBar(event, Window, Bar, Slider, isDragged, scrollPos, Window.getSize().x, Window.getSize().y);
 
+        // Verificăm dacă cursorul a ieșit din fereastră. Dacă da, mutăm obiectul text astfel încât cursorul să fie în interior.
+		if (cursorVisual.getPosition().x < 0)
+		{
+			text.move(-cursorVisual.getPosition().x, 0);
+			cursorVisual.move(-cursorVisual.getPosition().x, 0);
+		}
+		if (cursorVisual.getPosition().x > Window.getSize().x)
+		{
+			text.move(Window.getSize().x - cursorVisual.getPosition().x, 0);
+			cursorVisual.move(Window.getSize().x - cursorVisual.getPosition().x, 0);
+		}
+
         // Actualizăm window-ul.
         Window.clear(sf::Color(COLOR_BG.r, COLOR_BG.g, COLOR_BG.b));
         textSelection.drawHighLight(Window, text, doc);
