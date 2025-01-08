@@ -302,32 +302,6 @@ void textDocument::deleteText(unsigned long long start, unsigned long long end) 
 		this->cursorPos = start;
 	else
 		this->cursorPos = initialPos;
-
-    //if (startchar->prev != nullptr)
-    //    startchar->prev->next = endchar;
-    //if (endchar != nullptr && endchar->next != nullptr)
-    //    q->next->prev = p->prev;
-
-    //if (p == this->first)
-    //    this->first = q;
-
-    //while (p != q) {
-    //    character* aux = p;
-    //    p = p->next;
-    //    delete aux;
-    //    this->charCount--;
-    //}
-
-    //// Ajustez pozitie cursor
-    //if (originalPos >= end) {
-    //    this->cursorPos = originalPos - (end - start);
-    //}
-    //else if (originalPos >= start) {
-    //    this->cursorPos = start;
-    //}
-    //else {
-    //    this->cursorPos = originalPos;
-    //}
 }
 
 unsigned long long textDocument::getCursorLineLength()
@@ -428,4 +402,81 @@ void textDocument::gotoPrevNewline() {
             break;
         }
     }
+}
+
+void textDocument::insertCharAtPos(char c, unsigned long long pos)
+{
+	if (pos > this->charCount)//daca e inafara documentului
+    {
+        return;
+    }
+    character* p = new character;
+    p->c = c;
+    p->prev = nullptr;
+    p->next = nullptr;
+    if (this->first == nullptr)
+    {
+        this->first = p;
+        this->charCount++;
+        return;
+    }
+    if (pos == 0)
+    {
+        p->next = this->first;
+        this->first->prev = p;
+        this->first = p;
+        this->charCount++;
+        return;
+    }
+    character* q = this->getChar(pos - 1);
+    p->next = q->next;
+    p->prev = q;
+    if (q->next != nullptr)
+    {
+        q->next->prev = p;
+    }
+    q->next = p;
+    this->charCount++;
+}
+void textDocument::replaceText(const std::string& searchText, const std::string& replaceText) {
+    std::vector<unsigned long long> positions = findText(searchText);
+    for (auto it = positions.rbegin(); it != positions.rend(); ++it) {
+        unsigned long long pos = *it;
+        deleteText(pos, pos + searchText.size());
+        for (size_t i = 0; i < replaceText.size(); ++i) {
+            insertCharAtPos(replaceText[i], pos + i);
+        }
+    }
+}
+std::vector<unsigned long long> textDocument::findText(const std::string& searchText)
+{
+    std::vector<unsigned long long> positions;
+    if (searchText.empty())
+    {
+        return positions;
+    }
+
+    character* p = this->first;
+    unsigned long long pos = 0;
+    while (p != nullptr)
+    {
+        bool match = true;
+        character* q = p;
+        for (size_t i = 0; i < searchText.size(); ++i)
+        {
+            if (q == nullptr || q->c != searchText[i])
+            {
+                match = false;
+                break;
+            }
+            q = q->next;
+        }
+        if (match)
+        {
+            positions.push_back(pos);
+        }
+        p = p->next;
+        ++pos;
+    }
+    return positions;
 }

@@ -1,5 +1,6 @@
 ﻿#pragma once
-
+#include <vector>
+#include <string>
 struct RGBColor
 {
     int r;
@@ -64,6 +65,16 @@ struct textDocument
 
     // Setează poziția cursorului pe precedentul '\n'.
     void gotoPrevNewline();
+
+	//Insereaza un caracter la o anumita pozitie
+    void insertCharAtPos(char c, unsigned long long pos);
+
+
+    //Functie pentru a da replace la te4xt
+    void replaceText(const std::string& searchText, const std::string& replaceText);
+
+    //functie care returneaza vector cu pozitiile stringurilor cautate
+    std::vector<unsigned long long> findText(const std::string& searchText);
 };
 
 // CONSTS

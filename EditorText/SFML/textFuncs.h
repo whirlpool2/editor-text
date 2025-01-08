@@ -60,7 +60,7 @@ void moveCursorUp(textDocument& doc);
 //Initial era o functie bottomBar care initializa si updata dar am separat-o in doua functii pentru a actualiza 
 // cand are loc un event care actualizeaza pozitia cursorului
 // Generează o bară ce afișează numărul liniei și numărul caracterului curent din aceasta.
-void initializeBottomBar(sf::Text& bottomBar, sf::Font& font, unsigned int windowHeight, sf::RectangleShape& bottomBorder);
+void initializeBottomBar(sf::Text& bottomBar, sf::Font& font,unsigned WindowWidth, unsigned int windowHeight, sf::RectangleShape& bottomBorder, int FontSize);
 
 // Actualizeaza bara de jos cu numarul liniei si numarul caracterului curent din aceasta.
 void updateBottomBar(sf::Text& bottomBar, textDocument& doc);
@@ -80,7 +80,7 @@ void scrollUp(textDocument& doc, sf::RenderWindow& window, sf::Text& textObject)
 void scrollDown(textDocument& doc, sf::RenderWindow& window, sf::Text& textObject);
 
 // Functie pentru creare bara scroll
-void ScrollBar(sf::Event& event, sf::RenderWindow& window, sf::RectangleShape& background, sf::RectangleShape& slider, bool& isDragged, float& scrollPos);
+void ScrollBar(sf::Event& event, sf::RenderWindow& window, sf::RectangleShape& background, sf::RectangleShape& slider, bool& isDragged, float& scrollPos, unsigned int WindowWidth, unsigned int WindowHeight);
 
 //Functie pentru functionarea scroll bar-ului
 void makeScrollBarWork(sf::Event& event, textDocument& doc, sf::RenderWindow& window, sf::RectangleShape& background, sf::RectangleShape& slider, bool& isDragged, float& scrollPosNew, float& scrollPosCurrent, sf::Text& textObject);

@@ -270,16 +270,16 @@ void deleteCharInTextObject(textDocument* doc, sf::Text& textObject)
 }
 
 //Am optimizat functia bottomBar, folosindu-ma de reactualizarea pozitiei numai cand are loc un event
-void initializeBottomBar(sf::Text& bottomBar, sf::Font& font, unsigned int windowHeight, sf::RectangleShape& bottomBorder)
+void initializeBottomBar(sf::Text& bottomBar, sf::Font& font,unsigned int windowWidth, unsigned int windowHeight, sf::RectangleShape& bottomBorder, int FontSize)
 {
 	bottomBar.setFont(font);
-	bottomBar.setCharacterSize(16);
+	bottomBar.setCharacterSize(FontSize * 0.6);
     bottomBar.setFillColor(sf::Color::White);
 	
     bottomBar.setOrigin(bottomBar.getGlobalBounds().width, bottomBar.getGlobalBounds().height);
-	bottomBar.setPosition(windowHeight - 10, windowHeight - 5);
+	bottomBar.setPosition(windowWidth - 10, windowHeight - 5);
 
-	bottomBorder.setSize(sf::Vector2f(windowHeight - 20, 20));
+	bottomBorder.setSize(sf::Vector2f(windowWidth - 20, 20));
 	bottomBorder.setFillColor(sf::Color::Black);
 	bottomBorder.setPosition(0, windowHeight - 20);
 }
@@ -436,14 +436,17 @@ void scrollDown(textDocument& doc, sf::RenderWindow& window, sf::Text& textObjec
 // Implementează scrollbar-ul pentru text.
 
 //TREBUIE ADAUGAT PARAMETRU PENTRU A PUTEA DA RESIZE SCROLL BARULUI!!!!!
-void ScrollBar(sf::Event& event, sf::RenderWindow& window, sf::RectangleShape& background, sf::RectangleShape& slider, bool& isDragged, float& scrollPos)
+void ScrollBar(sf::Event& event, sf::RenderWindow& window, sf::RectangleShape& background, sf::RectangleShape& slider,
+    bool& isDragged, float& scrollPos, unsigned int WindowWidth, unsigned int WindowHeight)
 {
-    background.setSize(sf::Vector2f(20, 800));
-    background.setPosition(780, 0);
+    background.setSize(sf::Vector2f(20, WindowHeight));
+    background.setPosition(WindowWidth - 20, 0);
     background.setFillColor(sf::Color(200, 200, 200));
 
-    slider.setSize(sf::Vector2f(20, 50));
-    slider.setPosition(780, scrollPos * (background.getSize().y - slider.getSize().y));
+	//Dimensiunea slide urului trebuie sa fie proportionala cu dimensiunea ferestrei
+    float sliderheight = WindowHeight * 0.05f;
+    slider.setSize(sf::Vector2f(20, sliderheight));
+    slider.setPosition(WindowWidth - 20, scrollPos * (background.getSize().y - slider.getSize().y));
     slider.setFillColor(sf::Color(100, 100, 100));
 
     if (event.type == sf::Event::MouseButtonPressed)

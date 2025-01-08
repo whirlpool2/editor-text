@@ -73,6 +73,9 @@ struct inputBox
 
 	// Desenează input box-ul pe ecran.
 	void draw(sf::RenderWindow& window, sf::Font& font);
+
+	//Returneaza textul introdus in input box
+	char* getText() { return inputText; }
 };
 
 // Deschide meniul și așteaptă input de la utilizator.

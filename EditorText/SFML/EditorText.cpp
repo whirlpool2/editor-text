@@ -16,6 +16,10 @@ enum menuOptions
 	SAVE,
 	SAVE_AS,
 	INFO,
+    FIND,
+    FIND_REPLACE,
+    NEXT,
+    PREVIOUS,
 	EXIT
 };
 
@@ -27,6 +31,10 @@ void initEscMenu(sf::RenderWindow& window, sf::Font& font, fullscreenMenu& menu)
 	menu.addButton("Save");
     menu.addButton("Save as");
     menu.addButton("Info");
+    menu.addButton("Find");
+    menu.addButton("Find and Replace");
+    menu.addButton("Next");
+    menu.addButton("Previous");
 	menu.addButton("Exit");
     menu.update(window, font);
 }
@@ -58,7 +66,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
 
     sf::Text bottomBarText;
     sf::RectangleShape bottomBorder;
-    initializeBottomBar(bottomBarText, font, Window.getSize().y, bottomBorder);
+    initializeBottomBar(bottomBarText, font,Window.getSize().x, Window.getSize().y, bottomBorder, fontSize);
 
     // cout << visibleLineCount(Window, text) << endl;
 
@@ -81,6 +89,21 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
     bool wasMousePressed = false;
 	bool isMousePressed = false;
 
+    //Pentru find and replace
+    bool findReplaceActive = false;
+    bool findInputActive = false; 
+    bool replaceInputActive = false; 
+    inputBox findInput;
+    inputBox replaceInput;
+    std::string message;
+    sf::Clock messageClock;
+	bool showMessage = false;//In cazul in care nu gasim textul de cautat afisam un mesaj
+    
+
+	//Avem un vectr in care memoram pozitiile la care se afla textul cautat
+    std::vector<unsigned long long> matchPositions;
+    int currentMatchIndex = -1; //-1 in cazul in care nu avem matches ca sa putem da trigger la cazul respectiv
+
     // Actualizăm conținutul textului (pentru a prelua datele încărcate).
     updateTextObject(&doc, Window, text);
 
@@ -89,10 +112,90 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
         sf::Event event;
         while (Window.pollEvent(event)) // Verificăm event-ul curent.
         {
-            if (inputBoxActive)
+            if (findReplaceActive)
+            {
+                if (findInputActive)
+                {
+
+                    //Luam input-ul de la user
+                    char* findText = findInput.handleInput(event, findInputActive);
+                    if (!findInputActive)
+                    {
+						// Daca am terminat de introdus textul de cautat, aidca daca s-a apasat enter dupa ce s-a introdus textul cautat, trecem la replace
+                        replaceInputActive = true;
+                        replaceInput.init(Window, font, 600, 32, "Enter text to replace:");
+                    }
+                }
+                else if (replaceInputActive)
+                {
+					//Luam input-ul de la user
+                    char* findTextCStr = findInput.getText();
+                    char* replaceTextCStr = replaceInput.getText();
+                    if (findTextCStr != nullptr && replaceTextCStr != nullptr)
+                    {
+                        std::string findText(findTextCStr);
+                        std::string replaceText(replaceTextCStr);
+
+						//Verificam daca textul cautat exista in document
+                        std::vector<unsigned long long> positions = doc.findText(findText);
+                        if (positions.empty())
+                        {
+                            // Daca nu gasim atunci afisam mesaj
+                            message = "Nu au fost gasite aparitii pentru '" + findText;
+                            messageClock.restart(); //avem un clock pentru mesaj de 3 secunde
+                            showMessage = true;
+                        }
+                        else
+                        {
+							//Aici inlocuim textul gasit
+                            doc.replaceText(findText, replaceText);
+                            updateWholeTextObject(&doc, Window, text);
+                        }
+                    }
+                    findReplaceActive = false;
+                }
+            }
+            else if (findInputActive)
+            {
+                //Luam inputul de la user
+                char* findText = findInput.handleInput(event, findInputActive);
+                if (!findInputActive)
+                {
+					// Dupa ce tastam enter, cautam textul in document
+                    char* findTextCStr = findInput.getText();
+                    if (findTextCStr != nullptr)
+                    {
+                        std::string findText(findTextCStr);
+
+						// Verificam daca exista textul cautat in document
+                        matchPositions = doc.findText(findText);
+                        if (matchPositions.empty())
+                        {
+                            // Daca nu am gasit atunci afisam mesajul
+                            message = "Nu au fost gasite aparitii pentru '" + findText;
+                            messageClock.restart();
+                            showMessage = true;
+                        }
+                        else
+                        {
+							// Dam highlight la textul gasit, daca sunt mai multe dam highlight la primul
+							//Ca sa navigam printre match uri folosim Next si Previous
+                            currentMatchIndex = 0;
+                            textSelection.SelStart = matchPositions[currentMatchIndex];
+                            textSelection.SelEnd = matchPositions[currentMatchIndex] + findText.length();
+                            textSelection.isSelected = true;
+                            doc.cursorPos = textSelection.SelEnd;
+                            updateWholeTextObject(&doc, Window, text);
+                        }
+                    }
+                    findInputActive = false;
+                }
+            }
+            //Cazurile pentru celelalte butoane din meniu
+            else if (inputBoxActive)
             {
                 char* userInput = input.handleInput(event, inputBoxActive);
-                if (inputBoxActive == false)
+                if (!inputBoxActive)
                 {
                     switch (menuOption)
                     {
@@ -104,11 +207,12 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                         saveFile(doc, userInput);
                         break;
                     }
-					path = userInput;
+                    path = userInput;
                     menuActive = false;
                 }
             }
-            if (menuActive)
+			//Cazurile pentru butoanele din meniu
+            else if (menuActive)
             {
                 if (event.type == sf::Event::KeyPressed)
                 {
@@ -121,6 +225,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                 {
                     if (event.mouseButton.button == sf::Mouse::Left)
                     {
+                        //Aflam pe ce buton s-a dat click
                         int clickedButton = menu.getClickedButton(sf::Mouse::getPosition(Window));
                         if (clickedButton != -1)
                         {
@@ -128,34 +233,81 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                             {
                             case 0:
                                 // New
-                                cout << "New" << endl;
+                                std::cout << "New" << std::endl;
                                 menuOption = NEW;
                                 break;
                             case 1:
                                 // Open
-                                cout << "Open" << endl;
+                                std::cout << "Open" << std::endl;
                                 menuOption = OPEN;
-								input.init(Window, font, 600, 32, "Enter file path:");
-								inputBoxActive = true;
+                                input.init(Window, font, 600, 32, "Enter file path:");
+                                inputBoxActive = true;
                                 break;
                             case 2:
                                 // Save
-                                cout << "Save" << endl;
+                                std::cout << "Save" << std::endl;
                                 menuOption = SAVE;
+                                saveFile(doc, path);
                                 break;
-							case 3:
-								// Save as
-								cout << "Save as" << endl;
-								menuOption = SAVE_AS;
+                            case 3:
+                                // Save as
+                                std::cout << "Save as" << std::endl;
+                                menuOption = SAVE_AS;
                                 input.init(Window, font, 600, 32, "Enter file save path:");
                                 inputBoxActive = true;
-								break;
+                                break;
                             case 4:
-								// Info
-								cout << "Info" << endl;
+                                // Info
+                                std::cout << "Info" << std::endl;
                                 menuOption = INFO;
-								break;
+                                break;
                             case 5:
+                                // Find
+                                std::cout << "Find" << std::endl;
+                                menuOption = FIND;
+                                findInputActive = true;
+                                findInput.init(Window, font, 600, 32, "Enter text to find:");
+                                break;
+                            case 6:
+                                // Find and Replace
+                                std::cout << "Find and Replace" << std::endl;
+                                menuOption = FIND_REPLACE;
+                                findReplaceActive = true;
+                                findInputActive = true; 
+                                findInput.init(Window, font, 600, 32, "Enter text to find:");
+                                break;
+                            case 7:
+                                // Next
+                                std::cout << "Next" << std::endl;
+								if (!matchPositions.empty())//Daca avem match uri
+                                {
+                                    currentMatchIndex = (currentMatchIndex + 1) % matchPositions.size();
+									//avem modulo pentru a putea face cicluri printre match uri
+									std::string findText(findInput.getText()); //Folosim un string pentru a tine minte textul cautat
+                                    textSelection.SelStart = matchPositions[currentMatchIndex];
+                                    textSelection.SelEnd = matchPositions[currentMatchIndex] + findText.length();
+									textSelection.isSelected = true;//Facem True ca sa dam highlight la textul gasit
+									doc.cursorPos = textSelection.SelEnd;//mutam cursorul la finalul textului gasit
+                                    updateWholeTextObject(&doc, Window, text);
+                                }
+                                break;
+                            case 8:
+                                // Previous
+                                std::cout << "Previous" << std::endl;
+                                if (!matchPositions.empty())
+                                {
+                                    currentMatchIndex = (currentMatchIndex - 1 + matchPositions.size()) % matchPositions.size();
+									//Adunam matchPositions.size ca sa nu puste programul in aer, ca sa ramana indexul pozitiv
+									//Uneori se poate bugui si vrem sa evitam crash uri
+                                    std::string findText(findInput.getText()); // Define findText here
+                                    textSelection.SelStart = matchPositions[currentMatchIndex];
+                                    textSelection.SelEnd = matchPositions[currentMatchIndex] + findText.length();
+                                    textSelection.isSelected = true;
+                                    doc.cursorPos = textSelection.SelEnd;
+                                    updateWholeTextObject(&doc, Window, text);
+                                }
+                                break;
+                            case 9:
                                 // Exit
                                 Window.close();
                                 break;
@@ -164,6 +316,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                     }
                 }
             }
+            
             else
             {
                 if (event.type == sf::Event::Closed)
@@ -178,10 +331,56 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                     fontSize = fontSize * newSize.y / Window.getSize().y;
 
                     Window.setView(sf::View(sf::FloatRect(0, 0, newSize.x, newSize.y)));
-                    initializeBottomBar(bottomBarText, font, newSize.y, bottomBorder);
+                    initEscMenu(Window, font, menu);
+                    initializeBottomBar(bottomBarText, font, newSize.x, newSize.y, bottomBorder, fontSize);
+					ScrollBar(event, Window, Bar, Slider, isDragged, scrollPos, newSize.x, newSize.y);
                     updateWholeTextObject(&doc, Window, text);
                 }
-                
+                if (findReplaceActive)
+                {
+                    if (findInputActive)
+                    {
+                        char* findText = findInput.handleInput(event, findInputActive);
+                        if (!findInputActive)
+                        {
+							// Afisam interfata pentru replace
+                            replaceInputActive = true;
+                            replaceInput.init(Window, font, 600, 32, "Enter text to replace:");
+                        }
+                    }
+					// Am afisat promptul, acum trecem al replace
+                    else if (replaceInputActive)
+                    {
+                        char* replaceText = replaceInput.handleInput(event, replaceInputActive);
+                        if (!replaceInputActive)
+                        {
+                            // Acum trecem la inlocuire in sine
+                            char* findTextCStr = findInput.getText();//memoram textul cautat
+							char* replaceTextCStr = replaceInput.getText();//memoram textul cu care inlocuim
+                            if (findTextCStr != nullptr && replaceTextCStr != nullptr)
+                            {
+                                std::string findText(findTextCStr);
+                                std::string replaceText(replaceTextCStr);
+
+								//Verificam daca textul cautat exista in document
+                                std::vector<unsigned long long> positions = doc.findText(findText);
+                                if (positions.empty())
+                                {
+                                    // Nu exista, afisam mesaj
+                                    message = "Nu au fost gasite aparitii pentru '" + findText;
+                                    messageClock.restart();
+                                    showMessage = true;
+                                }
+                                else
+                                {
+                                    doc.replaceText(findText, replaceText);
+                                    updateWholeTextObject(&doc, Window, text);
+                                }
+                            }
+                            findReplaceActive = false;
+                        }
+                    }
+                }
                 updateBottomBar(bottomBarText, doc);
                 // Daca este apăsat click stânga.
                 if (event.type == sf::Event::MouseButtonPressed)
@@ -193,8 +392,6 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                         //Daca facem o selectie cu mouse ul, dupa ce dam release la click stanga
                         //Daca dam click din nou va trebui sa resetam selectia, asa ca aceste 2 if uri
                         //au rolul de a trata cazul acesta
-						//Primul if nu pare sa faca sens dar Ajuta sa nu plesneasca programul
-						//cel de al 2 lea if reseteaza selectia
                         //Daca mouse ul nu este apasat acum dar a fos apasat inainte inseamna ca resetam selectia
                         if(!isMousePressed && !wasMousePressed)
 							textSelection.isSelected = false;
@@ -275,49 +472,6 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                     }
                     updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
                     
-                    /*
-                    if (event.text.unicode < 128)
-                    {
-                        // Convertim tasta apăsată într-un char.
-                        char key = static_cast<char>(event.text.unicode);
-                        // Daca exista o selecție activa, stergem textul selectat.
-                        if (textSelection.isSelected)
-                        {
-                            textSelection.deleteSelectedText(doc, text,  cursorVisual, cursorClock, cursorVisible, Window);
-							std::cout << "Textul selectat a fost sters" << std::endl;
-                         }
-                        // Dacă se apasă backspace și se poate șterge...
-                        if (key == 8 && doc.charCount != 0 && doc.cursorPos > 0) {
-                                //daca am shift apasat si dau delete se sterge tot continutul selectat
-                                textSelection.deleteSelectedText(doc, text,  cursorVisual, cursorClock, cursorVisible, Window);
-                            
-                            
-                        }
-                        else if (key >= 32 && key <= 126)
-                        {
-                            // key in [32, 126] implică caracterele alfanumerice, punctuații și paranteze, etc.
-                            insertCharInTextObject(&doc, text, key);
-                        }
-                        else if (key == 13)
-                        {
-                            // 13 corespude CR, adică ENTER.
-                            insertCharInTextObject(&doc, text, '\n');
-                        }
-                    }
-                    // TODO: Revizitează optimizarea asta.
-                    // Probabil ar trebui să țin minte doi cursori diferiți, unul pentru cursorul vizual și unul pentru cursorul documentului.
-                    // Ar fi cam greu totuși.
-                    /*
-                    if (doc.getCursorLine() > visibleLineCount(Window, text))
-                    {
-                        cout << "Cursorul este la o linie mai mare decat numarul de linii vizibile. (" << doc.getCursorLine() << " > " << visibleLineCount(Window, text) << ")" << endl;
-                        updateTextObject(&doc, Window, text, doc.getCursorLine() - visibleLineCount(Window, text));
-                }
-                    */
-
-                    // Test pentru funcția docToString. Se va șterge, și va fi apelată la nevoie ulterior.
-                    // debugString(&doc);
-                   // updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
                 }
                 //implementare makeScrollBarWork
                 float scrollPosCurrent = scrollPos;
@@ -436,7 +590,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
 
         // Se animează cursorul.
         cursorAnimate(cursorVisual, cursorClock, cursorVisible);
-        ScrollBar(event, Window, Bar, Slider, isDragged, scrollPos);
+		ScrollBar(event, Window, Bar, Slider, isDragged, scrollPos, Window.getSize().x, Window.getSize().y);
 
         // Actualizăm window-ul.
         Window.clear(sf::Color(COLOR_BG.r, COLOR_BG.g, COLOR_BG.b));
@@ -454,6 +608,43 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
         if (inputBoxActive)
         {
             input.draw(Window, font);
+        }
+        if (findReplaceActive)
+        {
+            if (findInputActive)
+            {
+                findInput.draw(Window, font);
+            }
+            else if (replaceInputActive)
+            {
+                replaceInput.draw(Window, font);
+            }
+        }
+        if (findInputActive)
+        {
+            findInput.draw(Window, font);
+        }
+        if (showMessage)
+        {
+            sf::Text messageText;
+            messageText.setFont(font);
+            messageText.setString(message);
+            messageText.setCharacterSize(24);
+            messageText.setFillColor(sf::Color::Red);
+
+            // Center the text on the window
+            sf::FloatRect textRect = messageText.getLocalBounds();
+            messageText.setOrigin(textRect.left + textRect.width / 2.0f,
+                textRect.top + textRect.height / 2.0f);
+            messageText.setPosition(Window.getSize().x / 2.0f, Window.getSize().y / 2.0f);
+
+            Window.draw(messageText);
+
+            // Hide the message after 3 seconds
+            if (messageClock.getElapsedTime().asSeconds() > 3)
+            {
+                showMessage = false;
+            }
         }
         Window.display();
     }
