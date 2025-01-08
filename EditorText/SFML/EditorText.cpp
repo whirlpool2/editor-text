@@ -102,56 +102,68 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
     std::string message;
     sf::Clock messageClock;
 	bool showMessage = false;//In cazul in care nu gasim textul de cautat afisam un mesaj
-    
+   sf::Clock replaceDelayClock;
+bool replaceDelayActive = false;
 
-	//Avem un vectr in care memoram pozitiile la care se afla textul cautat
-    std::vector<unsigned long long> matchPositions;
-    int currentMatchIndex = -1; //-1 in cazul in care nu avem matches ca sa putem da trigger la cazul respectiv
+//Avem un vectr in care memoram pozitiile la care se afla textul cautat
+std::vector<unsigned long long> matchPositions;
+int currentMatchIndex = -1; //-1 in cazul in care nu avem matches ca sa putem da trigger la cazul respectiv
 
-    // Actualizăm conținutul textului (pentru a prelua datele încărcate).
-    updateTextObject(&doc, Window, text);
+// Actualizăm conținutul textului (pentru a prelua datele încărcate).
+updateTextObject(&doc, Window, text);
 
-    while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul rulează la infinit.
+while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul rulează la infinit.
+{
+    sf::Event event;
+    while (Window.pollEvent(event)) // Verificăm event-ul curent.
     {
-        sf::Event event;
-        while (Window.pollEvent(event)) // Verificăm event-ul curent.
+        if (findReplaceActive)
         {
-            if (findReplaceActive)
+            if (findInputActive)
             {
-                if (findInputActive)
-                {
 
-                    //Luam input-ul de la user
-                    char* findText = findInput.handleInput(event, findInputActive);
-                    if (!findInputActive)
-                    {
-						// Daca am terminat de introdus textul de cautat, aidca daca s-a apasat enter dupa ce s-a introdus textul cautat, trecem la replace
-                        replaceInputActive = true;
-                        replaceInput.init(Window, font, 600, 32, "Enter text to replace:");
-                    }
-                }
-                else if (replaceInputActive)
+                //Luam input-ul de la user
+                char* findText = findInput.handleInput(event, findInputActive);
+                if (!findInputActive)
                 {
-					//Luam input-ul de la user
-                    char* findTextCStr = findInput.getText();
-                    char* replaceTextCStr = replaceInput.getText();
+                    // Daca am terminat de introdus textul de cautat, aidca daca s-a apasat enter dupa ce s-a introdus textul cautat, trecem la replace
+                    replaceInputActive = true;
+                    replaceInput.init(Window, font, 600, 32, "Enter text to replace:");
+                    replaceDelayClock.restart();
+                    replaceDelayActive = true;
+
+                }
+            }
+            else if (replaceInputActive)
+            {
+                if (replaceDelayActive and replaceDelayClock.getElapsedTime().asSeconds() < 0.5)
+                {
+                    continue;
+                }
+                replaceDelayActive = false;
+                //Luam input-ul de la user
+                char* replaceText = replaceInput.handleInput(event, replaceInputActive);
+                if (!replaceInputActive)
+                {
+                    // Acum trecem la inlocuire in sine
+                    char* findTextCStr = findInput.getText(); // memoram textul cautat
+                    char* replaceTextCStr = replaceInput.getText(); // memoram textul cu care inlocuim
                     if (findTextCStr != nullptr && replaceTextCStr != nullptr)
                     {
                         std::string findText(findTextCStr);
                         std::string replaceText(replaceTextCStr);
 
-						//Verificam daca textul cautat exista in document
+                        // Verificam daca textul cautat exista in document
                         std::vector<unsigned long long> positions = doc.findText(findText);
                         if (positions.empty())
                         {
-                            // Daca nu gasim atunci afisam mesaj
+                            // Nu exista, afisam mesaj
                             message = "Nu au fost gasite aparitii pentru '" + findText;
-                            messageClock.restart(); //avem un clock pentru mesaj de 3 secunde
+                            messageClock.restart();
                             showMessage = true;
                         }
                         else
                         {
-							//Aici inlocuim textul gasit
                             doc.replaceText(findText, replaceText);
                             updateWholeTextObject(&doc, Window, text);
                         }
@@ -159,42 +171,8 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                     findReplaceActive = false;
                 }
             }
-            else if (findInputActive)
-            {
-                //Luam inputul de la user
-                char* findText = findInput.handleInput(event, findInputActive);
-                if (!findInputActive)
-                {
-					// Dupa ce tastam enter, cautam textul in document
-                    char* findTextCStr = findInput.getText();
-                    if (findTextCStr != nullptr)
-                    {
-                        std::string findText(findTextCStr);
-
-						// Verificam daca exista textul cautat in document
-                        matchPositions = doc.findText(findText);
-                        if (matchPositions.empty())
-                        {
-                            // Daca nu am gasit atunci afisam mesajul
-                            message = "Nu au fost gasite aparitii pentru '" + findText;
-                            messageClock.restart();
-                            showMessage = true;
-                        }
-                        else
-                        {
-							// Dam highlight la textul gasit, daca sunt mai multe dam highlight la primul
-							//Ca sa navigam printre match uri folosim Next si Previous
-                            currentMatchIndex = 0;
-                            textSelection.SelStart = matchPositions[currentMatchIndex];
-                            textSelection.SelEnd = matchPositions[currentMatchIndex] + findText.length();
-                            textSelection.isSelected = true;
-                            doc.cursorPos = textSelection.SelEnd;
-                            updateWholeTextObject(&doc, Window, text);
-                        }
-                    }
-                    findInputActive = false;
-                }
-            }
+        }
+            
             //Cazurile pentru celelalte butoane din meniu
             else if (inputBoxActive)
             {

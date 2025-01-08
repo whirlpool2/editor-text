@@ -414,12 +414,14 @@ void textDocument::insertCharAtPos(char c, unsigned long long pos)
     p->c = c;
     p->prev = nullptr;
     p->next = nullptr;
+    //document gol
     if (this->first == nullptr)
     {
         this->first = p;
         this->charCount++;
         return;
     }
+    //inserare inceput
     if (pos == 0)
     {
         p->next = this->first;
@@ -428,6 +430,7 @@ void textDocument::insertCharAtPos(char c, unsigned long long pos)
         this->charCount++;
         return;
     }
+    //pe la mijloc sau sfarsit
     character* q = this->getChar(pos - 1);
     p->next = q->next;
     p->prev = q;
@@ -442,9 +445,10 @@ void textDocument::replaceText(const std::string& searchText, const std::string&
     std::vector<unsigned long long> positions = findText(searchText);
     for (auto it = positions.rbegin(); it != positions.rend(); ++it) {
         unsigned long long pos = *it;
-        deleteText(pos, pos + searchText.size());
+        deleteText(pos, pos + searchText.size());//stergem textu gasit
         for (size_t i = 0; i < replaceText.size(); ++i) {
-            insertCharAtPos(replaceText[i], pos + i);
+			insertCharAtPos(replaceText[i], pos + i);//inseram caracter cu caracter textul de inlocuit
+            //avem lista dublu inlantuita deci nu avem de ales
         }
     }
 }
