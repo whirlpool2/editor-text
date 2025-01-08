@@ -264,6 +264,7 @@ void deleteCharInTextObject(textDocument* doc, sf::Text& textObject)
 {
     // std::cout << "DEBUG: Cursor pos is " << doc->cursorPos << " (relative to line: " << doc->getCursorPositionInLine() << ")" << std::endl;
     sf::String text = textObject.getString();
+    if(!text.isEmpty())
     text.erase(doc->cursorPos - 1, 1);
     textObject.setString(text);
     doc->deleteChar();
