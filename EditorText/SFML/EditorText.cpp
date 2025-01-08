@@ -30,7 +30,7 @@ void initEscMenu(sf::RenderWindow& window, sf::Font& font, fullscreenMenu& menu)
 	menu.addButton("Open");
 	menu.addButton("Save");
     menu.addButton("Save as");
-    menu.addButton("Info");
+    menu.addButton("Info/Help");
     menu.addButton("Find");
     menu.addButton("Find and Replace");
     menu.addButton("Next");
@@ -78,6 +78,10 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
     fullscreenMenu menu;
     initEscMenu(Window, font, menu);
     unsigned int menuOption;
+
+    // Declarăm popup-ul.
+    bool popupActive = false;
+    popup popupBox;
 
 	// Declarăm input box-ul.
     // Inițializarea se va face după caz, în funcție de opțiunea aleasă în meniu.
@@ -219,6 +223,10 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                     if (event.key.code == sf::Keyboard::Escape)
                     {
                         menuActive = !menuActive;
+						if (popupActive)
+						{
+							popupActive = false;
+						}
                     }
                 }
                 if (event.type == sf::Event::MouseButtonPressed)
@@ -260,6 +268,8 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
                                 // Info
                                 std::cout << "Info" << std::endl;
                                 menuOption = INFO;
+								popupBox.init(Window, font, fontSize, "Minimalist text editor\n\Proiect IP 2024-2025\nrealizat de: Beresteanu Mihail, Mihalache Stefan, Pascaniuc Lucas (1B2)\n\nUse SHIFT/Hold LEFT MOUSE to select.\nUse CTRL and SCROLL/PLUS/MINUS to change font size.\nPress CTRL+S to save.");
+								popupActive = true;
                                 break;
                             case 5:
                                 // Find
@@ -608,6 +618,10 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
         if (inputBoxActive)
         {
             input.draw(Window, font);
+        }
+        if (popupActive)
+        {
+            popupBox.draw(Window);
         }
         if (findReplaceActive)
         {

@@ -43,6 +43,28 @@ struct fullscreenMenu
 	int getClickedButton(sf::Vector2i mousePos);
 };
 
+// Structură pentru un pop-up cu text.
+// Pop-up-ul va fi centrat pe ecran, și va întuneca fundalul.
+struct popup
+{
+	sf::RectangleShape background; // Folosit pentru întunecarea fundalului.
+	sf::RectangleShape popupArea;  // Zona efectivă de pop-up. (Fereastră cu fundalul COLOR_BG și contur COLOR_TEXT)
+	sf::Text popupText;
+	char popupTextString[1024];
+
+	// Calculate de funcția init.
+	float width;
+	float height;
+	float x;
+	float y;
+
+	// Inițializează pop-up-ul cu valorile date.
+	void init(sf::RenderWindow& window, sf::Font& font, unsigned int fontSize, const char* text);
+
+	// Desenează pop-up-ul pe ecran.
+	void draw(sf::RenderWindow& window);
+};
+
 // Structură pentru un input box, cu un text descriptiv centrat deasupra.
 // Input box-ul va fi centrat pe ecran, și va întuneca fundalul.
 struct inputBox
@@ -61,7 +83,7 @@ struct inputBox
 
 	// Inițializează input box-ul cu valorile date.
 	void init(sf::RenderWindow& window, sf::Font& font, float width, float height, const char* desc);
-	
+
 	// Permite scrierea în input box.
 	// La apel, se preia input-ul de la tastatură și se adaugă la inputText.
 	// Când se apasă enter, se închide box-ul și se returnează input-ul.
