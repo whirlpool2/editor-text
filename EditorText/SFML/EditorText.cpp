@@ -493,7 +493,7 @@ while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul ruleaz�
 						cursorClickPos(mousePos, doc, text);
 						textSelection.updateSelectedTextMouse(doc, text, mousePos, isMousePressed,
                             Window, cursorVisual, cursorClock, cursorVisible);
-                        updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
+                        updateCursorVisual(doc, text, cursorVisual);
                     }
                 }
 				//Daca butonul mouse-ului este eliberat atunci indicam asta algoritmului ca sa nu mai faca selectie
@@ -513,7 +513,7 @@ while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul ruleaz�
                         sf::Vector2i mousePos = sf::Mouse::getPosition(Window);
 						textSelection.updateSelectedTextMouse(doc, text, mousePos, isMousePressed,
 							Window, cursorVisual, cursorClock, cursorVisible);
-						updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
+						updateCursorVisual(doc, text, cursorVisual);
                     }
 
                 }
@@ -558,7 +558,7 @@ while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul ruleaz�
                         insertCharInTextObject(&doc, text, '\n');
                         textSelection.isSelected = false;
                     }
-                    updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
+                    updateCursorVisual(doc, text, cursorVisual);
                     
                 }
                 //implementare makeScrollBarWork
@@ -622,6 +622,8 @@ while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul ruleaz�
                     }
                     else {
                         //Vector2i(0, 0) inseamna ca nu se selecteaza nimic
+                        cursorClock.restart();
+                        cursorVisible = true;
                         if (event.key.code == sf::Keyboard::Left && doc.cursorPos > 0) {
                             doc.cursorPos--;
                             textSelection.isSelected = false;
@@ -709,7 +711,7 @@ while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul ruleaz�
 
                     // updateTextObject(&doc, Window, text);
                     updateWholeTextObject(&doc, Window, text);
-                    updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
+                    updateCursorVisual(doc, text, cursorVisual);
                 }
             }
         }
@@ -731,7 +733,7 @@ while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul ruleaz�
 		}
 
         updateWholeTextObject(&doc, Window, text);
-        updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
+        updateCursorVisual(doc, text, cursorVisual);
 
         // Actualizăm window-ul.
         Window.clear(sf::Color(COLOR_BG.r, COLOR_BG.g, COLOR_BG.b));

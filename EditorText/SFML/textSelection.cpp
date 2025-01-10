@@ -141,7 +141,7 @@ void TextSelection::deleteSelectedText(textDocument& doc, sf::Text& text,
    doc.cursorPos = SelEnd = SelStart;
    isSelected = false;
    updateTextObject(&doc, window, text);
-   updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
+   updateCursorVisual(doc, text, cursorVisual);
 }
 
 void TextSelection::copyText(textDocument& doc) {
@@ -183,7 +183,7 @@ void TextSelection::pasteText(textDocument& doc, sf::Text& text, sf::RenderWindo
 	}
 	//Actualizam textul si cursorul
 	updateTextObject(&doc, window, text);
-	updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
+	updateCursorVisual(doc, text, cursorVisual);
 	//Resetez selectia
 	isSelected = false;
 	SelStart = SelEnd = doc.cursorPos;
@@ -209,7 +209,7 @@ void TextSelection::updateSelectedTextMouse(textDocument& doc, sf::Text& text, s
     isSelected = (SelStart != SelEnd);
  
     updateTextObject(&doc, window, text);
-    updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
+    updateCursorVisual(doc, text, cursorVisual);
 
 
 }

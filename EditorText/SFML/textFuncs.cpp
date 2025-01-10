@@ -253,14 +253,12 @@ void updateWholeTextObject(textDocument* doc, sf::RenderWindow& window, sf::Text
     textObject.setString(text);
 }
 
-void updateCursorVisual(textDocument& doc, sf::Text& textObject, sf::RectangleShape& cursorVisual, sf::Clock& cursorClock, bool& cursorVisible)
+void updateCursorVisual(textDocument& doc, sf::Text& textObject, sf::RectangleShape& cursorVisual)
 {
 	sf::String text = textObject.getString();
 	int fontSize = textObject.getCharacterSize();
 	sf::Vector2f charPos = textObject.findCharacterPos(doc.cursorPos);
 	cursorVisual.setPosition(charPos.x, charPos.y);
-	cursorClock.restart();
-    cursorVisible = true;
 }
 
 void insertCharInTextObject(textDocument* doc, sf::Text& textObject, char c)

@@ -43,7 +43,7 @@ void updateWholeTextObject(textDocument* doc, sf::RenderWindow& window, sf::Text
 
 // Actualizează cursorul vizual în funcție de poziția cursorului din document.
 // Restartează și animația prin resetarea ceasului.
-void updateCursorVisual(textDocument& doc, sf::Text& textObject, sf::RectangleShape& cursorVisual, sf::Clock& cursorClock, bool& cursorVisible);
+void updateCursorVisual(textDocument& doc, sf::Text& textObject, sf::RectangleShape& cursorVisual);
 
 // Inserează un caracter în obiectul text la poziția cursorului.
 void insertCharInTextObject(textDocument* doc, sf::Text& textObject, char c);
