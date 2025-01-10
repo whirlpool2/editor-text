@@ -419,16 +419,5 @@ FodyWeavers.xsd
 *.mod
 *.smod
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
-
 x64/
 SFML/x64/Debug
