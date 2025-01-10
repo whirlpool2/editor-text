@@ -145,82 +145,90 @@ void cursorClickPos(sf::Vector2i& mousePos, textDocument& doc, sf::Text textObje
     sf::String text = textObject.getString();
     int fontSize = textObject.getCharacterSize(); // -2 pentru a îmbunătăți precizia.
 
+    // Verifică dacă am dat click pe primul caracter.
+    if (mousePosFloat.x <= textObject.findCharacterPos(0).x && mousePosFloat.y <= textObject.findCharacterPos(0).y + fontSize)
+    {
+        doc.cursorPos = 0;
+        return;
+    }
+
     // Verificăm dacă click-ul este mai jos de text.
-	if (mousePosFloat.y >= textObject.findCharacterPos(doc.charCount - 1).y + fontSize)
-	{
-		doc.cursorPos = doc.charCount;
-		return;
-	}
+    if (mousePosFloat.y >= textObject.findCharacterPos(doc.charCount - 1).y + fontSize)
+    {
+        doc.cursorPos = doc.charCount;
+        return;
+    }
    
     /*
     Folosim 2 căutări binare.
-	
-	Prima căutare binară va amplasa cursorul pe un caracter din linia pe care se află click-ul.
-	În cazul în care click-ul este mai jos decât ultimul caracter din linie, cursorul va fi plasat pe ultimul caracter.
-	În cazul în s-a dat click pe o linie, dar click-ul este mai în dreapta decât ultimul caracter, cursorul va fi plasat pe ultimul caracter.
+    
+    Prima căutare binară va amplasa cursorul pe un caracter din linia pe care se află click-ul.
+    În cazul în care click-ul este mai jos decât ultimul caracter din linie, cursorul va fi plasat pe ultimul caracter.
+    În cazul în s-a dat click pe o linie, dar click-ul este mai în dreapta decât ultimul caracter, cursorul va fi plasat pe ultimul caracter.
     În rest, putem să trecem la următoarea căutare binară.
 
-	A doua căutare binară va amplasa cursorul pe caracterul cel mai apropiat de click.
+    A doua căutare binară va amplasa cursorul pe caracterul cel mai apropiat de click.
     Limitele acestei căutări sunt primul și ultimul caracter din linie, aflate prin mutarea cursorului între '\n'-uri.
     */
 
-    unsigned long long left = 0;
-    unsigned long long right = doc.charCount - 1;
+    long long left = 0;
+    long long right = doc.charCount - 1;
     while (left <= right)
     {
-        unsigned long long mid = (left + right) / 2;
+        long long mid = (left + right) / 2;
         sf::Vector2f charPos = textObject.findCharacterPos(mid);
-		if (mousePosFloat.y >= charPos.y && mousePosFloat.y <= charPos.y + fontSize)
-		{
-			doc.cursorPos = mid;
-		}
+        if (mousePosFloat.y >= charPos.y && mousePosFloat.y <= charPos.y + fontSize)
+        {
+            doc.cursorPos = mid;
+            break;
+        }
         if (charPos.y < mousePosFloat.y)
         {
-			left = mid + 1;
-		}
+            left = mid + 1;
+        }
         else
         {
             right = mid - 1;
         }
     }
 
-	// Dacă ne aflăm pe prima linie, nu există niciun '\n' înainte de cursor.
+    // Dacă ne aflăm pe prima linie, nu există niciun '\n' înainte de cursor.
     // Atunci, ne ducem pe primul caracter.
-	if (doc.getCursorLine() == 0)
-	{
-		doc.cursorPos = 0;
-	}
+    if (doc.getCursorLine() == 0)
+    {
+        doc.cursorPos = 0;
+    }
     else
     {
         doc.gotoPrevNewline();
     }
     left = doc.cursorPos;
     doc.gotoNextNewline();
-	right = doc.cursorPos;
+    right = doc.cursorPos;
     
     if (textObject.findCharacterPos(doc.cursorPos).x + fontSize <= mousePosFloat.x)
     {
         return;
     }
 
-	while (left <= right)
-	{
-		unsigned long long mid = (left + right) / 2;
-		sf::Vector2f charPos = textObject.findCharacterPos(mid);
-		if (mousePosFloat.x >= charPos.x + 2 && mousePosFloat.x <= charPos.x + fontSize - 2)
-		{
-			doc.cursorPos = mid + 1; // +1 pentru că altfel am fi pe caracterul din stânga. (Trebuie găsită o explicație mai bună)
-			return;
-		}
-		if (charPos.x < mousePosFloat.x)
-		{
-			left = mid + 1;
-		}
-		else
-		{
-			right = mid - 1;
-		}
-	}
+    while (left <= right)
+    {
+        long long mid = (left + right) / 2;
+        sf::Vector2f charPos = textObject.findCharacterPos(mid);
+        if (mousePosFloat.x >= charPos.x + 2 && mousePosFloat.x <= charPos.x + fontSize - 2)
+        {
+            doc.cursorPos = mid + 1; // +1 pentru că altfel am fi pe caracterul din stânga. (Trebuie găsită o explicație mai bună)
+            return;
+        }
+        if (charPos.x < mousePosFloat.x)
+        {
+            left = mid + 1;
+        }
+        else
+        {
+            right = mid - 1;
+        }
+    }
 }
 
 unsigned int visibleLineCount(sf::RenderWindow& window, sf::Text textObject)
