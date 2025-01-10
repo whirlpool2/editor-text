@@ -638,10 +638,48 @@ while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul ruleaz�
                             moveCursorUp(doc);
 							textSelection.isSelected = false;
                         }
+                    }
+					
+                    if (event.key.code == sf::Keyboard::Home) // Trecem la începutul liniei.
+                    {
+                        doc.gotoPrevNewline();
+                        doc.cursorPos++;
+                    }
+                    if (event.key.code == sf::Keyboard::End) // Trecem la începutul liniei.
+                    {
+                        doc.gotoNextNewline();
+                        doc.cursorPos--;
+                    }
+                    if (event.key.code == sf::Keyboard::Right && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) // Cuvântul următor
+                    {
+                        if (doc.cursorPos < doc.charCount)
+                        {
+                            doc.cursorPos++;
                         }
-					
-					
-                    
+						while (doc.cursorPos < doc.charCount && doc.getChar(doc.cursorPos)->c != ' ' && doc.getChar(doc.cursorPos)->c != '\n')
+						{
+							doc.cursorPos++;
+						}
+                        if (doc.cursorPos < doc.charCount)
+                        {
+                            doc.cursorPos++;
+                            if (doc.getChar(doc.cursorPos)->c == '\n')
+                            {
+                                doc.cursorPos++;
+                            }
+                        }	
+                    }
+                    if (event.key.code == sf::Keyboard::Left && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) // Cuvântul precedent
+                    {
+                        if (doc.cursorPos > 0)
+                        {
+                            doc.cursorPos--;
+                        }
+                        while (doc.cursorPos > 0 && doc.getChar(doc.cursorPos)->c != ' ' && doc.getChar(doc.cursorPos)->c != '\n')
+                        {
+                            doc.cursorPos--;
+                        }
+                    }
                     if (event.key.code == sf::Keyboard::Equal && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) // Zoom-in (CTRL + '=')
                     {
                         fontSize = fontSize + 4;

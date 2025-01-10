@@ -108,7 +108,7 @@ void TextSelection::drawHighLight(sf::RenderWindow& window, sf::Text& text, text
 void TextSelection::deleteSelectedText(textDocument& doc, sf::Text& text,
     sf::RectangleShape& cursorVisual, sf::Clock& cursorClock, bool& cursorVisible, sf::RenderWindow& window) {
    
-    std::cout << "DA INTRU AICI BOULE" << std::endl;
+    std::cout << "DA INTRU AICI" << std::endl;
     
     if (!isSelected or SelEnd <= SelStart){
         std::cout << "Nu este selectat text" << std::endl;
