@@ -101,10 +101,16 @@ void TextSelection::drawHighLight(sf::RenderWindow& window, sf::Text& text, text
 
             // Calculam latimea caracterului curent
             float charWidth = nextPosition.x - position.x;
+            std::string s = text.getString();
+			if (s[i] == '\n')
+			{
+                continue;
+            }
 
             highlight.setPosition(position); // setam pozitia dreptunghiului de highlight
             highlight.setSize(sf::Vector2f(charWidth, text.getCharacterSize() * 1.2f)); // setam dimensiunile dreptunghiului
             window.draw(highlight); // desenam dreptunghiul, ca sa apara vizual pe ecran
+
         }
     }
 
