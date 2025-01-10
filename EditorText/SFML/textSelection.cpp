@@ -96,10 +96,15 @@ void TextSelection::drawHighLight(sf::RenderWindow& window, sf::Text& text, text
 		//parcurgem textul si punem highlight pe textul selectat
         float SelectSize = (text.getCharacterSize() / 2) * 1.2;//Pentru a avea highlightul o linie constanta
         for (unsigned long long i = SelStart; i < SelEnd; ++i) {
-            sf::Vector2f position = text.findCharacterPos(i); //luam pozitia caracterului curent
-			highlight.setPosition(position);//setam pozitia dreptunghiului de highlight
-			highlight.setSize(sf::Vector2f(SelectSize, text.getCharacterSize() * 1.2f));//setam dimensiunile dreptunghiului
-			window.draw(highlight);//desenam dreptunghiul, ca sa apara vizual pe ecran
+            sf::Vector2f position = text.findCharacterPos(i); // luam pozitia caracterului curent
+            sf::Vector2f nextPosition = text.findCharacterPos(i + 1); // luam pozitia urmatorului caracter
+
+            // Calculam latimea caracterului curent
+            float charWidth = nextPosition.x - position.x;
+
+            highlight.setPosition(position); // setam pozitia dreptunghiului de highlight
+            highlight.setSize(sf::Vector2f(charWidth, text.getCharacterSize() * 1.2f)); // setam dimensiunile dreptunghiului
+            window.draw(highlight); // desenam dreptunghiul, ca sa apara vizual pe ecran
         }
     }
 
@@ -131,39 +136,6 @@ void TextSelection::deleteSelectedText(textDocument& doc, sf::Text& text,
    isSelected = false;
    updateTextObject(&doc, window, text);
    updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
-    
- //      if (!selection.isSelected || selection.SelStart >= selection.SelEnd) {
-	//	std::cout << "No text selected.\n" << selection.SelStart << "  " << selection.SelEnd << '\n';
-
-	//if (selection.SelStart != selection.SelEnd)
-	//		doc.deleteText(selection.SelStart, selection.SelEnd);
- //       else
- //           deleteCharInTextObject(&doc, text);
-
- //       return;
- //   }
-
- //   // Sterg textul selectat
- //   doc.deleteText(selection.SelStart, selection.SelEnd);
-
- //   // Fac legatura intre caracterul de start si urmatorul dupa cel sters pentru a nu avea crash-uri
- //   character* startChar = doc.getChar(selection.SelStart - 1);
- //   character* nextChar = doc.getChar(selection.SelStart);
- //   if (startChar != nullptr && nextChar != nullptr) {
- //       startChar->next = nextChar;
- //       nextChar->prev = startChar;
- //   }
-
-	////// Actualizez pozitia cursorului cu cea de la startul selectiei
- //   doc.cursorPos = selection.SelStart;
-
- //   // Resetez parametrul pt verificarea textului selectat
- //   selection.isSelected = false;
- //   selection.SelStart = selection.SelEnd = doc.cursorPos;
-
- //   // Actualizez textul si cursorul
- //   updateTextObject(&doc, window, text);
- //   updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
 }
 
 void TextSelection::copyText(textDocument& doc) {
