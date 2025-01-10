@@ -730,6 +730,9 @@ while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul ruleaz�
 			cursorVisual.move(Window.getSize().x - cursorVisual.getPosition().x, 0);
 		}
 
+        updateWholeTextObject(&doc, Window, text);
+        updateCursorVisual(doc, text, cursorVisual, cursorClock, cursorVisible);
+
         // Actualizăm window-ul.
         Window.clear(sf::Color(COLOR_BG.r, COLOR_BG.g, COLOR_BG.b));
         textSelection.drawHighLight(Window, text, doc);
