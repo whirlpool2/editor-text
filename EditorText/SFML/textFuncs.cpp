@@ -145,13 +145,6 @@ void cursorClickPos(sf::Vector2i& mousePos, textDocument& doc, sf::Text textObje
     sf::String text = textObject.getString();
     int fontSize = textObject.getCharacterSize(); // -2 pentru a îmbunătăți precizia.
 
-    // Verifică dacă am dat click pe primul caracter.
-    if (mousePosFloat.x <= textObject.findCharacterPos(0).x && mousePosFloat.y <= textObject.findCharacterPos(0).y + fontSize)
-    {
-        doc.cursorPos = 0;
-        return;
-    }
-
     // Verificăm dacă click-ul este mai jos de text.
     if (mousePosFloat.y >= textObject.findCharacterPos(doc.charCount - 1).y + fontSize)
     {
@@ -211,13 +204,24 @@ void cursorClickPos(sf::Vector2i& mousePos, textDocument& doc, sf::Text textObje
         return;
     }
 
+	if (mousePosFloat.x <= textObject.getGlobalBounds().left + fontSize/2)
+	{
+		if (doc.getChar(left) != nullptr && doc.getChar(left) == doc.first)
+		{
+            doc.cursorPos = 0;
+			return;
+		}
+		doc.cursorPos = left+1;
+		return;
+	}
+
     while (left <= right)
     {
         long long mid = (left + right) / 2;
         sf::Vector2f charPos = textObject.findCharacterPos(mid);
-        if (mousePosFloat.x >= charPos.x + 2 && mousePosFloat.x <= charPos.x + fontSize - 2)
+        if (mousePosFloat.x >= charPos.x - fontSize/2 && mousePosFloat.x <= charPos.x + fontSize/2)
         {
-            doc.cursorPos = mid + 1; // +1 pentru că altfel am fi pe caracterul din stânga. (Trebuie găsită o explicație mai bună)
+            doc.cursorPos = mid; // +1 pentru că altfel am fi pe caracterul din stânga. (Trebuie găsită o explicație mai bună)
             return;
         }
         if (charPos.x < mousePosFloat.x)
