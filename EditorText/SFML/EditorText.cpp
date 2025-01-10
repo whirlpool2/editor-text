@@ -23,6 +23,7 @@ enum menuOptions
     RAND_COLOR,
     LOAD_COLOR,
     SAVE_COLOR,
+    CHANGE_FONT,
 	EXIT
 };
 
@@ -41,6 +42,7 @@ void initEscMenu(sf::RenderWindow& window, sf::Font& font, fullscreenMenu& menu)
     menu.addButton("Change color scheme");
     menu.addButton("Load color scheme");
     menu.addButton("Save color scheme");
+    menu.addButton("Change font");
 	menu.addButton("Exit");
     menu.update(window, font);
 }
@@ -68,7 +70,7 @@ void handleKeyboardInput(sf::RenderWindow& Window, textDocument& doc, TextSelect
     cursorVisual.setPosition(text.getPosition().x, text.getPosition().y);
 
     // Setăm fontul la unul arbitrar.
-    setFont(text, font, 24, COLOR_TEXT, (char*)"Fonts/CascadiaMono.ttf");
+    setFont(text, font, fontSize, COLOR_TEXT, (char*)"Fonts/CascadiaMono.ttf");
 
     sf::Text bottomBarText;
     sf::RectangleShape bottomBorder;
@@ -236,6 +238,9 @@ while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul ruleaz�
                 case SAVE_COLOR:
 					saveColorScheme(userInput);
 					break;
+                case CHANGE_FONT:
+                    setFont(text, font, fontSize, COLOR_TEXT, userInput);
+                    break;
                 }
                 menuActive = false;
             }
@@ -382,6 +387,13 @@ while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul ruleaz�
                                 inputBoxActive = true;
 								break;
                             case 12:
+								// Change font
+								std::cout << "Change font" << std::endl;
+								menuOption = CHANGE_FONT;
+								input.init(Window, font, 600, 32, "Enter font path:");
+								inputBoxActive = true;
+                                break;
+                            case 13:
                                 // Exit
                                 Window.close();
                                 break;

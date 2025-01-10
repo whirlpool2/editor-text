@@ -38,6 +38,9 @@
     <Font Include="Fonts\CascadiaMono.ttf">
       <Filter>Fonts</Filter>
     </Font>
+    <Font Include="Fonts\TimesNewRoman.ttf">
+      <Filter>Fonts</Filter>
+    </Font>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="textStructs.h">

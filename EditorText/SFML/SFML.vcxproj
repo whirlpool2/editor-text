@@ -148,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <Font Include="Fonts\CascadiaMono.ttf" />
+    <Font Include="Fonts\TimesNewRoman.ttf" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="menuFuncs.h" />
