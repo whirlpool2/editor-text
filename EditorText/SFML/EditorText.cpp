@@ -231,6 +231,7 @@ while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul ruleaz�
                 case LOAD_COLOR:
 					loadColorScheme(userInput);
 					text.setFillColor(sf::Color(COLOR_TEXT.r, COLOR_TEXT.g, COLOR_TEXT.b));
+					menu.update(Window, font);
 					break;
                 case SAVE_COLOR:
 					saveColorScheme(userInput);
@@ -364,6 +365,7 @@ while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul ruleaz�
 								menuOption = RAND_COLOR;
                                 randomColorScheme();
                                 text.setFillColor(sf::Color(COLOR_TEXT.r, COLOR_TEXT.g, COLOR_TEXT.b));
+                                menu.update(Window, font);
 								break;
                             case 10:
 								// Load color scheme
