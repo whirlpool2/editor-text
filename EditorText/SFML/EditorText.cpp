@@ -20,6 +20,9 @@ enum menuOptions
     FIND_REPLACE,
     NEXT,
     PREVIOUS,
+    RAND_COLOR,
+    LOAD_COLOR,
+    SAVE_COLOR,
 	EXIT
 };
 
@@ -35,6 +38,9 @@ void initEscMenu(sf::RenderWindow& window, sf::Font& font, fullscreenMenu& menu)
     menu.addButton("Find and Replace");
     menu.addButton("Next");
     menu.addButton("Previous");
+    menu.addButton("Change color scheme");
+    menu.addButton("Load color scheme");
+    menu.addButton("Save color scheme");
 	menu.addButton("Exit");
     menu.update(window, font);
 }
@@ -216,12 +222,20 @@ while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul ruleaz�
                 case OPEN:
                     loadFile(doc, userInput);
                     updateWholeTextObject(&doc, Window, text);
+                    path = userInput;
                     break;
                 case SAVE_AS:
                     saveFile(doc, userInput);
+                    path = userInput;
                     break;
+                case LOAD_COLOR:
+					loadColorScheme(userInput);
+					text.setFillColor(sf::Color(COLOR_TEXT.r, COLOR_TEXT.g, COLOR_TEXT.b));
+					break;
+                case SAVE_COLOR:
+					saveColorScheme(userInput);
+					break;
                 }
-                path = userInput;
                 menuActive = false;
             }
         }
@@ -345,6 +359,27 @@ while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul ruleaz�
                                 }
                                 break;
                             case 9:
+								// Change color scheme
+								std::cout << "Change color scheme" << std::endl;
+								menuOption = RAND_COLOR;
+                                randomColorScheme();
+                                text.setFillColor(sf::Color(COLOR_TEXT.r, COLOR_TEXT.g, COLOR_TEXT.b));
+								break;
+                            case 10:
+								// Load color scheme
+								std::cout << "Load color scheme" << std::endl;
+								menuOption = LOAD_COLOR;
+								input.init(Window, font, 600, 32, "Enter theme name:");
+								inputBoxActive = true;
+                                break;
+                            case 11:
+								// Save color scheme
+								std::cout << "Save color scheme" << std::endl;
+								menuOption = SAVE_COLOR;
+                                input.init(Window, font, 600, 32, "Enter theme name:");
+                                inputBoxActive = true;
+								break;
+                            case 12:
                                 // Exit
                                 Window.close();
                                 break;
@@ -705,6 +740,7 @@ while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul ruleaz�
 
 int main()
 {
+	srand(time(NULL));
     sf::RenderWindow EditorText(sf::VideoMode(800, 800), "Editor Text", sf::Style::Default);
     EditorText.setFramerateLimit(60);
 

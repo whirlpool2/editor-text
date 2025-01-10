@@ -92,7 +92,7 @@ void TextSelection::drawHighLight(sf::RenderWindow& window, sf::Text& text, text
     //daca avem o selectie, atunci ii dam highlight
     if (isSelected) {
 		sf::RectangleShape highlight;//cream un dreptunghi pentru highlight
-		highlight.setFillColor(sf::Color(170, 210, 230, 128));//setam culoarea dreptunghiului, albastru transparent
+		highlight.setFillColor(sf::Color(COLOR_TEXT_HIGHLIGHT.r, COLOR_TEXT_HIGHLIGHT.g, COLOR_TEXT_HIGHLIGHT.b, 128));//setam culoarea dreptunghiului, albastru transparent
 		//parcurgem textul si punem highlight pe textul selectat
         float SelectSize = (text.getCharacterSize() / 2) * 1.2;//Pentru a avea highlightul o linie constanta
         for (unsigned long long i = SelStart; i < SelEnd; ++i) {

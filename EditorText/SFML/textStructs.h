@@ -1,12 +1,26 @@
 ﻿#pragma once
 #include <vector>
 #include <string>
+
 struct RGBColor
 {
     int r;
     int g;
     int b;
 };
+
+int Max(int a, int b);
+
+// Implementare simplă a unui generator de int-uri, nu este prea uniformă.
+int randInt(int low, int high);
+
+bool isBackgroundBright();
+
+void randomColorScheme();
+
+void loadColorScheme(char* path);
+
+void saveColorScheme(char* path);
 
 struct character
 {
@@ -79,7 +93,7 @@ struct textDocument
 
 // CONSTS
 
-const RGBColor             COLOR_BG = { 32,  32,  32 };
-const RGBColor COLOR_TEXT_HIGHLIGHT = { 255, 255, 128 };
-const RGBColor           COLOR_TEXT = { 255, 255, 255 };
+extern RGBColor COLOR_BG;
+extern RGBColor COLOR_TEXT_HIGHLIGHT;
+extern RGBColor COLOR_TEXT;
 

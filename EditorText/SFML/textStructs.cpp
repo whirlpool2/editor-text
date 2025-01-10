@@ -1,5 +1,85 @@
 ﻿#include "textStructs.h"
 #include <iostream>
+#include <fstream>
+#include <random>
+
+RGBColor COLOR_BG = { 32,  32,  32 };
+RGBColor COLOR_TEXT_HIGHLIGHT = { 128, 128, 255 };
+RGBColor COLOR_TEXT = { 255, 255, 255 };
+
+int Max(int a, int b)
+{
+	return a > b ? a : b;
+}
+
+int randInt(int low, int high)
+{
+    std::random_device rd;
+    std::uniform_int_distribution<int> dist(low, high);
+    return dist(rd);
+}
+
+bool isBackgroundBright()
+{
+	return ((COLOR_BG.r + COLOR_BG.g + COLOR_BG.b) / 3) > 128;
+}
+
+void randomColorScheme()
+{
+    bool isDark = randInt(0, 1);
+
+    if (isDark)
+    {
+        COLOR_TEXT = { 255 - randInt(0, 64), 255 - randInt(0, 64), 255 - randInt(0, 64) };
+        COLOR_BG = { randInt(0, 64), randInt(0, 64), randInt(0, 64) };
+    }
+    else
+    {
+        COLOR_TEXT = { 0 + randInt(0, 64), 0 + randInt(0, 64), 0 + randInt(0, 64) };
+        COLOR_BG = { randInt(192, 255), randInt(192, 255), randInt(192, 255) };
+    }
+
+    COLOR_TEXT_HIGHLIGHT = { COLOR_TEXT.g , COLOR_TEXT.b , COLOR_TEXT.r };
+
+	/*
+    COLOR_BG = { 128 + randInt(0, 255), randInt(0, 255), randInt(0, 255) };
+    if (isBackgroundBright())
+    {
+		COLOR_TEXT = { 0 + randInt(0, 64), 0 + randInt(0, 64), 0 + randInt(0, 64) };
+		COLOR_TEXT_HIGHLIGHT = { COLOR_TEXT.r / 4, COLOR_TEXT.g / 4, COLOR_TEXT.b / 4 };
+	}
+    else
+    {
+		COLOR_TEXT = { 255 - randInt(0, 64), 255 - randInt(0, 64), 255 - randInt(0, 64) };
+		COLOR_TEXT_HIGHLIGHT = { Max(COLOR_TEXT.r + 32, 255), Max(COLOR_TEXT.g + 32, 255), Max(COLOR_TEXT.b + 32, 255) };
+    }
+    */
+}
+
+void loadColorScheme(char* path)
+{
+	std::cout << "Loading color scheme from " << path << std::endl;
+    std::ifstream fin(path);
+    fin >> COLOR_BG.r >> COLOR_BG.g >> COLOR_BG.b;
+    fin >> COLOR_TEXT.r >> COLOR_TEXT.g >> COLOR_TEXT.b;
+    fin >> COLOR_TEXT_HIGHLIGHT.r >> COLOR_TEXT_HIGHLIGHT.g >> COLOR_TEXT_HIGHLIGHT.b;
+
+	std::cout << "Read the following values: " << std::endl << COLOR_BG.r << " " << COLOR_BG.g << " " << COLOR_BG.b << std::endl;
+	std::cout << COLOR_TEXT.r << " " << COLOR_TEXT.g << " " << COLOR_TEXT.b << std::endl;
+	std::cout << COLOR_TEXT_HIGHLIGHT.r << " " << COLOR_TEXT_HIGHLIGHT.g << " " << COLOR_TEXT_HIGHLIGHT.b << std::endl;
+	fin.close();
+}
+
+void saveColorScheme(char* path)
+{
+	std::cout << "Saving color scheme to " << path << std::endl;
+	std::ofstream fout(path);
+	fout << COLOR_BG.r << " " << COLOR_BG.g << " " << COLOR_BG.b << std::endl;
+    fout << COLOR_TEXT.r << " " << COLOR_TEXT.g << " " << COLOR_TEXT.b << std::endl;
+    fout << COLOR_TEXT_HIGHLIGHT.r << " " << COLOR_TEXT_HIGHLIGHT.g << " " << COLOR_TEXT_HIGHLIGHT.b << std::endl;
+    fout.close();
+}
+
 void textDocument::init()
 {
     this->first = nullptr;
