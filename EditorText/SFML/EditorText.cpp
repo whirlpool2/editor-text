@@ -7,6 +7,8 @@
 #include "menuFuncs.h"
 #include <stdlib.h>
 #include "textSelection.h"
+#include <windows.h>
+
 using namespace std;
 
 enum menuOptions
@@ -792,6 +794,13 @@ while (Window.isOpen()) // Cât timp fereastra este deschisă, tot codul ruleaz�
 
 int main()
 {
+	// Ascunde consola.
+    HWND hConsole = GetConsoleWindow();
+    if (hConsole != NULL)
+    {
+        ShowWindow(hConsole, SW_HIDE);
+    }
+
 	srand(time(NULL));
     sf::RenderWindow EditorText(sf::VideoMode(800, 800), "Editor Text", sf::Style::Default);
     EditorText.setFramerateLimit(60);
