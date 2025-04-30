@@ -25,9 +25,9 @@ Proiect la "Introducere în programare", 2024-2025, realizat de Bereșteanu Miha
 - [x] Funcții copy, paste și cut.
 - [x] Funcții find și replace.
 - [x] Meniuri
-    - [ ] Deschiderea fișierelor, crearea de fișiere noi
-    - [ ] Schimbarea fontului.
-    - [ ] Schimbarea culorilor.
+    - [x] Deschiderea fișierelor, crearea de fișiere noi
+    - [x] Schimbarea fontului.
+    - [x] Schimbarea culorilor.
 - [x] Suportare codificărilor de tip Unicode
     - Probabil implică doar schimbarea unui tip de date în structura de caracter.
 - [x] Suport pentru _schimbarea rezoluției ferestrei_.
