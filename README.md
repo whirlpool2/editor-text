@@ -23,11 +23,11 @@ Proiect la "Introducere în programare", 2024-2025, realizat de Bereșteanu Miha
 - [x] Selecție
     - Posibilitatea de a înlocui textul selectat.
 - [x] Funcții copy, paste și cut.
-- [ ] Funcții find și replace.
+- [x] Funcții find și replace.
 - [x] Meniuri
     - [ ] Deschiderea fișierelor, crearea de fișiere noi
     - [ ] Schimbarea fontului.
     - [ ] Schimbarea culorilor.
-- [ ] Suportare codificărilor de tip Unicode
+- [x] Suportare codificărilor de tip Unicode
     - Probabil implică doar schimbarea unui tip de date în structura de caracter.
-- [ ] Suport pentru _schimbarea rezoluției ferestrei_.
+- [x] Suport pentru _schimbarea rezoluției ferestrei_.
